@@ -1,4 +1,5 @@
 using AudialAtlasService.Data;
+using AudialAtlasService.Handlers;
 using Microsoft.EntityFrameworkCore;
 
 namespace AudialAtlasService
@@ -16,6 +17,10 @@ namespace AudialAtlasService
             var app = builder.Build();
 
             app.MapGet("/", () => "Hello World!");
+
+            app.MapGet("/artists", ArtistHandler.GetAllArtists);
+            app.MapGet("/artists/{artistId}", ArtistHandler.GetSingleArtist);
+            app.MapPost("/artists", ArtistHandler.PostArtist);
 
             app.Run();
         }
