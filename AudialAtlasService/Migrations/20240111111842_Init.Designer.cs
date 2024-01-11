@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AudialAtlasService.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240111110926_Init")]
+    [Migration("20240111111842_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,41 +25,41 @@ namespace AudialAtlasService.Migrations
 
             modelBuilder.Entity("ArtistGenre", b =>
                 {
-                    b.Property<int>("ArtistsId")
+                    b.Property<int>("ArtistsArtistId")
                         .HasColumnType("int");
 
-                    b.Property<int>("GenresgenreId")
+                    b.Property<int>("GenresGenreId")
                         .HasColumnType("int");
 
-                    b.HasKey("ArtistsId", "GenresgenreId");
+                    b.HasKey("ArtistsArtistId", "GenresGenreId");
 
-                    b.HasIndex("GenresgenreId");
+                    b.HasIndex("GenresGenreId");
 
                     b.ToTable("ArtistGenre");
                 });
 
             modelBuilder.Entity("ArtistUser", b =>
                 {
-                    b.Property<int>("ArtistsId")
+                    b.Property<int>("ArtistsArtistId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UsersId")
+                    b.Property<int>("UsersUserId")
                         .HasColumnType("int");
 
-                    b.HasKey("ArtistsId", "UsersId");
+                    b.HasKey("ArtistsArtistId", "UsersUserId");
 
-                    b.HasIndex("UsersId");
+                    b.HasIndex("UsersUserId");
 
                     b.ToTable("ArtistUser");
                 });
 
             modelBuilder.Entity("AudialAtlasService.Models.Artist", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ArtistId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArtistId"), 1L, 1);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -69,61 +69,61 @@ namespace AudialAtlasService.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("ArtistId");
 
                     b.ToTable("Artists");
                 });
 
             modelBuilder.Entity("AudialAtlasService.Models.Genre", b =>
                 {
-                    b.Property<int>("genreId")
+                    b.Property<int>("GenreId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("genreId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GenreId"), 1L, 1);
 
                     b.Property<string>("GenreTitle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("genreId");
+                    b.HasKey("GenreId");
 
                     b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("AudialAtlasService.Models.Song", b =>
                 {
-                    b.Property<int>("songId")
+                    b.Property<int>("SongId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("songId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SongId"), 1L, 1);
 
                     b.Property<string>("Artist")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ArtistsId")
+                    b.Property<int>("ArtistsArtistId")
                         .HasColumnType("int");
 
                     b.Property<string>("SongTitle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("songId");
+                    b.HasKey("SongId");
 
-                    b.HasIndex("ArtistsId");
+                    b.HasIndex("ArtistsArtistId");
 
                     b.ToTable("Songs");
                 });
 
             modelBuilder.Entity("AudialAtlasService.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -141,52 +141,52 @@ namespace AudialAtlasService.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("GenreSong", b =>
                 {
-                    b.Property<int>("GenresgenreId")
+                    b.Property<int>("GenresGenreId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SongssongId")
+                    b.Property<int>("SongsSongId")
                         .HasColumnType("int");
 
-                    b.HasKey("GenresgenreId", "SongssongId");
+                    b.HasKey("GenresGenreId", "SongsSongId");
 
-                    b.HasIndex("SongssongId");
+                    b.HasIndex("SongsSongId");
 
                     b.ToTable("GenreSong");
                 });
 
             modelBuilder.Entity("GenreUser", b =>
                 {
-                    b.Property<int>("GenresgenreId")
+                    b.Property<int>("GenresGenreId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UsersId")
+                    b.Property<int>("UsersUserId")
                         .HasColumnType("int");
 
-                    b.HasKey("GenresgenreId", "UsersId");
+                    b.HasKey("GenresGenreId", "UsersUserId");
 
-                    b.HasIndex("UsersId");
+                    b.HasIndex("UsersUserId");
 
                     b.ToTable("GenreUser");
                 });
 
             modelBuilder.Entity("SongUser", b =>
                 {
-                    b.Property<int>("SongssongId")
+                    b.Property<int>("SongsSongId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UsersId")
+                    b.Property<int>("UsersUserId")
                         .HasColumnType("int");
 
-                    b.HasKey("SongssongId", "UsersId");
+                    b.HasKey("SongsSongId", "UsersUserId");
 
-                    b.HasIndex("UsersId");
+                    b.HasIndex("UsersUserId");
 
                     b.ToTable("SongUser");
                 });
@@ -195,13 +195,13 @@ namespace AudialAtlasService.Migrations
                 {
                     b.HasOne("AudialAtlasService.Models.Artist", null)
                         .WithMany()
-                        .HasForeignKey("ArtistsId")
+                        .HasForeignKey("ArtistsArtistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("AudialAtlasService.Models.Genre", null)
                         .WithMany()
-                        .HasForeignKey("GenresgenreId")
+                        .HasForeignKey("GenresGenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -210,13 +210,13 @@ namespace AudialAtlasService.Migrations
                 {
                     b.HasOne("AudialAtlasService.Models.Artist", null)
                         .WithMany()
-                        .HasForeignKey("ArtistsId")
+                        .HasForeignKey("ArtistsArtistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("AudialAtlasService.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("UsersId")
+                        .HasForeignKey("UsersUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -225,7 +225,7 @@ namespace AudialAtlasService.Migrations
                 {
                     b.HasOne("AudialAtlasService.Models.Artist", "Artists")
                         .WithMany("Songs")
-                        .HasForeignKey("ArtistsId")
+                        .HasForeignKey("ArtistsArtistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -236,13 +236,13 @@ namespace AudialAtlasService.Migrations
                 {
                     b.HasOne("AudialAtlasService.Models.Genre", null)
                         .WithMany()
-                        .HasForeignKey("GenresgenreId")
+                        .HasForeignKey("GenresGenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("AudialAtlasService.Models.Song", null)
                         .WithMany()
-                        .HasForeignKey("SongssongId")
+                        .HasForeignKey("SongsSongId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -251,13 +251,13 @@ namespace AudialAtlasService.Migrations
                 {
                     b.HasOne("AudialAtlasService.Models.Genre", null)
                         .WithMany()
-                        .HasForeignKey("GenresgenreId")
+                        .HasForeignKey("GenresGenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("AudialAtlasService.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("UsersId")
+                        .HasForeignKey("UsersUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -266,13 +266,13 @@ namespace AudialAtlasService.Migrations
                 {
                     b.HasOne("AudialAtlasService.Models.Song", null)
                         .WithMany()
-                        .HasForeignKey("SongssongId")
+                        .HasForeignKey("SongsSongId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("AudialAtlasService.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("UsersId")
+                        .HasForeignKey("UsersUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
