@@ -26,13 +26,13 @@ namespace AudialAtlasService.Migrations
                 name: "Genres",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    genreId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     GenreTitle = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Genres", x => x.Id);
+                    table.PrimaryKey("PK_Genres", x => x.genreId);
                 });
 
             migrationBuilder.CreateTable(
@@ -55,7 +55,7 @@ namespace AudialAtlasService.Migrations
                 name: "Songs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    songId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SongTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Artist = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -63,7 +63,7 @@ namespace AudialAtlasService.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Songs", x => x.Id);
+                    table.PrimaryKey("PK_Songs", x => x.songId);
                     table.ForeignKey(
                         name: "FK_Songs_Artists_ArtistsId",
                         column: x => x.ArtistsId,
@@ -77,11 +77,11 @@ namespace AudialAtlasService.Migrations
                 columns: table => new
                 {
                     ArtistsId = table.Column<int>(type: "int", nullable: false),
-                    GenresId = table.Column<int>(type: "int", nullable: false)
+                    GenresgenreId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ArtistGenre", x => new { x.ArtistsId, x.GenresId });
+                    table.PrimaryKey("PK_ArtistGenre", x => new { x.ArtistsId, x.GenresgenreId });
                     table.ForeignKey(
                         name: "FK_ArtistGenre_Artists_ArtistsId",
                         column: x => x.ArtistsId,
@@ -89,10 +89,10 @@ namespace AudialAtlasService.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ArtistGenre_Genres_GenresId",
-                        column: x => x.GenresId,
+                        name: "FK_ArtistGenre_Genres_GenresgenreId",
+                        column: x => x.GenresgenreId,
                         principalTable: "Genres",
-                        principalColumn: "Id",
+                        principalColumn: "genreId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -124,17 +124,17 @@ namespace AudialAtlasService.Migrations
                 name: "GenreUser",
                 columns: table => new
                 {
-                    GenresId = table.Column<int>(type: "int", nullable: false),
+                    GenresgenreId = table.Column<int>(type: "int", nullable: false),
                     UsersId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GenreUser", x => new { x.GenresId, x.UsersId });
+                    table.PrimaryKey("PK_GenreUser", x => new { x.GenresgenreId, x.UsersId });
                     table.ForeignKey(
-                        name: "FK_GenreUser_Genres_GenresId",
-                        column: x => x.GenresId,
+                        name: "FK_GenreUser_Genres_GenresgenreId",
+                        column: x => x.GenresgenreId,
                         principalTable: "Genres",
-                        principalColumn: "Id",
+                        principalColumn: "genreId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_GenreUser_Users_UsersId",
@@ -148,23 +148,23 @@ namespace AudialAtlasService.Migrations
                 name: "GenreSong",
                 columns: table => new
                 {
-                    GenresId = table.Column<int>(type: "int", nullable: false),
-                    SongsId = table.Column<int>(type: "int", nullable: false)
+                    GenresgenreId = table.Column<int>(type: "int", nullable: false),
+                    SongssongId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GenreSong", x => new { x.GenresId, x.SongsId });
+                    table.PrimaryKey("PK_GenreSong", x => new { x.GenresgenreId, x.SongssongId });
                     table.ForeignKey(
-                        name: "FK_GenreSong_Genres_GenresId",
-                        column: x => x.GenresId,
+                        name: "FK_GenreSong_Genres_GenresgenreId",
+                        column: x => x.GenresgenreId,
                         principalTable: "Genres",
-                        principalColumn: "Id",
+                        principalColumn: "genreId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GenreSong_Songs_SongsId",
-                        column: x => x.SongsId,
+                        name: "FK_GenreSong_Songs_SongssongId",
+                        column: x => x.SongssongId,
                         principalTable: "Songs",
-                        principalColumn: "Id",
+                        principalColumn: "songId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -172,17 +172,17 @@ namespace AudialAtlasService.Migrations
                 name: "SongUser",
                 columns: table => new
                 {
-                    SongsId = table.Column<int>(type: "int", nullable: false),
+                    SongssongId = table.Column<int>(type: "int", nullable: false),
                     UsersId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SongUser", x => new { x.SongsId, x.UsersId });
+                    table.PrimaryKey("PK_SongUser", x => new { x.SongssongId, x.UsersId });
                     table.ForeignKey(
-                        name: "FK_SongUser_Songs_SongsId",
-                        column: x => x.SongsId,
+                        name: "FK_SongUser_Songs_SongssongId",
+                        column: x => x.SongssongId,
                         principalTable: "Songs",
-                        principalColumn: "Id",
+                        principalColumn: "songId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_SongUser_Users_UsersId",
@@ -193,9 +193,9 @@ namespace AudialAtlasService.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ArtistGenre_GenresId",
+                name: "IX_ArtistGenre_GenresgenreId",
                 table: "ArtistGenre",
-                column: "GenresId");
+                column: "GenresgenreId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ArtistUser_UsersId",
@@ -203,9 +203,9 @@ namespace AudialAtlasService.Migrations
                 column: "UsersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GenreSong_SongsId",
+                name: "IX_GenreSong_SongssongId",
                 table: "GenreSong",
-                column: "SongsId");
+                column: "SongssongId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GenreUser_UsersId",
