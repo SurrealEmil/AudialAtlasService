@@ -18,6 +18,12 @@ namespace AudialAtlasService
 
             app.MapGet("/", () => "Hello World!");
 
+            // Songs
+            app.MapGet("/songs", SongHandler.ListAllSongs);
+            app.MapGet("/songs/{songId}", SongHandler.GetSingleSong);
+            app.MapPost("/songs", SongHandler.PostSong);
+
+            // Artists
             app.MapGet("/artists", ArtistHandler.GetAllArtists);
             app.MapGet("/artists/{artistId}", ArtistHandler.GetSingleArtist);
             app.MapPost("/artists", ArtistHandler.PostArtist);
