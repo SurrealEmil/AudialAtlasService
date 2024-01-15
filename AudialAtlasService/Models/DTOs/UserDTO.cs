@@ -1,7 +1,7 @@
 ﻿using AudialAtlasService.Data;
 using AudialAtlasService.Models;
 
-namespace AudialAtlasService.DTOs
+namespace AudialAtlasService.Models.DTOs
 {
     public class UserDTO
     {
