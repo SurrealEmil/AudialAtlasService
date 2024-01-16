@@ -23,23 +23,26 @@ namespace AudialAtlasService.Handlers
 
         public static IResult GetSingleArtist(ApplicationContext context, int artistId) 
         {
-            ArtistSingleViewModel? artist = context.Artists
+            Artist? artist = context.Artists
                 .Where(a => a.ArtistId == artistId)
-                .Select(a => new ArtistSingleViewModel()
-                {
-                    Name = a.Name,
-                    Description = a.Description
-                    // Implement SongViewModels
-                    // Implement GenreViewModels
-                })
+                .Include(a => a.Genres)
                 .SingleOrDefault();
 
-            if(artist == null)
+            if (artist == null)
             {
-                return Results.NotFound(new { Message = "No artist found" } );
+                return Results.NotFound(new { Message = "No artist found" });
             }
 
-            return Results.Json(artist);
+            ArtistGetSingleArtistViewModel? artResult = new ArtistGetSingleArtistViewModel()
+            {
+                Name = artist.Name,
+                Description = artist.Description,
+                Genres = artist.Genres
+                    .Select(g => g.GenreTitle)
+                    .ToArray()
+            };
+
+            return Results.Json(artResult);
         }
 
         public static IResult PostArtist(ApplicationContext context, ArtistDto dto)
@@ -85,6 +88,7 @@ namespace AudialAtlasService.Handlers
 
             Genre? genre = context.Genres
                 .Where(g => g.GenreId == genreId)
+                .Include(g => g.Artists)
                 .SingleOrDefault();
             if (genre == null)
             {
@@ -93,15 +97,17 @@ namespace AudialAtlasService.Handlers
 
             try
             {
+                artist.Genres.Add(genre);
                 context.Artists.Update(artist);
                 context.SaveChanges();
+                return Results.StatusCode((int)HttpStatusCode.Created);
             }
             catch (Exception ex)
             {
-                return Results.Conflict(new { Message = "Lol didn't work" });
+                return Results.Conflict(new { Message = $"Lol didn't work with message: {ex.Message}" });
             }
 
-            return Results.StatusCode((int)HttpStatusCode.Created);
+            
         }
     }
 }
