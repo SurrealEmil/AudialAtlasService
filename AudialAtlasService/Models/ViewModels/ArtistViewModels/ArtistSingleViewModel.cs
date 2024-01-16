@@ -1,4 +1,4 @@
-﻿namespace AudialAtlasService.Models.ViewModels
+﻿namespace AudialAtlasService.Models.ViewModels.ArtistViewModels
 {
     public class ArtistSingleViewModel
     {

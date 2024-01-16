@@ -1,4 +1,6 @@
-﻿namespace AudialAtlasService.Models.ViewModels.GenreViewModels
+﻿using AudialAtlasService.Models.ViewModels.ArtistViewModels;
+
+namespace AudialAtlasService.Models.ViewModels.GenreViewModels
 {
     public class ArtistsInGenreViewModel : GenreSingleViewModel
     {

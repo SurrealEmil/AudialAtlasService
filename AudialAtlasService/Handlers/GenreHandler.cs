@@ -2,6 +2,7 @@
 using AudialAtlasService.Models;
 using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels;
+using AudialAtlasService.Models.ViewModels.ArtistViewModels;
 using AudialAtlasService.Models.ViewModels.GenreViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

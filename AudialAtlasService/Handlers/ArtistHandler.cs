@@ -1,7 +1,8 @@
 ﻿using AudialAtlasService.Data;
 using AudialAtlasService.Models;
 using AudialAtlasService.Models.DTOs;
-using AudialAtlasService.Models.ViewModels;
+using AudialAtlasService.Models.ViewModels.ArtistViewModels;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace AudialAtlasService.Handlers
@@ -13,8 +14,7 @@ namespace AudialAtlasService.Handlers
             List<ArtistListAllViewModel> list = context.Artists
                 .Select(a => new ArtistListAllViewModel()
                 {
-                    Name = a.Name,
-                    Description = a.Description
+                    Name = a.Name
                 })
                 .ToList();
 
@@ -67,6 +67,38 @@ namespace AudialAtlasService.Handlers
             catch (Exception ex)
             {
                 return Results.Conflict(new { Message = $"Request failed with error message {ex.Message}" });
+            }
+
+            return Results.StatusCode((int)HttpStatusCode.Created);
+        }
+
+        public static IResult LinkGenreToArtist(ApplicationContext context, int artistId, int genreId)
+        {
+            Artist? artist = context.Artists
+                .Where(a => a.ArtistId == artistId)
+                .Include(a => a.Genres)
+                .SingleOrDefault();
+            if (artist == null)
+            {
+                throw new ArgumentException();
+            }
+
+            Genre? genre = context.Genres
+                .Where(g => g.GenreId == genreId)
+                .SingleOrDefault();
+            if (genre == null)
+            {
+                throw new ArgumentException();
+            }
+
+            try
+            {
+                context.Artists.Update(artist);
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return Results.Conflict(new { Message = "Lol didn't work" });
             }
 
             return Results.StatusCode((int)HttpStatusCode.Created);

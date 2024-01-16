@@ -35,6 +35,9 @@ namespace AudialAtlasService
             app.MapGet("/songs/genres/{genreId}", GenreHandler.GetAllSongsInGenre);
             app.MapPost("/genres", GenreHandler.PostGenre);
 
+            // Link Artist to Genre
+            app.MapPost("/artists/{artistId}/genres/{genreId}", ArtistHandler.LinkGenreToArtist);
+
             app.Run();
         }
     }
