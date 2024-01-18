@@ -28,6 +28,16 @@ namespace AudialAtlasService
             app.MapGet("/artists/{artistId}", ArtistHandler.GetSingleArtist);
             app.MapPost("/artists", ArtistHandler.PostArtist);
 
+            // Genre
+            app.MapGet("/genres", GenreHandler.ListAllGenre);
+            app.MapGet("/genres/{genreId}", GenreHandler.GetSingleGenre);
+            app.MapGet("/artists/genres/{genreId}", GenreHandler.GetAllArtistsInGenre);
+            app.MapGet("/songs/genres/{genreId}", GenreHandler.GetAllSongsInGenre);
+            app.MapPost("/genres", GenreHandler.PostGenre);
+
+            // Link Artist to Genre
+            app.MapPost("/artists/{artistId}/genres/{genreId}", ArtistHandler.LinkGenreToArtist);
+
             app.Run();
         }
     }

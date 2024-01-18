@@ -41,6 +41,9 @@ namespace AudialAtlasService.Handlers
 
         public static IResult PostSong(ApplicationContext context, SongDto dto)
         {
+            // Get artist for song
+            // Use artistId
+
             Song? song = new Song()
             {
                 SongTitle = dto.SongTitle

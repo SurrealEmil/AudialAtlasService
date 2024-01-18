@@ -1,7 +1,8 @@
 ﻿using AudialAtlasService.Data;
 using AudialAtlasService.Models;
 using AudialAtlasService.Models.DTOs;
-using AudialAtlasService.Models.ViewModels;
+using AudialAtlasService.Models.ViewModels.ArtistViewModels;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace AudialAtlasService.Handlers
@@ -13,8 +14,7 @@ namespace AudialAtlasService.Handlers
             List<ArtistListAllViewModel> list = context.Artists
                 .Select(a => new ArtistListAllViewModel()
                 {
-                    Name = a.Name,
-                    Description = a.Description
+                    Name = a.Name
                 })
                 .ToList();
 
@@ -23,23 +23,26 @@ namespace AudialAtlasService.Handlers
 
         public static IResult GetSingleArtist(ApplicationContext context, int artistId) 
         {
-            ArtistSingleViewModel? artist = context.Artists
+            Artist? artist = context.Artists
                 .Where(a => a.ArtistId == artistId)
-                .Select(a => new ArtistSingleViewModel()
-                {
-                    Name = a.Name,
-                    Description = a.Description
-                    // Implement SongViewModels
-                    // Implement GenreViewModels
-                })
+                .Include(a => a.Genres)
                 .SingleOrDefault();
 
-            if(artist == null)
+            if (artist == null)
             {
-                return Results.NotFound(new { Message = "No artist found" } );
+                return Results.NotFound(new { Message = "No artist found" });
             }
 
-            return Results.Json(artist);
+            ArtistGetSingleArtistViewModel? artResult = new ArtistGetSingleArtistViewModel()
+            {
+                Name = artist.Name,
+                Description = artist.Description,
+                Genres = artist.Genres
+                    .Select(g => g.GenreTitle)
+                    .ToArray()
+            };
+
+            return Results.Json(artResult);
         }
 
         public static IResult PostArtist(ApplicationContext context, ArtistDto dto)
@@ -70,6 +73,41 @@ namespace AudialAtlasService.Handlers
             }
 
             return Results.StatusCode((int)HttpStatusCode.Created);
+        }
+
+        public static IResult LinkGenreToArtist(ApplicationContext context, int artistId, int genreId)
+        {
+            Artist? artist = context.Artists
+                .Where(a => a.ArtistId == artistId)
+                .Include(a => a.Genres)
+                .SingleOrDefault();
+            if (artist == null)
+            {
+                throw new ArgumentException();
+            }
+
+            Genre? genre = context.Genres
+                .Where(g => g.GenreId == genreId)
+                .Include(g => g.Artists)
+                .SingleOrDefault();
+            if (genre == null)
+            {
+                throw new ArgumentException();
+            }
+
+            try
+            {
+                artist.Genres.Add(genre);
+                context.Artists.Update(artist);
+                context.SaveChanges();
+                return Results.StatusCode((int)HttpStatusCode.Created);
+            }
+            catch (Exception ex)
+            {
+                return Results.Conflict(new { Message = $"Lol didn't work with message: {ex.Message}" });
+            }
+
+            
         }
     }
 }
