@@ -1,4 +1,5 @@
 ﻿using AudialAtlasService.Data;
+using AudialAtlasService.DbHelper;
 using AudialAtlasService.Models;
 using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels.ArtistViewModels;
@@ -12,30 +13,16 @@ namespace AudialAtlasService.Handlers
 
     public class ArtistHandler
     {
-
-
-        public static IResult GetAllArtists(ApplicationContext context)
+        public static IResult GetAllArtists()
         {
-            List<Artist> artists = context.Artists
-                .Include(a => a.Genres)
-                .ToList();
+            List<ArtistListAllViewModel> list = ArtistDbHelper.ArtistListAll();
 
-            List<ArtistListAllViewModel> result = new List<ArtistListAllViewModel>();
-
-            foreach(Artist artist in artists)
+            if (list == null)
             {
-                ArtistListAllViewModel addToResult = new ArtistListAllViewModel()
-                {
-                    ArtistId = artist.ArtistId,
-                    Name = artist.Name,
-                    Genres = artist.Genres
-                        .Select(g => g.GenreTitle)
-                        .ToArray()
-                };
-                result.Add(addToResult);
+                return Results.NotFound(new { Message = "No artists found" });
             }
 
-            return Results.Json(result);
+            return Results.Json(list);
         }
 
         public static IResult GetSingleArtist(ApplicationContext context, int artistId) 
