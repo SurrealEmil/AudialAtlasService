@@ -60,6 +60,20 @@ namespace AudialAtlasService
                 userFunctions.ConnectUserToGenre(userId, genreId);
                 return Results.Ok("Successfully connected user to genre.");
             });
+
+            app.MapPost("/users/{userName}", (IPostUserFunctions userFunctions, string userName) =>
+            {
+
+                try
+                {
+                    userFunctions.RemoveUser(userName);
+                    return Results.Ok("Removed user sucessfully.");
+                }
+                catch (Exception ex)
+                {
+                    return Results.NotFound(ex.Message);
+                }
+            });
             //------------------------------------------------------------------
 
             // Songs
