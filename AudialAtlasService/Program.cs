@@ -11,7 +11,7 @@ namespace AudialAtlasService
             var builder = WebApplication.CreateBuilder(args);
 
             string connectionString = builder.Configuration.GetConnectionString("ApplicationContext");
-
+            builder.Services.AddScoped<IArtistHandler, ArtistHandler>();
             builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
 
             var app = builder.Build();
@@ -35,7 +35,7 @@ namespace AudialAtlasService
             app.MapGet("/songs/genres/{genreId}", GenreHandler.GetAllSongsInGenre);
             app.MapPost("/genres", GenreHandler.PostGenre);
 
-            // Link Artist to Genre
+            // Link Genre to Artist
             app.MapPost("/artists/{artistId}/genres/{genreId}", ArtistHandler.LinkGenreToArtist);
 
             app.Run();

@@ -3,22 +3,39 @@ using AudialAtlasService.Models;
 using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels.ArtistViewModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Net;
 
 namespace AudialAtlasService.Handlers
 {
+
+
     public class ArtistHandler
     {
+
+
         public static IResult GetAllArtists(ApplicationContext context)
         {
-            List<ArtistListAllViewModel> list = context.Artists
-                .Select(a => new ArtistListAllViewModel()
-                {
-                    Name = a.Name
-                })
+            List<Artist> artists = context.Artists
+                .Include(a => a.Genres)
                 .ToList();
 
-            return Results.Json(list);
+            List<ArtistListAllViewModel> result = new List<ArtistListAllViewModel>();
+
+            foreach(Artist artist in artists)
+            {
+                ArtistListAllViewModel addToResult = new ArtistListAllViewModel()
+                {
+                    ArtistId = artist.ArtistId,
+                    Name = artist.Name,
+                    Genres = artist.Genres
+                        .Select(g => g.GenreTitle)
+                        .ToArray()
+                };
+                result.Add(addToResult);
+            }
+
+            return Results.Json(result);
         }
 
         public static IResult GetSingleArtist(ApplicationContext context, int artistId) 
@@ -56,6 +73,18 @@ namespace AudialAtlasService.Handlers
                 return Results.BadRequest(new { Message = "Description field is required" });
             }
 
+            List<Artist> checkName = context.Artists
+                .Where(a => a.Name == dto.Name)
+                .ToList();
+
+            foreach(Artist check in checkName)
+            {
+                if (check.Description == dto.Description)
+                {
+                    return Results.BadRequest(new { Message = "Combination of name and description already exists" });
+                }
+            }
+
             Artist artist = new Artist()
             {
                 Name = dto.Name,
@@ -83,7 +112,7 @@ namespace AudialAtlasService.Handlers
                 .SingleOrDefault();
             if (artist == null)
             {
-                throw new ArgumentException();
+                return Results.NotFound(new { Message = $"No artist with id {artistId}" });
             }
 
             Genre? genre = context.Genres
@@ -92,7 +121,7 @@ namespace AudialAtlasService.Handlers
                 .SingleOrDefault();
             if (genre == null)
             {
-                throw new ArgumentException();
+                return Results.NotFound(new { Message = $"No genre with id {genreId}" });
             }
 
             try
@@ -104,7 +133,7 @@ namespace AudialAtlasService.Handlers
             }
             catch (Exception ex)
             {
-                return Results.Conflict(new { Message = $"Lol didn't work with message: {ex.Message}" });
+                return Results.Conflict(new { Message = $"Failed to add genre to artist with error: {ex.Message}" });
             }
 
             
