@@ -41,7 +41,7 @@ namespace AudialAtlasService.Handlers
 
         void ConnectUserToGenre(int userId, int genreId);
 
-        void RemoveUser();
+        void RemoveUser(string userName);
     }
 
     /// ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -183,9 +183,9 @@ namespace AudialAtlasService.Handlers
             throw new NotImplementedException();
         }
 
-        public void RemoveUser()
+        public void RemoveUser(string userName)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }
