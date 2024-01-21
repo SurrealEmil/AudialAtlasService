@@ -16,7 +16,7 @@ namespace AudialAtlasService
             var builder = WebApplication.CreateBuilder(args);
 
             string connectionString = builder.Configuration.GetConnectionString("ApplicationContext");
-            builder.Services.AddScoped<IGetArtistsDbHelper, ArtistDbHelper>();
+            builder.Services.AddScoped<IGetArtistsDbHelper, ArtistRepository>();
             builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
 
             // DI Containers med AddScoped
@@ -69,12 +69,7 @@ namespace AudialAtlasService
             app.MapPost("/songs", SongHandler.PostSong);
 
             // Artists
-            app.MapGet("/artists", async (IGetArtistsDbHelper helper) =>
-            {
-                IResult result = await ArtistHandler.GetAllArtists();
-
-
-            });
+            app.MapGet("/artists", ArtistHandler.GetAllArtists);
             app.MapGet("/artists/{artistId}", ArtistHandler.GetSingleArtist);
             app.MapPost("/artists", ArtistHandler.PostArtist);
 
