@@ -25,7 +25,10 @@ namespace AudialAtlasService
 
             var app = builder.Build();
 
-            app.MapGet("/", () => "Hello World!");
+            app.MapGet("/", () => 
+            {
+                Console.WriteLine("Hello World");
+            });
 
             // Users -----------------------------------------------------------
             app.MapGet("/users/{userId}/genres", (IGetUserFunctions userFunctions, int userId) =>
@@ -39,14 +42,22 @@ namespace AudialAtlasService
             });
 
             // Gör om
-            app.MapPost("/users/{userId}/checkuserexists", (IPostUserFunctions userFunctions, UserDTO userDTO) =>
+            app.MapGet("/users/{userName}/check", (IPostUserFunctions userFunctions, string userName) =>
             {
-                bool userExistsOrNot = userFunctions.CheckIfUserExists(userDTO);
+                try
+                {
+                    Console.WriteLine(userName);
+                    bool userExistsOrNot = userFunctions.CheckIfUserExists(userName);
 
-                // En förkortning på en if-else sats.
-                return userExistsOrNot 
-                ? Results.Ok("User exists.") 
-                : Results.NotFound("User does not exist.");
+                    // En förkortning på en if-else sats.
+                    return userExistsOrNot
+                    ? Results.Ok("User exists.")
+                    : Results.NotFound("User does not exist.");
+                }
+                catch (Exception ex)
+                {
+                    return Results.NotFound(ex.Message);
+                }
             });
 
             app.MapPost("/users/{userName}/artists/{artistId}", (string userName, int artistId, IPostUserFunctions userFunctions) =>

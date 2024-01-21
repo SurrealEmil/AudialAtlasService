@@ -2,6 +2,6 @@
 {
     public class UserListAllViewModel
     {
-        public List<UserSingleViewModel> Users { get; set; }
+        
     }
 }
