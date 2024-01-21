@@ -33,7 +33,7 @@ namespace AudialAtlasService.Handlers
     public interface IPostUserFunctions
     {
         //Ändra till vanlig.
-        bool CheckIfUserExists(UserDTO userDTO);
+        bool CheckIfUserExists(string userName);
 
         void ConnectUserToArtist(string userName, int artistId);
 
@@ -54,7 +54,6 @@ namespace AudialAtlasService.Handlers
         private readonly ApplicationContext _context;
         //---------------------------------------------
 
-
         //En konstruktor som tillåter Dependency Injection, med context kopplat i för att ge metoderna en DI koppling till databasen
         public UserHandler(ApplicationContext context)
         {
@@ -62,9 +61,14 @@ namespace AudialAtlasService.Handlers
         }
         //---------------------------------------------
 
-        public bool CheckIfUserExists(UserDTO userDTO)        
+        public bool CheckIfUserExists(string userName)        
         {
-            return _context.Users.Any(u => u.UserName == userDTO.UserName);
+            Console.WriteLine("Pre user exists");                                                                         
+            var userExists = _context.Users.
+                Where(x => x.UserName == userName).
+                Any(x => x.UserName == userName);
+            Console.WriteLine("Post user exists");
+            return userExists;
         }
 
         public void ConnectUserToArtist(string userName, int artistId)
