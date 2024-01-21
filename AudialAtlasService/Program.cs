@@ -41,8 +41,7 @@ namespace AudialAtlasService
                 : Results.NotFound("No genres found for this user.") ;
             });
 
-            // Gör om
-            app.MapGet("/users/{userName}/check", (IPostUserFunctions userFunctions, string userName) =>
+            app.MapGet("/users/{userName}/check", (IGetUserFunctions userFunctions, string userName) =>
             {
                 try
                 {

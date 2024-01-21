@@ -18,6 +18,8 @@ namespace AudialAtlasService.Handlers
 
     public interface IGetUserFunctions
     {
+        bool CheckIfUserExists(string userName);
+
         // Beslöt för att göra så metoderna retunerar en lista.
         List<Song> GetAllSongsLikedByUser(int userId);
 
@@ -32,9 +34,6 @@ namespace AudialAtlasService.Handlers
 
     public interface IPostUserFunctions
     {
-        //Ändra till vanlig.
-        bool CheckIfUserExists(string userName);
-
         void ConnectUserToArtist(string userName, int artistId);
 
         void ConnectUserToSong(string userName, int songId);
