@@ -61,7 +61,7 @@ namespace AudialAtlasService
                 return Results.Ok("Successfully connected user to genre.");
             });
 
-            app.MapPost("/users/{userName}", (IPostUserFunctions userFunctions, string userName) =>
+            app.MapPost("/users/removeuser/{userName}", (IPostUserFunctions userFunctions, string userName) =>
             {
 
                 try
