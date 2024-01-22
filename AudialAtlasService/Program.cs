@@ -1,11 +1,12 @@
 using AudialAtlasService.Data;
-using AudialAtlasService.DbHelper;
+using AudialAtlasService.DbHelpers;
 using AudialAtlasService.Handlers;
 using Microsoft.EntityFrameworkCore;
 using AudialAtlasService.Models;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
 using AudialAtlasService.Models.DTOs;
+using AudialAtlasService.DbHelpers;
 
 namespace AudialAtlasService
 {
@@ -16,13 +17,16 @@ namespace AudialAtlasService
             var builder = WebApplication.CreateBuilder(args);
 
             string connectionString = builder.Configuration.GetConnectionString("ApplicationContext");
-            builder.Services.AddScoped<IGetArtistsDbHelper, ArtistRepository>();
+            
             builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
 
             // DI Containers med AddScoped
             builder.Services.AddScoped<IGetUserFunctions, UserHandler>();
             builder.Services.AddScoped<IPostUserFunctions, UserHandler>();
             builder.Services.AddScoped<IViewModelFunctions, UserHandler>();
+
+            builder.Services.AddScoped<IArtistsDbHelper, ArtistRepository>();
+            builder.Services.AddScoped<ISongDbHelper, SongRepository>();
 
             var app = builder.Build();
 
@@ -66,7 +70,7 @@ namespace AudialAtlasService
             // Songs
             app.MapGet("/songs", SongHandler.ListAllSongs);
             app.MapGet("/songs/{songId}", SongHandler.GetSingleSong);
-            app.MapPost("/songs", SongHandler.PostSong);
+            app.MapPost("artists/{artistId}/songs", SongHandler.PostSong);
 
             // Artists
             app.MapGet("/artists", ArtistHandler.GetAllArtists);

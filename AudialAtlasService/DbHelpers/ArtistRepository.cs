@@ -53,6 +53,9 @@ namespace AudialAtlasService.DbHelpers
                     Description = a.Description,
                     Genres = a.Genres
                         .Select(g => g.GenreTitle)
+                        .ToArray(),
+                    Songs = a.Songs
+                        .Select(s => s.SongTitle)
                         .ToArray()
                 })
                 .SingleOrDefault();

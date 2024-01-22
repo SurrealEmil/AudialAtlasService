@@ -1,4 +1,5 @@
 ﻿using AudialAtlasService.Data;
+using AudialAtlasService.DbHelpers;
 using AudialAtlasService.Models;
 using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels;
@@ -8,63 +9,43 @@ namespace AudialAtlasService.Handlers
 {
     public class SongHandler
     {
-        public static IResult ListAllSongs(ApplicationContext context)
+        public static IResult ListAllSongs(ISongDbHelper helper)
         {
-            List<SongListAllViewModel> list = context.Songs
-                .Select(s => new SongListAllViewModel()
-                {
-                    SongTitle = s.SongTitle,
-                    // Implement ArtistViewModel
-                })
-                .ToList();
+            List<SongListAllViewModel> result = helper.ListAllSongs();
 
-            return Results.Json(list);
+            return Results.Json(result);
         }
 
-        public static IResult GetSingleSong(ApplicationContext context, int songId)
+        public static IResult GetSingleSong(ISongDbHelper helper, int songId)
         {
-            SongSingleViewModel? song = context.Songs
-                .Where(s => s.SongId == songId)
-                .Select(s => new SongSingleViewModel()
-                {
-                    SongTitle = s.SongTitle,
-                })
-                .SingleOrDefault();
+            SongSingleViewModel? song = helper.GetSingleSong(songId);
 
             if(song == null)
             {
-                return Results.NotFound(new { Message = "No song found" });
+                return Results.NotFound(new { Message = $"No song with id {songId} found" });
             }
 
             return Results.Json(song);
         }
 
-        public static IResult PostSong(ApplicationContext context, SongDto dto)
+        public static IResult PostSong(ISongDbHelper helper, int artistId, SongDto dto)
         {
-            // Get artist for song
-            // Use artistId
-
-            Song? song = new Song()
+            if(dto.SongTitle == null)
             {
-                SongTitle = dto.SongTitle
-            };
-
-            if(song == null)
-            {
-                return Results.BadRequest(new { Message = "SongTitle field is required" });
+                return Results.BadRequest(new {Message = "Song title is required"});
             }
 
-            try
-            {
-                context.Songs.Add(song);
-                context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                return Results.Conflict(new { Message = $"Failed to create new song with error message: {ex.Message}" });
-            }
+            int created = helper.PostSong(artistId, dto);
 
-            return Results.StatusCode((int)HttpStatusCode.Created);
+            switch (created)
+            {
+                case 0:
+                    return Results.NotFound(new { Message = $"No artist with id {artistId} found" });
+                case 1:
+                    return Results.StatusCode((int)HttpStatusCode.Created);
+                default:
+                    return Results.Conflict(new { Message = "Failed to add song to artist" });
+            }
         }
     }
 }

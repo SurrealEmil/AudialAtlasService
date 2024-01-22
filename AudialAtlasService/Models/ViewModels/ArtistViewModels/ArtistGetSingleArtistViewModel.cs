@@ -9,6 +9,6 @@
         public string[] Genres { get; set; }
 
         //// Should be list of SongViewModel
-        //public virtual List<SongViewModel> Songs { get; set; }
+        public string[]? Songs { get; set; }
     }
 }
