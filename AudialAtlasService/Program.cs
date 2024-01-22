@@ -31,8 +31,11 @@ namespace AudialAtlasService
             });
 
             // Users -----------------------------------------------------------
+
+            // FIXA, funkar ej!
             app.MapGet("/users/{userId}/genres", (IGetUserFunctions userFunctions, int userId) =>
-            {   
+            {
+                Console.WriteLine("INFO: GetAllGenresLikedByUser HAS BEEN CALLED");
                 var getGenresConnectedToUser = userFunctions.GetAllGenresLikedByUser(userId);
 
                 // En förkortning på en if-else sats.
@@ -41,11 +44,12 @@ namespace AudialAtlasService
                 : Results.NotFound("No genres found for this user.") ;
             });
 
+            //Funkar
             app.MapGet("/users/{userName}/check", (IGetUserFunctions userFunctions, string userName) =>
             {
                 try
                 {
-                    Console.WriteLine(userName);
+                    Console.WriteLine("INFO: CheckIfUserExists HAS BEEN CALLED");
                     bool userExistsOrNot = userFunctions.CheckIfUserExists(userName);
 
                     // En förkortning på en if-else sats.

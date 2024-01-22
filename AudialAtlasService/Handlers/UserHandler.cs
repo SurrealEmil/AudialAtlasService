@@ -160,9 +160,12 @@ namespace AudialAtlasService.Handlers
                                                         //även fast det inte finns en istället för null.
         public List<Genre> GetAllGenresLikedByUser(int userId)
         {
+            Console.WriteLine("Pre catch");
             var userWithGenres = _context.Users
+               // .Where(u =>  u.UserName == userName)
                 .Include(u => u.Genres)
                 .FirstOrDefault(u => u.UserId == userId);
+            Console.WriteLine("Post catch");
 
             return userWithGenres?.Genres.ToList() ?? new List<Genre>();
         }
