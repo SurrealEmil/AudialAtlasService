@@ -11,6 +11,7 @@ namespace AudialAtlasService.DbHelpers
         public List<SongListAllViewModel> ListAllSongs();
         public SongSingleViewModel GetSingleSong(int songId);
         public int PostSong(int artistId, SongDto dto);
+        public int LinkGenreToSong(int songId, int genreId);
 
     }
     public class SongRepository : ISongDbHelper
@@ -72,6 +73,38 @@ namespace AudialAtlasService.DbHelpers
                 _context.Songs.Add(song);
                 _context.SaveChanges();
                 return 1;
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+        }
+
+        public int LinkGenreToSong(int songId, int genreId)
+        {
+            Song? song = _context.Songs
+                .Where(s => s.SongId == songId)
+                .Include(s => s.Genres)
+                .SingleOrDefault();
+            if(song == null)
+            {
+                return 0;
+            }
+
+            Genre? genre = _context.Genres
+                .Where(g => g.GenreId == genreId)
+                .Include(g => g.Songs)
+                .SingleOrDefault();
+            if(genre == null) 
+            { 
+                return 1;
+            }
+
+            try
+            {
+                song.Genres.Add(genre);
+                _context.SaveChanges();
+                return 2;
             }
             catch (Exception ex)
             {

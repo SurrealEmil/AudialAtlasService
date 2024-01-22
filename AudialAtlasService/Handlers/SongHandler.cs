@@ -47,5 +47,22 @@ namespace AudialAtlasService.Handlers
                     return Results.Conflict(new { Message = "Failed to add song to artist" });
             }
         }
+
+        public static IResult LinkGenreToSong(ISongDbHelper helper, int songId, int genreId)
+        {
+            int linkGenreToSong = helper.LinkGenreToSong(songId, genreId);
+
+            switch (linkGenreToSong)
+            {
+                case 0:
+                    return Results.NotFound(new { Message = $"No song with id {songId} found" });
+                case 1:
+                    return Results.NotFound(new {Message = $"No genre with id {genreId} found" });
+                case 2:
+                    return Results.StatusCode((int)HttpStatusCode.Created);
+                default:
+                    return Results.Conflict(new { Message = "Failed to link genre to song" });
+            }
+        }
     }
 }
