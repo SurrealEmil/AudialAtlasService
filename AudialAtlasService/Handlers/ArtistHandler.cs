@@ -1,8 +1,8 @@
 ﻿using AudialAtlasService.Data;
-using AudialAtlasService.DbHelpers;
 using AudialAtlasService.Models;
 using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels.ArtistViewModels;
+using AudialAtlasService.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Net;

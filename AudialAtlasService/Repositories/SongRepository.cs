@@ -2,18 +2,19 @@
 using AudialAtlasService.Models;
 using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels;
+using AudialAtlasService.Repositories.SongRepoExceptions;
 using Microsoft.EntityFrameworkCore;
 
-namespace AudialAtlasService.DbHelpers
+namespace AudialAtlasService.Repositories
 {
     public interface ISongDbHelper
     {
         public List<SongListAllViewModel> ListAllSongs();
         public SongSingleViewModel GetSingleSong(int songId);
-        public int PostSong(int artistId, SongDto dto);
-        public int LinkGenreToSong(int songId, int genreId);
-
+        public void PostSong(int artistId, SongDto dto);
+        public void LinkGenreToSong(int songId, int genreId);
     }
+
     public class SongRepository : ISongDbHelper
     {
         private ApplicationContext _context;
@@ -31,6 +32,11 @@ namespace AudialAtlasService.DbHelpers
                     Artist = s.Artist.Name
                 })
                 .ToList();
+
+            if(list.Count <= 0)
+            {
+                throw new SongNotFoundException("No songs in database");
+            }
             return list;
         }
 
@@ -48,10 +54,15 @@ namespace AudialAtlasService.DbHelpers
                 })
                 .SingleOrDefault();
 
+            if(song == null)
+            {
+                throw new SongNotFoundException();
+            }
+
             return song;
         }
 
-        public int PostSong(int artistId, SongDto dto)
+        public void PostSong(int artistId, SongDto dto)
         {
             Artist? artist = _context.Artists
                 .Where(a => a.ArtistId == artistId)
@@ -59,7 +70,7 @@ namespace AudialAtlasService.DbHelpers
                 .SingleOrDefault();
             if(artist == null) 
             {
-                return 0;
+                throw new SongFailedToAddToDatabaseException($"No artist with id {artistId} found");
             }
 
             Song? song = new Song()
@@ -72,15 +83,14 @@ namespace AudialAtlasService.DbHelpers
             {
                 _context.Songs.Add(song);
                 _context.SaveChanges();
-                return 1;
             }
-            catch (Exception ex)
+            catch
             {
-                return -1;
+                throw new SongFailedToAddToDatabaseException();
             }
         }
 
-        public int LinkGenreToSong(int songId, int genreId)
+        public void LinkGenreToSong(int songId, int genreId)
         {
             Song? song = _context.Songs
                 .Where(s => s.SongId == songId)
@@ -88,7 +98,7 @@ namespace AudialAtlasService.DbHelpers
                 .SingleOrDefault();
             if(song == null)
             {
-                return 0;
+                throw new SongNotFoundException($"No song with id {songId} found");
             }
 
             Genre? genre = _context.Genres
@@ -97,18 +107,19 @@ namespace AudialAtlasService.DbHelpers
                 .SingleOrDefault();
             if(genre == null) 
             { 
-                return 1;
+                // Placeholder for genre exception?
+                throw new SongNotFoundException($"No genre with id {genreId} found");
             }
 
             try
             {
                 song.Genres.Add(genre);
                 _context.SaveChanges();
-                return 2;
             }
             catch (Exception ex)
             {
-                return -1;
+                // Change exception to more specifik exception.
+                throw new SongFailedToAddToDatabaseException("Failed to add genre to song");
             }
         }
     }

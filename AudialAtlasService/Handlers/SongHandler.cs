@@ -1,8 +1,9 @@
 ﻿using AudialAtlasService.Data;
-using AudialAtlasService.DbHelpers;
 using AudialAtlasService.Models;
 using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels;
+using AudialAtlasService.Repositories;
+using AudialAtlasService.Repositories.SongRepoExceptions;
 using System.Net;
 
 namespace AudialAtlasService.Handlers
@@ -11,21 +12,28 @@ namespace AudialAtlasService.Handlers
     {
         public static IResult ListAllSongs(ISongDbHelper helper)
         {
-            List<SongListAllViewModel> result = helper.ListAllSongs();
-
-            return Results.Json(result);
+            try
+            {
+                List<SongListAllViewModel> result = helper.ListAllSongs();
+                return Results.Json(result);
+            }
+            catch (SongNotFoundException e)
+            {
+                return Results.NotFound(e);
+            }
         }
 
         public static IResult GetSingleSong(ISongDbHelper helper, int songId)
         {
-            SongSingleViewModel? song = helper.GetSingleSong(songId);
-
-            if(song == null)
+            try
+            {
+                SongSingleViewModel? song = helper.GetSingleSong(songId);
+                return Results.Json(song);
+            }
+            catch (SongNotFoundException)
             {
                 return Results.NotFound(new { Message = $"No song with id {songId} found" });
             }
-
-            return Results.Json(song);
         }
 
         public static IResult PostSong(ISongDbHelper helper, int artistId, SongDto dto)
@@ -35,33 +43,34 @@ namespace AudialAtlasService.Handlers
                 return Results.BadRequest(new {Message = "Song title is required"});
             }
 
-            int created = helper.PostSong(artistId, dto);
-
-            switch (created)
+            try
             {
-                case 0:
-                    return Results.NotFound(new { Message = $"No artist with id {artistId} found" });
-                case 1:
-                    return Results.StatusCode((int)HttpStatusCode.Created);
-                default:
-                    return Results.Conflict(new { Message = "Failed to add song to artist" });
+                helper.PostSong(artistId, dto);
+                return Results.StatusCode((int)HttpStatusCode.Created);
+            }
+            catch (SongFailedToAddToDatabaseException e)
+            {
+                return Results.Conflict(new
+                {
+                    Message = $"Failed with message: {e.Message}"
+                });
             }
         }
 
         public static IResult LinkGenreToSong(ISongDbHelper helper, int songId, int genreId)
         {
-            int linkGenreToSong = helper.LinkGenreToSong(songId, genreId);
-
-            switch (linkGenreToSong)
+            try
             {
-                case 0:
-                    return Results.NotFound(new { Message = $"No song with id {songId} found" });
-                case 1:
-                    return Results.NotFound(new {Message = $"No genre with id {genreId} found" });
-                case 2:
-                    return Results.StatusCode((int)HttpStatusCode.Created);
-                default:
-                    return Results.Conflict(new { Message = "Failed to link genre to song" });
+                helper.LinkGenreToSong(songId, genreId);
+                return Results.StatusCode((int)HttpStatusCode.Created);
+            }
+            catch (SongNotFoundException e)
+            {
+                return Results.NotFound(new { Message = $"Failed with message: {e.Message}" });
+            }
+            catch (SongFailedToAddToDatabaseException e)
+            {
+                return Results.Conflict(new { Message = $"Failed with message: {e.Message}" });
             }
         }
     }

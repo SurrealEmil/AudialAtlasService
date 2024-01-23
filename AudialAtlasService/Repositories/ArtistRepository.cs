@@ -5,7 +5,7 @@ using AudialAtlasService.Models.ViewModels.ArtistViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
-namespace AudialAtlasService.DbHelpers
+namespace AudialAtlasService.Repositories
 {
     public interface IArtistsDbHelper
     {

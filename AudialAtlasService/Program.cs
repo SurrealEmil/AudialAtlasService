@@ -1,12 +1,11 @@
 using AudialAtlasService.Data;
-using AudialAtlasService.DbHelpers;
 using AudialAtlasService.Handlers;
 using Microsoft.EntityFrameworkCore;
 using AudialAtlasService.Models;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
 using AudialAtlasService.Models.DTOs;
-using AudialAtlasService.DbHelpers;
+using AudialAtlasService.Repositories;
 
 namespace AudialAtlasService
 {
