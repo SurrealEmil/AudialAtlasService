@@ -7,7 +7,7 @@ using System.Net;
 
 namespace AudialAtlasService.Repositories
 {
-    public interface IArtistsDbHelper
+    public interface IArtistRepository
     {
         public List<ArtistListAllViewModel> ArtistListAll();
         public ArtistGetSingleArtistViewModel GetSingleArtist(int artistId);
@@ -15,7 +15,7 @@ namespace AudialAtlasService.Repositories
         public int LinkGenreToArtist(int artistId, int genreId);
     }
 
-    public class ArtistRepository : IArtistsDbHelper
+    public class ArtistRepository : IArtistRepository
     {
         private static ApplicationContext _context;
         public ArtistRepository(ApplicationContext context)

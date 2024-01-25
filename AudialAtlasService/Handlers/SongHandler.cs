@@ -10,7 +10,7 @@ namespace AudialAtlasService.Handlers
 {
     public class SongHandler
     {
-        public static IResult ListAllSongs(ISongDbHelper helper)
+        public static IResult ListAllSongs(ISongRepository helper)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace AudialAtlasService.Handlers
             }
         }
 
-        public static IResult GetSingleSong(ISongDbHelper helper, int songId)
+        public static IResult GetSingleSong(ISongRepository helper, int songId)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace AudialAtlasService.Handlers
             }
         }
 
-        public static IResult PostSong(ISongDbHelper helper, int artistId, SongDto dto)
+        public static IResult PostSong(ISongRepository helper, int artistId, SongDto dto)
         {
             if(dto.SongTitle == null)
             {
@@ -57,7 +57,7 @@ namespace AudialAtlasService.Handlers
             }
         }
 
-        public static IResult LinkGenreToSong(ISongDbHelper helper, int songId, int genreId)
+        public static IResult LinkGenreToSong(ISongRepository helper, int songId, int genreId)
         {
             try
             {

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AudialAtlasService.Repositories
 {
-    public interface ISongDbHelper
+    public interface ISongRepository
     {
         public List<SongListAllViewModel> ListAllSongs();
         public SongSingleViewModel GetSingleSong(int songId);
@@ -15,7 +15,7 @@ namespace AudialAtlasService.Repositories
         public void LinkGenreToSong(int songId, int genreId);
     }
 
-    public class SongRepository : ISongDbHelper
+    public class SongRepository : ISongRepository
     {
         private ApplicationContext _context;
         public SongRepository(ApplicationContext context)

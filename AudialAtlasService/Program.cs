@@ -24,8 +24,8 @@ namespace AudialAtlasService
             builder.Services.AddScoped<IPostUserFunctions, UserHandler>();
             builder.Services.AddScoped<IViewModelFunctions, UserHandler>();
 
-            builder.Services.AddScoped<IArtistsDbHelper, ArtistRepository>();
-            builder.Services.AddScoped<ISongDbHelper, SongRepository>();
+            builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
+            builder.Services.AddScoped<ISongRepository, SongRepository>();
 
             var app = builder.Build();
 

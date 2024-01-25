@@ -13,7 +13,7 @@ namespace AudialAtlasService.Handlers
 
     public class ArtistHandler
     {
-        public static IResult GetAllArtists(IArtistsDbHelper helper)
+        public static IResult GetAllArtists(IArtistRepository helper)
         {
             List<ArtistListAllViewModel> list = helper.ArtistListAll();
 
@@ -25,7 +25,7 @@ namespace AudialAtlasService.Handlers
             return Results.Json(list);
         }
 
-        public static IResult GetSingleArtist(IArtistsDbHelper helper, int artistId) 
+        public static IResult GetSingleArtist(IArtistRepository helper, int artistId) 
         {
             ArtistGetSingleArtistViewModel? artist = helper.GetSingleArtist(artistId);
 
@@ -37,7 +37,7 @@ namespace AudialAtlasService.Handlers
             return Results.Json(artist);
         }
 
-        public static IResult PostArtist(IArtistsDbHelper helper, ArtistDto dto)
+        public static IResult PostArtist(IArtistRepository helper, ArtistDto dto)
         {
             if (string.IsNullOrEmpty(dto.Name))
             {
@@ -61,7 +61,7 @@ namespace AudialAtlasService.Handlers
             }
         }
 
-        public static IResult LinkGenreToArtist(IArtistsDbHelper helper, int artistId, int genreId)
+        public static IResult LinkGenreToArtist(IArtistRepository helper, int artistId, int genreId)
         {
             int linkArtistAndGenre = helper.LinkGenreToArtist(artistId, genreId);
 
