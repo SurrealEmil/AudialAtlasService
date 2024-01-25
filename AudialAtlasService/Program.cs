@@ -5,6 +5,7 @@ using AudialAtlasService.Models;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
 using AudialAtlasService.Models.DTOs;
+using AudialAtlasService.Repositories;
 
 namespace AudialAtlasService
 {
@@ -19,21 +20,33 @@ namespace AudialAtlasService
             builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
 
             // DI Containers med AddScoped
-            builder.Services.AddScoped<IGetUserFunctions, UserHandler>();
-            builder.Services.AddScoped<IPostUserFunctions, UserHandler>();
-            builder.Services.AddScoped<IViewModelFunctions, UserHandler>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             var app = builder.Build();
 
             app.MapGet("/", () => 
             {
-                Console.WriteLine("Hello World");
+                Console.WriteLine("Hello World in Console!");
             });
 
             // Users -----------------------------------------------------------
 
-            // FIXA, funkar ej!
-            app.MapGet("/users/{userId}/genres", (IGetUserFunctions userFunctions, int userId) =>
+            app.MapGet("/users/{userId}/artists", (IUserRepository userfunctions, int userId) =>
+            {
+                
+
+
+
+                //Console.WriteLine("\nCONSOLE LOG\nINFO: GetAllArtistsLikedByUser HAS BEEN CALLED\n");
+
+                //var getArtistConnectedToUser = userfunctions.GetAllArtistsLikedByUser(userId);
+
+                //return getArtistConnectedToUser.Any()
+                //? Results.Ok(getArtistConnectedToUser)
+                //: Results.NotFound("No artists liked by this user.");
+            });
+
+            app.MapGet("/users/{userId}/genres", (IUserRepository userFunctions, int userId) =>
             {
                 Console.WriteLine("\nCONSOLE LOG\nINFO: GetAllGenresLikedByUser HAS BEEN CALLED\n");
                 var getGenresConnectedToUser = userFunctions.GetAllGenresLikedByUser(userId);
@@ -44,8 +57,7 @@ namespace AudialAtlasService
                 : Results.NotFound("No genres found for this user.");
             });
 
-            //Funkar
-            app.MapGet("/users/{userName}/check", (IGetUserFunctions userFunctions, string userName) =>
+            app.MapGet("/users/{userName}/check", (IUserRepository userFunctions, string userName) =>
             {
                 try
                 {
@@ -63,21 +75,20 @@ namespace AudialAtlasService
                 }
             });
 
-            app.MapPost("/users/{userName}/artists/{artistId}", (string userName, int artistId, IPostUserFunctions userFunctions) =>
+            app.MapPost("/users/{userName}/artists/{artistId}", (string userName, int artistId, IUserRepository userFunctions) =>
             {// Kanske bör vara UserHandler userHanlder istället för IPostUserFunctions, inte testat än.
                 userFunctions.ConnectUserToArtist(userName, artistId);
                 return Results.Ok("Successfully connected user to artist.");
             });
 
-            app.MapPost("/users/{userId}/genres/{genreId}", (int userId, int genreId, IPostUserFunctions userFunctions) =>
+            app.MapPost("/users/{userId}/genres/{genreId}", (int userId, int genreId, IUserRepository userFunctions) =>
             {// Kanske bör vara UserHandler userHanlder istället för IPostUserFunctions, inte testat än.
                 userFunctions.ConnectUserToGenre(userId, genreId);
                 return Results.Ok("Successfully connected user to genre.");
             });
 
-            app.MapPost("/users/removeuser/{userName}", (IPostUserFunctions userFunctions, string userName) =>
+            app.MapPost("/users/removeuser/{userName}", (IUserRepository userFunctions, string userName) =>
             {
-
                 try
                 {
                     userFunctions.RemoveUser(userName);
@@ -88,7 +99,6 @@ namespace AudialAtlasService
                     return Results.NotFound(ex.Message);
                 }
             });
-            //------------------------------------------------------------------
 
             // Songs
             app.MapGet("/songs", SongHandler.ListAllSongs);
