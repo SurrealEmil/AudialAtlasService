@@ -50,10 +50,7 @@ namespace AudialAtlasService.Handlers
             }
             catch (SongFailedToAddToDatabaseException e)
             {
-                return Results.Conflict(new
-                {
-                    Message = $"Failed with message: {e.Message}"
-                });
+                return Results.StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
 
@@ -70,7 +67,7 @@ namespace AudialAtlasService.Handlers
             }
             catch (SongFailedToAddToDatabaseException e)
             {
-                return Results.Conflict(new { Message = $"Failed with message: {e.Message}" });
+                return Results.StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
     }

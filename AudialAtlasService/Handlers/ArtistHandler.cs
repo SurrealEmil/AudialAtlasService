@@ -48,17 +48,20 @@ namespace AudialAtlasService.Handlers
                 return Results.BadRequest(new { Message = "Description field is required" });
             }
 
-            int created = helper.AddArtistToDb(dto);
-
-            switch(created)
+            try
             {
-                case 0:
-                    return Results.StatusCode((int)HttpStatusCode.Created);
-                case 1:
-                    return Results.BadRequest(new { Message = "Artist already exists" });
-                default:
-                    return Results.Conflict(new { Message = "Failed to add artist to database" });
+                helper.AddArtistToDb(dto);
             }
+            catch (ArgumentException e)
+            {
+                return Results.BadRequest(new { Message = "Artist already exists" });
+            }
+            catch (Exception e) 
+            {
+                return Results.Conflict(new { Message = "Failed to add artist to database" });
+            }
+
+            return Results.StatusCode((int)HttpStatusCode.Created);
         }
 
         public static IResult LinkGenreToArtist(IArtistRepository helper, int artistId, int genreId)

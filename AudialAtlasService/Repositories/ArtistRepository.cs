@@ -11,7 +11,7 @@ namespace AudialAtlasService.Repositories
     {
         public List<ArtistListAllViewModel> ArtistListAll();
         public ArtistGetSingleArtistViewModel GetSingleArtist(int artistId);
-        public int AddArtistToDb(ArtistDto dto);
+        public void AddArtistToDb(ArtistDto dto);
         public int LinkGenreToArtist(int artistId, int genreId);
     }
 
@@ -63,7 +63,7 @@ namespace AudialAtlasService.Repositories
             return artResult;
         }
 
-        public int AddArtistToDb(ArtistDto dto)
+        public void AddArtistToDb(ArtistDto dto)
         {
             // Maybe change return type to tuple? So method returns both string for error message and int for the switch.
             List<Artist> checkName = _context.Artists
@@ -74,8 +74,7 @@ namespace AudialAtlasService.Repositories
             {
                 if (check.Description == dto.Description)
                 {
-                    // 1 means artist already exists
-                    return 1;
+                    throw new ArgumentException();
                 }
             }
 
@@ -89,13 +88,10 @@ namespace AudialAtlasService.Repositories
             {
                 _context.Artists.Add(artist);
                 _context.SaveChanges();
-                // 0 means success
-                return 0;
             }
-            catch (Exception ex)
+            catch
             {
-                // -1 means method failed (Uses default in the switch).
-                return -1;
+                throw new Exception();
             }
         }
 
