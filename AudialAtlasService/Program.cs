@@ -29,76 +29,14 @@ namespace AudialAtlasService
                 Console.WriteLine("Hello World in Console!");
             });
 
-            // Users -----------------------------------------------------------
-
-            app.MapGet("/users/{userId}/artists", (IUserRepository userfunctions, int userId) =>
-            {
-                
-
-
-
-                //Console.WriteLine("\nCONSOLE LOG\nINFO: GetAllArtistsLikedByUser HAS BEEN CALLED\n");
-
-                //var getArtistConnectedToUser = userfunctions.GetAllArtistsLikedByUser(userId);
-
-                //return getArtistConnectedToUser.Any()
-                //? Results.Ok(getArtistConnectedToUser)
-                //: Results.NotFound("No artists liked by this user.");
-            });
-
-            app.MapGet("/users/{userId}/genres", (IUserRepository userFunctions, int userId) =>
-            {
-                Console.WriteLine("\nCONSOLE LOG\nINFO: GetAllGenresLikedByUser HAS BEEN CALLED\n");
-                var getGenresConnectedToUser = userFunctions.GetAllGenresLikedByUser(userId);
-
-                // En förkortning på en if-else sats.
-                return getGenresConnectedToUser.Any() 
-                ? Results.Ok(getGenresConnectedToUser) 
-                : Results.NotFound("No genres found for this user.");
-            });
-
-            app.MapGet("/users/{userName}/check", (IUserRepository userFunctions, string userName) =>
-            {
-                try
-                {
-                    Console.WriteLine("INFO: CheckIfUserExists HAS BEEN CALLED");
-                    bool userExistsOrNot = userFunctions.CheckIfUserExists(userName);
-
-                    // En förkortning på en if-else sats.
-                    return userExistsOrNot
-                    ? Results.Ok("User exists.")
-                    : Results.NotFound("User does not exist.");
-                }
-                catch (Exception ex)
-                {
-                    return Results.NotFound(ex.Message);
-                }
-            });
-
-            app.MapPost("/users/{userName}/artists/{artistId}", (string userName, int artistId, IUserRepository userFunctions) =>
-            {// Kanske bör vara UserHandler userHanlder istället för IPostUserFunctions, inte testat än.
-                userFunctions.ConnectUserToArtist(userName, artistId);
-                return Results.Ok("Successfully connected user to artist.");
-            });
-
-            app.MapPost("/users/{userId}/genres/{genreId}", (int userId, int genreId, IUserRepository userFunctions) =>
-            {// Kanske bör vara UserHandler userHanlder istället för IPostUserFunctions, inte testat än.
-                userFunctions.ConnectUserToGenre(userId, genreId);
-                return Results.Ok("Successfully connected user to genre.");
-            });
-
-            app.MapPost("/users/removeuser/{userName}", (IUserRepository userFunctions, string userName) =>
-            {
-                try
-                {
-                    userFunctions.RemoveUser(userName);
-                    return Results.Ok("Removed user sucessfully.");
-                }
-                catch (Exception ex)
-                {
-                    return Results.NotFound(ex.Message);
-                }
-            });
+            // Users
+            app.MapPost("/users/connect-to-artist", UserHandler.ConnectUserToArtistHandler);
+            app.MapPost("/users/connect-to-genre", UserHandler.ConnectUserToGenreHandler);
+            app.MapPost("/users/connect-to-song", UserHandler.ConnectUserToSongHandler);
+            app.MapGet("/users/{userId}/artists", UserHandler.GetAllArtistsLikedByUserHandler);
+            app.MapGet("/users/{userId}/genres", UserHandler.GetAllGenresLikedByUserHandler);
+            app.MapGet("/users/{userId}/songs", UserHandler.GetAllSongsLikedByUserHandler);
+            app.MapGet("/users/{userName}/check", UserHandler.CheckIfUserExistsHandler);
 
             // Songs
             app.MapGet("/songs", SongHandler.ListAllSongs);

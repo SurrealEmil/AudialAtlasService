@@ -5,6 +5,7 @@ using AudialAtlasService.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using AudialAtlasService.Handlers;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography.X509Certificates;
 
 // IoC (Interests of Concerns) strukturerat
 namespace AudialAtlasService.Repositories
@@ -15,10 +16,9 @@ namespace AudialAtlasService.Repositories
         List<ArtistDto> GetAllArtistsLikedByUser(int userId);
         List<GenreDto> GetAllGenresLikedByUser(int userId);
         List<SongDto> GetAllSongsLikedByUser(int userId);
-        void ConnectUserToArtist(string userName, int artistId);
-        void ConnectUserToSong(string userName, int songId);
-        void ConnectUserToGenre(int userId, int genreId);
-        void RemoveUser(string userName);
+        void ConnectUserToArtist(UserArtistConnectionDto connectionDto);
+        void ConnectUserToSong(UserSongConnectionDto connectionDto);
+        void ConnectUserToGenre(UserGenreConnectionDto connectionDto);
         void GetRecommendations();
     }
 
@@ -41,19 +41,70 @@ namespace AudialAtlasService.Repositories
             return userExists;
         }
 
-        public void ConnectUserToArtist(string userName, int artistId)
+        public void ConnectUserToArtist(UserArtistConnectionDto connectionDto)
         {
-            throw new NotImplementedException();
+            var user = _context.Users
+                .Include(u => u.Artists)
+                .FirstOrDefault(u => u.UserId == connectionDto.UserId);
+            var artist = _context.Artists.Find(connectionDto.ArtistId);
+
+            if (user == null || artist == null)
+            {
+                throw new KeyNotFoundException("The user or artist does not exist.");
+            }
+
+            if (user.Artists.Any(a => a.ArtistId == artist.ArtistId))
+            {
+
+                return;
+            }
+
+            user.Artists.Add(artist);
+            _context.SaveChanges();
         }
 
-        public void ConnectUserToGenre(int userId, int genreId)
+        public void ConnectUserToGenre(UserGenreConnectionDto connectionDto)
         {
-            throw new NotImplementedException();
+            var user = _context.Users
+                .Include(u => u.Genres)
+                .FirstOrDefault(u => u.UserId == connectionDto.UserId);
+            var genre = _context.Genres.Find(connectionDto.GenreId);
+
+            if (user == null || genre == null)
+            {
+                throw new KeyNotFoundException("The user or genre does not exist.");
+            }
+
+            if (user.Genres.Any(a => a.GenreId == genre.GenreId))
+            {
+
+                return;
+            }
+
+            user.Genres.Add(genre);
+            _context.SaveChanges();
         }
 
-        public void ConnectUserToSong(string userName, int songId)
+        public void ConnectUserToSong(UserSongConnectionDto connectionDto)
         {
-            throw new NotImplementedException();
+            var user = _context.Users
+                .Include(u => u.Songs)
+                .FirstOrDefault(u => u.UserId == connectionDto.UserId);
+            var song = _context.Songs.Find(connectionDto.SongId);
+
+            if (user == null || song == null)
+            {
+                throw new KeyNotFoundException("The user or song does not exist.");
+            }
+
+            if (user.Songs.Any(a => a.SongId == song.SongId))
+            {
+
+                return;
+            }
+
+            user.Songs.Add(song);
+            _context.SaveChanges();
         }
 
         public List<ArtistDto> GetAllArtistsLikedByUser(int userId)
@@ -116,21 +167,6 @@ namespace AudialAtlasService.Repositories
         public void GetRecommendations()
         {
             throw new NotImplementedException();
-        }
-
-        public void RemoveUser(string userName)
-        {
-            var user = _context.Users.Find(userName);
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-                _context.SaveChanges();
-            }
-            else
-            {
-                throw new ArgumentException("Could not find user");
-            }
-
         }
     }
 }
