@@ -1,8 +1,8 @@
 ﻿namespace AudialAtlasService.Models.DTOs
 {
-    public class GenreDto
+    public class UserGenreConnectionDto
     {
+        public int UserId { get; set; }
         public int GenreId { get; set; }
-        public string GenreTitle { get; set; }
     }
 }

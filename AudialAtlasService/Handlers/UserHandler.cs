@@ -1,191 +1,113 @@
 ﻿using AudialAtlasService.Data;
-using AudialAtlasService.Handlers;
 using AudialAtlasService.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels;
+using AudialAtlasService.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace AudialAtlasService.Handlers
 {
-    // Separata Interfaces för ändamål att följa konceptet SoC (seperation of concerns).
-    //|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-
-    public interface IViewModelFunctions
+    public class UserHandler
     {
-        void GetAllUsersWithViewModel();
-    }
-
-    public interface IGetUserFunctions
-    {
-        // Beslöt för att göra så metoderna retunerar en lista.
-        List<Song> GetAllSongsLikedByUser(int userId);
-
-        List<Artist> GetAllArtistsLikedByUser(int userId);
-
-        List<Genre> GetAllGenresLikedByUser(int userId);
-        // -------------------------------------------------
-
-        //Based on?
-        void GetRecommendations();
-    }
-
-    public interface IPostUserFunctions
-    {
-        //Ändra till vanlig.
-        bool CheckIfUserExists(UserDTO userDTO);
-
-        void ConnectUserToArtist(string userName, int artistId);
-
-        void ConnectUserToSong(string userName, int songId);
-
-        void ConnectUserToGenre(int userId, int genreId);
-
-        void RemoveUser();
-    }
-
-    /// ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-
-    public class UserHandler : IGetUserFunctions, IPostUserFunctions, IViewModelFunctions
-    {//IoC strukturerat för att följa konceptet "lösa kopplingar".
-        //Bonus: Effektiv testning och flexibilitet för moddning.
-
-        //Sätter en fast koppling vid start, ser till att vid denna DI så går inte kopplingen att ändras av misstag.
-        private readonly ApplicationContext _context;
-        //---------------------------------------------
-
-
-        //En konstruktor som tillåter Dependency Injection, med context kopplat i för att ge metoderna en DI koppling till databasen
-        public UserHandler(ApplicationContext context)
+        public static IResult ConnectUserToArtistHandler([FromServices] IUserRepository userRepository, UserArtistConnectionDto connectionDto)
         {
-            _context = context;
-        }
-        //---------------------------------------------
-
-        public bool CheckIfUserExists(UserDTO userDTO)        
-        {
-            return _context.Users.Any(u => u.UserName == userDTO.UserName);
-        }
-
-        public void ConnectUserToArtist(string userName, int artistId)
-        {
-            var user = _context.Users
-                .Include(u => u.Artists)
-                .FirstOrDefault(u => u.UserName == userName);
-
-            if (user != null)
+            try
             {
-                var artist = _context.Artists.Find(artistId); if (artist != null)
-                {
-                    if (!user.Artists.Contains(artist))
-                    {
-                        user.Artists.Add(artist);
-                        _context.SaveChanges();
-                    }
-                }
-                else
-                {
-                    //Error hitta inte artist
-                }
+                userRepository.ConnectUserToArtist(connectionDto);
+                return Results.Ok("User successfully connected to artist.");
             }
-            else
+            catch (KeyNotFoundException exKey)
             {
-                // Error hitta inte user
+                return Results.NotFound(exKey.Message);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(detail: ex.Message, title: "Error connecting user to artist");
             }
         }
 
-        public void ConnectUserToGenre(int userId, int genreId)
+        public static IResult ConnectUserToGenreHandler([FromServices] IUserRepository userRepository, UserGenreConnectionDto connectionDto)
         {
-            var user = _context.Users
-                .Include(u => u.Genres)
-                .FirstOrDefault(u => u.UserId == userId);
-            if (user != null)
+            try
             {
-                var genre = _context.Genres.Find(genreId); if (genre != null)
-                {
-                    if (!user.Genres.Contains(genre))
-                    {
-                        user.Genres.Add(genre);
-                        _context.SaveChanges();
-                    }
-                }
-                else
-                {
-                    //Error hitta inte genre
-                }
+                userRepository.ConnectUserToGenre(connectionDto);
+                return Results.Ok("User successfully connected to genre.");
             }
-            else
+            catch (KeyNotFoundException exKey)
             {
-                //Error hitta inte user
+                return Results.NotFound(exKey.Message);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(detail: ex.Message, title: "Error connecting user to genre");
             }
         }
 
-        public void ConnectUserToSong(string userName, int songId)
+        public static IResult ConnectUserToSongHandler([FromServices] IUserRepository userRepository, UserSongConnectionDto connectionDto)
         {
-            var user = _context.Users
-                .Include(u => u.Songs)
-                .FirstOrDefault(u => u.UserName == userName);
-            if (user != null)
+            try
             {
-                var song = _context.Songs.Find(songId); if (song != null)
-                {
-                    if (!user.Songs.Contains(song))
-                    {
-                        user.Songs.Add(song);
-                        _context.SaveChanges();
-                    }
-                }
-                else
-                {
-                    //Error hitta inte genre.
-                }
+                userRepository.ConnectUserToSong(connectionDto);
+                return Results.Ok("User successfully connected to song.");
             }
-            else
+            catch (KeyNotFoundException exKey)
             {
-                //Error hitta inte user.
+                return Results.NotFound(exKey.Message);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(detail: ex.Message, title: "Error connecting user to song");
             }
         }
 
-        public List<Artist> GetAllArtistsLikedByUser(int userId)
+        public static IResult GetAllArtistsLikedByUserHandler([FromServices] IUserRepository userFunctions, int userId)
         {
-            var userWithLikedArtists = _context.Users
-                .Include(u => u.Artists)
-                .FirstOrDefault(u => u.UserId == userId);
-            
-            return userWithLikedArtists?.Artists.ToList() ?? new List<Artist>();
-        }                                               //^^ "??" ser till att en lista skickas
-                                                        //även fast det inte finns en istället för null.
-        public List<Genre> GetAllGenresLikedByUser(int userId)
-        {
-            var userWithGenres = _context.Users
-                .Include(u => u.Genres)
-                .FirstOrDefault(u => u.UserId == userId);
+            Console.WriteLine("\nCONSOLE LOG\nINFO: GetAllArtistsLikedByUser HAS BEEN CALLED\n");
 
-            return userWithGenres?.Genres.ToList() ?? new List<Genre>();
+            var getArtistConnectedToUser = userFunctions.GetAllArtistsLikedByUser(userId);
+
+            return getArtistConnectedToUser.Any()
+                ? Results.Ok(getArtistConnectedToUser)
+                : Results.NotFound("No artists liked by this user.");
         }
 
-        public List<Song> GetAllSongsLikedByUser(int userId)
+        public static IResult GetAllGenresLikedByUserHandler([FromServices] IUserRepository userRepository, int userId)
         {
-            var userWithSongs = _context.Users
-                .Include(u => u.Songs)
-                .FirstOrDefault(u => u.UserId == userId);
+            Console.WriteLine("\nCONSOLE LOG\nINFO: GetAllGenresLikedByUser HAS BEEN CALLED\n");
 
-            return userWithSongs?.Songs.ToList() ?? new List<Song>();
+            var genresConnectedToUser = userRepository.GetAllGenresLikedByUser(userId);
+
+            return genresConnectedToUser.Any()
+                ? Results.Ok(genresConnectedToUser)
+                : Results.NotFound("No genres found for this user.");
         }
 
-        public void GetAllUsersWithViewModel()
+        public static IResult GetAllSongsLikedByUserHandler([FromServices] IUserRepository userRepository, int userId)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("\nCONSOLE LOG\nINFO: GetAllSongsLikedByUser HAS BEEN CALLED\n");
+
+            var songsConnectedToUser = userRepository.GetAllSongsLikedByUser(userId);
+
+            return songsConnectedToUser.Any()
+                ? Results.Ok(songsConnectedToUser)
+                : Results.NotFound("No songs found for this user.");
         }
 
-        public void GetRecommendations()
+        public static IResult CheckIfUserExistsHandler([FromServices] IUserRepository userRepository, string userName)
         {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveUser()
-        {
-            throw new NotImplementedException();
+            Console.WriteLine("INFO: CheckIfUserExists HAS BEEN CALLED");
+            try
+            {
+                bool userExists = userRepository.CheckIfUserExists(userName);
+                return userExists
+                    ? Results.Ok("User exists.")
+                    : Results.NotFound("User does not exist.");
+            }
+            catch (Exception)
+            {
+                return Results.Problem("An unexpected error occurred.");
+            }
         }
     }
 }
