@@ -16,11 +16,14 @@ namespace AudialAtlasService
             var builder = WebApplication.CreateBuilder(args);
 
             string connectionString = builder.Configuration.GetConnectionString("ApplicationContext");
-
+            
             builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
 
             // DI Containers med AddScoped
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+            builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
+            builder.Services.AddScoped<ISongRepository, SongRepository>();
 
             var app = builder.Build();
 
@@ -41,7 +44,9 @@ namespace AudialAtlasService
             // Songs
             app.MapGet("/songs", SongHandler.ListAllSongs);
             app.MapGet("/songs/{songId}", SongHandler.GetSingleSong);
-            app.MapPost("/songs", SongHandler.PostSong);
+            // PostSong posts the song directly on the artist. So currently no way of posting a song
+            // without also having an artist.
+            app.MapPost("artists/{artistId}/songs", SongHandler.PostSong);
 
             // Artists
             app.MapGet("/artists", ArtistHandler.GetAllArtists);
@@ -55,8 +60,9 @@ namespace AudialAtlasService
             app.MapGet("/songs/genres/{genreId}", GenreHandler.GetAllSongsInGenre);
             app.MapPost("/genres", GenreHandler.PostGenre);
 
-            // Link Artist to Genre
+            // Link Genre to Artist
             app.MapPost("/artists/{artistId}/genres/{genreId}", ArtistHandler.LinkGenreToArtist);
+            app.MapPost("/songs/{songId}/genres/{genreId}", SongHandler.LinkGenreToSong);
 
             app.Run();
         }

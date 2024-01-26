@@ -2,69 +2,73 @@
 using AudialAtlasService.Models;
 using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels;
+using AudialAtlasService.Repositories;
+using AudialAtlasService.Repositories.SongRepoExceptions;
 using System.Net;
 
 namespace AudialAtlasService.Handlers
 {
     public class SongHandler
     {
-        public static IResult ListAllSongs(ApplicationContext context)
+        public static IResult ListAllSongs(ISongRepository helper)
         {
-            List<SongListAllViewModel> list = context.Songs
-                .Select(s => new SongListAllViewModel()
-                {
-                    SongTitle = s.SongTitle,
-                    // Implement ArtistViewModel
-                })
-                .ToList();
-
-            return Results.Json(list);
-        }
-
-        public static IResult GetSingleSong(ApplicationContext context, int songId)
-        {
-            SongSingleViewModel? song = context.Songs
-                .Where(s => s.SongId == songId)
-                .Select(s => new SongSingleViewModel()
-                {
-                    SongTitle = s.SongTitle,
-                })
-                .SingleOrDefault();
-
-            if(song == null)
+            try
             {
-                return Results.NotFound(new { Message = "No song found" });
+                List<SongListAllViewModel> result = helper.ListAllSongs();
+                return Results.Json(result);
             }
-
-            return Results.Json(song);
+            catch (SongNotFoundException e)
+            {
+                return Results.NotFound(e);
+            }
         }
 
-        public static IResult PostSong(ApplicationContext context, SongDto dto)
+        public static IResult GetSingleSong(ISongRepository helper, int songId)
         {
-            // Get artist for song
-            // Use artistId
-
-            Song? song = new Song()
+            try
             {
-                SongTitle = dto.SongTitle
-            };
-
-            if(song == null)
+                SongSingleViewModel? song = helper.GetSingleSong(songId);
+                return Results.Json(song);
+            }
+            catch (SongNotFoundException)
             {
-                return Results.BadRequest(new { Message = "SongTitle field is required" });
+                return Results.NotFound(new { Message = $"No song with id {songId} found" });
+            }
+        }
+
+        public static IResult PostSong(ISongRepository helper, int artistId, SongDto dto)
+        {
+            if(dto.SongTitle == null)
+            {
+                return Results.BadRequest(new {Message = "Song title is required"});
             }
 
             try
             {
-                context.Songs.Add(song);
-                context.SaveChanges();
+                helper.PostSong(artistId, dto);
+                return Results.StatusCode((int)HttpStatusCode.Created);
             }
-            catch (Exception ex)
+            catch (SongFailedToAddToDatabaseException e)
             {
-                return Results.Conflict(new { Message = $"Failed to create new song with error message: {ex.Message}" });
+                return Results.StatusCode((int)HttpStatusCode.InternalServerError);
             }
+        }
 
-            return Results.StatusCode((int)HttpStatusCode.Created);
+        public static IResult LinkGenreToSong(ISongRepository helper, int songId, int genreId)
+        {
+            try
+            {
+                helper.LinkGenreToSong(songId, genreId);
+                return Results.StatusCode((int)HttpStatusCode.Created);
+            }
+            catch (SongNotFoundException e)
+            {
+                return Results.NotFound(new { Message = $"Failed with message: {e.Message}" });
+            }
+            catch (SongFailedToAddToDatabaseException e)
+            {
+                return Results.StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
     }
 }

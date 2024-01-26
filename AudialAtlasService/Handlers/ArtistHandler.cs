@@ -2,50 +2,42 @@
 using AudialAtlasService.Models;
 using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels.ArtistViewModels;
+using AudialAtlasService.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Net;
 
 namespace AudialAtlasService.Handlers
 {
+
+
     public class ArtistHandler
     {
-        public static IResult GetAllArtists(ApplicationContext context)
+        public static IResult GetAllArtists(IArtistRepository helper)
         {
-            List<ArtistListAllViewModel> list = context.Artists
-                .Select(a => new ArtistListAllViewModel()
-                {
-                    Name = a.Name
-                })
-                .ToList();
+            List<ArtistListAllViewModel> list = helper.ArtistListAll();
+
+            if (list == null)
+            {
+                return Results.NotFound(new { Message = "No artists found" });
+            }
 
             return Results.Json(list);
         }
 
-        public static IResult GetSingleArtist(ApplicationContext context, int artistId) 
+        public static IResult GetSingleArtist(IArtistRepository helper, int artistId) 
         {
-            Artist? artist = context.Artists
-                .Where(a => a.ArtistId == artistId)
-                .Include(a => a.Genres)
-                .SingleOrDefault();
+            ArtistGetSingleArtistViewModel? artist = helper.GetSingleArtist(artistId);
 
-            if (artist == null)
+            if(artist == null)
             {
-                return Results.NotFound(new { Message = "No artist found" });
+                return Results.NotFound(new { Message = $"No artist with id {artistId} found" });
             }
 
-            ArtistGetSingleArtistViewModel? artResult = new ArtistGetSingleArtistViewModel()
-            {
-                Name = artist.Name,
-                Description = artist.Description,
-                Genres = artist.Genres
-                    .Select(g => g.GenreTitle)
-                    .ToArray()
-            };
-
-            return Results.Json(artResult);
+            return Results.Json(artist);
         }
 
-        public static IResult PostArtist(ApplicationContext context, ArtistDto dto)
+        public static IResult PostArtist(IArtistRepository helper, ArtistDto dto)
         {
             if (string.IsNullOrEmpty(dto.Name))
             {
@@ -56,58 +48,37 @@ namespace AudialAtlasService.Handlers
                 return Results.BadRequest(new { Message = "Description field is required" });
             }
 
-            Artist artist = new Artist()
-            {
-                Name = dto.Name,
-                Description = dto.Description
-            };
-
             try
             {
-                context.Artists.Add(artist);
-                context.SaveChanges();
+                helper.AddArtistToDb(dto);
             }
-            catch (Exception ex)
+            catch (ArgumentException e)
             {
-                return Results.Conflict(new { Message = $"Request failed with error message {ex.Message}" });
+                return Results.BadRequest(new { Message = "Artist already exists" });
+            }
+            catch (Exception e) 
+            {
+                return Results.Conflict(new { Message = "Failed to add artist to database" });
             }
 
             return Results.StatusCode((int)HttpStatusCode.Created);
         }
 
-        public static IResult LinkGenreToArtist(ApplicationContext context, int artistId, int genreId)
+        public static IResult LinkGenreToArtist(IArtistRepository helper, int artistId, int genreId)
         {
-            Artist? artist = context.Artists
-                .Where(a => a.ArtistId == artistId)
-                .Include(a => a.Genres)
-                .SingleOrDefault();
-            if (artist == null)
-            {
-                throw new ArgumentException();
-            }
+            int linkArtistAndGenre = helper.LinkGenreToArtist(artistId, genreId);
 
-            Genre? genre = context.Genres
-                .Where(g => g.GenreId == genreId)
-                .Include(g => g.Artists)
-                .SingleOrDefault();
-            if (genre == null)
+            switch (linkArtistAndGenre)
             {
-                throw new ArgumentException();
+                case 0:
+                    return Results.NotFound(new { Message = $"No artist with id {artistId} found" });
+                case 1:
+                    return Results.NotFound(new { Message = $"No genre with id {genreId} found" });
+                case 2:
+                    return Results.StatusCode((int)HttpStatusCode.Created);
+                default:
+                    return Results.Conflict(new { Message = "Failed to add genre to artist" });
             }
-
-            try
-            {
-                artist.Genres.Add(genre);
-                context.Artists.Update(artist);
-                context.SaveChanges();
-                return Results.StatusCode((int)HttpStatusCode.Created);
-            }
-            catch (Exception ex)
-            {
-                return Results.Conflict(new { Message = $"Lol didn't work with message: {ex.Message}" });
-            }
-
-            
         }
     }
 }

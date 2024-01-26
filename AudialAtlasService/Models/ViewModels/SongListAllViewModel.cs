@@ -5,6 +5,6 @@
         public string SongTitle { get; set; }
 
         // ArtistViewModel or only artist name
-        //public virtual Artist Artist { get; set; }
+        public string? Artist { get; set; }
     }
 }
