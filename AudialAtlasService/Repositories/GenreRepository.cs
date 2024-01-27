@@ -19,8 +19,6 @@ namespace AudialAtlasService.Repositories
         public List<SongsInGenreViewModel> GetAllSongsInGenre(int genreId);
         public void PostGenre(GenreDto dto);
 
-        //public void AddArtistToDb(ArtistDto dto);
-        //public int LinkGenreToArtist(int artistId, int genreId);
     }
 
     public class GenreRepository : IGenreRepository
