@@ -4,6 +4,8 @@ using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels;
 using AudialAtlasService.Models.ViewModels.ArtistViewModels;
 using AudialAtlasService.Models.ViewModels.GenreViewModels;
+using AudialAtlasService.Repositories;
+using AudialAtlasService.Repositories.GenreRepoExceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -13,115 +15,81 @@ namespace AudialAtlasService.Handlers
 {
     public class GenreHandler
     {
-        public static IResult ListAllGenre(ApplicationContext context)
+        public static IResult ListAllGenre(IGenreRepository helper)
         {
-            GenreListAllViewModel result = new GenreListAllViewModel
-            {
-                Genres = context.Genres
-                    .Select(g => new GenreSingleViewModel()
-                    {
-                        GenreId = g.GenreId,
-                        GenreTitle = g.GenreTitle,
-                    })
-                    .ToList()
-            };
+            List<GenreListAllViewModel> list = helper.ListAllGenre();
 
-            return Results.Json(result);
+            if (list == null)
+            {
+                return Results.NotFound(new { Message = "No genres found" });
+            }
+
+            return Results.Json(list);
         }
 
-        public static IResult GetSingleGenre(ApplicationContext context, [FromRoute] int genreId)
+        public static IResult GetSingleGenre(IGenreRepository helper, int genreId)
         {
-            GenreSingleViewModel? genre = context.Genres
-                .Where(g => g.GenreId == genreId)
-                .Select(g => new GenreSingleViewModel()
-                {
-                    GenreId = g.GenreId,
-                    GenreTitle = g.GenreTitle,
-                })
-                .SingleOrDefault();
+            GenreSingleViewModel? genre = helper.GetSingleGenre(genreId);
 
             if (genre == null)
             {
-                return Results.NotFound(new { Message = "No genre found" });
+                return Results.NotFound(new { Message = $"No genre with id {genreId} found" });
             }
 
             return Results.Json(genre);
         }
 
-        public static IResult GetAllArtistsInGenre(ApplicationContext context, int genreId)
+        public static IResult GetAllArtistsInGenre(IGenreRepository helper, int genreId)
         {
-            ArtistsInGenreViewModel? genre = context.Genres
-                .Where(g => g.GenreId == genreId)
-                .Include(g => g.Artists)
-                .Select(g => new ArtistsInGenreViewModel
-                {
-                    GenreId = g.GenreId,
-                    GenreTitle = g.GenreTitle,
-                    Artists = g.Artists.Select(a => new ArtistSingleViewModel
-                    {
-                        // Map artist properties as needed
-                        Name = a.Name,
-                        Description = a.Description,
-                    }).ToList()
-                })
-                .SingleOrDefault();
+            List<ArtistsInGenreViewModel> genre = helper.GetAllArtistsInGenre(genreId);
 
             if (genre == null)
             {
-                return Results.NotFound(new { Message = "No genre found" });
+                return Results.NotFound(new { Message = $"No genre with id {genreId} found" });
             }
 
             return Results.Json(genre);
         }
 
-        public static IResult GetAllSongsInGenre(ApplicationContext context, int genreId)
+        public static IResult GetAllSongsInGenre(IGenreRepository helper, int genreId)
         {
-            SongsInGenreViewModel? genre = context.Genres
-                .Where(g => g.GenreId == genreId)
-                .Include(g => g.Songs)
-                .Select(g => new SongsInGenreViewModel()
-                {
-                    GenreId = g.GenreId,
-                    GenreTitle = g.GenreTitle,
-                    Songs = g.Songs.Select(s => new SongSingleViewModel
-                    {
-                        // Map songs properties as needed
-                        SongTitle = s.SongTitle,
-                    }).ToList()
-                })
-                .SingleOrDefault();
+            List<SongsInGenreViewModel> genre = helper.GetAllSongsInGenre(genreId);
 
             if (genre == null)
             {
-                return Results.NotFound(new { Message = "No genre found" });
+                return Results.NotFound(new { Message = $"No genre with id {genreId} found" });
             }
 
             return Results.Json(genre);
         }
 
-        public static IResult PostGenre(ApplicationContext context, GenreDto dto)
+        public static IResult PostGenre(IGenreRepository helper, GenreDto dto)
         {
-            Genre? genre = new Genre()
-            {
-                GenreTitle = dto.GenreTitle
-            };
-
-            if (genre == null)
+            if (dto.GenreTitle == null)
             {
                 return Results.BadRequest(new { Message = "GenreTitle field is required" });
             }
 
             try
             {
-                context.Genres.Add(genre);
-                context.SaveChanges();
+                helper.PostGenre(dto);
+                return Results.StatusCode((int)HttpStatusCode.Created);
+            }
+            catch (GenreAlreadyExistsException ex)
+            {
+                // Handle GenreAlreadyExistsException if needed
+                return Results.BadRequest(new { ex.Message });
+            }
+            catch (GenreSaveException ex)
+            {
+                // Handle GenreSaveException if needed
+                return Results.StatusCode((int)HttpStatusCode.InternalServerError);
             }
             catch (Exception ex)
             {
-                return Results.Conflict(new { Message = $"Failed to create new genre with error message: {ex.Message}" });
+                // Catch any other unexpected exceptions
+                return Results.StatusCode((int)HttpStatusCode.InternalServerError);
             }
-
-            return Results.StatusCode((int)HttpStatusCode.Created);
         }
     }
 }
