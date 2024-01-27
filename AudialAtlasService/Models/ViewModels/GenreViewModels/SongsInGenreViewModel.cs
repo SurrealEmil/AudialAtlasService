@@ -2,6 +2,6 @@
 {
     public class SongsInGenreViewModel : GenreSingleViewModel
     {
-        public List<SongSingleViewModel> Songs { get; set; }
+        public List<SongViewModel> Songs { get; set; }
     }
 }

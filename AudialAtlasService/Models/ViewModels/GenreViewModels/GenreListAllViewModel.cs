@@ -2,6 +2,7 @@
 {
     public class GenreListAllViewModel
     {
-        public List<GenreSingleViewModel> Genres { get; set; }
+        public int GenreId { get; set; }
+        public string GenreTitle { get; set;}
     }
 }

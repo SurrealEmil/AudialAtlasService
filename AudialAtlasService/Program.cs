@@ -25,6 +25,8 @@ namespace AudialAtlasService
             builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
             builder.Services.AddScoped<ISongRepository, SongRepository>();
 
+            builder.Services.AddScoped<IGenreRepository, GenreRepository>();
+
             var app = builder.Build();
 
             app.MapGet("/", () => 
