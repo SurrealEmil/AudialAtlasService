@@ -6,9 +6,9 @@ namespace AudialAtlasServiceClient.Screens
 {
     internal class UserMenuScreen
     {
-        public static async Task UserMenuAsync(User user, string apiBaseUrl)
+        public static async Task UserMenuAsync(int userId, string apiBaseUrl)
         {
-            string pageHeader = $"~~~~ Welcome, {user.UserName} ~~~~";
+            string pageHeader = $"~~~~ Welcome, main menu ~~~~";
             string[] menuOptions =
             {
                 "List all favorite songs",
@@ -29,7 +29,7 @@ namespace AudialAtlasServiceClient.Screens
                 switch (choice)
                 {
                     case 1:
-                        await new FavoriteSongsScreen(apiBaseUrl).ListFavoriteSongsAsync();
+                        await new FavoriteSongsScreen(apiBaseUrl).ListFavoriteSongsAsync(userId);
                         break;
                     //case 2:
                     //    await FavoriteArtistsScreen.ListFavoriteArtistsAsync();

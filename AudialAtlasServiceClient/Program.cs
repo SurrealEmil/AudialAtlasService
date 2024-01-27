@@ -1,7 +1,5 @@
-﻿using AudialAtlasService.Data;
-using AudialAtlasServiceClient.Services;
+﻿using AudialAtlasService.Repositories;
 using AudialAtlasServiceClient.Screens;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace AudialAtlasServiceClient
@@ -23,15 +21,18 @@ namespace AudialAtlasServiceClient
             string apiBaseUrl = configuration["ApiSettings:BaseUrl"];
 
             // Configure DbContextOptions with connection string from appsettings
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("ApplicationContext"));
+            //var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
+            //optionsBuilder.UseSqlServer(configuration.GetConnectionString("ApplicationContext"));
 
             while (true)
             {
-                using var context = new ApplicationContext(optionsBuilder.Options);
+                //using var context = new ApplicationContext(optionsBuilder.Options);
 
                 Console.Clear();
-                await LoginScreen.LoginMenuAsync(context, apiBaseUrl);
+
+                var loginScreen = new LoginScreen();
+
+                await loginScreen.LoginMenuAsync(apiBaseUrl);
             }
         }
     }

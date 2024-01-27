@@ -3,6 +3,7 @@ using AudialAtlasService.Models;
 using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels;
 using AudialAtlasService.Repositories;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -108,6 +109,13 @@ namespace AudialAtlasService.Handlers
             {
                 return Results.Problem("An unexpected error occurred.");
             }
+        }
+
+        public static IResult UserAuthentication([FromServices] IUserRepository userRepository, string userName, string password)
+        {
+            int authenticatedUserId = userRepository.AuthenticateUser(userName, password);
+
+            return Results.Ok(authenticatedUserId);
         }
     }
 }

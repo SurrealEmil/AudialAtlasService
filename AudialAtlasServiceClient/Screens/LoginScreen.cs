@@ -1,11 +1,12 @@
 ﻿using AudialAtlasService.Data;
+using AudialAtlasService.Repositories;
 using AudialAtlasServiceClient.Handlers;
 
 namespace AudialAtlasServiceClient.Screens
 {
     public class LoginScreen
     {
-        public static async Task LoginMenuAsync(ApplicationContext context, string apiBaseUrl)
+        public async Task LoginMenuAsync(string apiBaseUrl)
         {
             PrintLogo.PrintAudialAtlasLogo();
 
@@ -21,10 +22,12 @@ namespace AudialAtlasServiceClient.Screens
             int choice = MenuHandler.DisplayMainMenu(pageHeader, menuOptions);
             Console.CursorVisible = true;
 
+            var userAuthenticationScreen = new UserAuthenticationScreen(apiBaseUrl);
+
             switch (choice)
             {
                 case 1:
-                    await UserAuthenticationScreen.CheckLogInAsync(context, apiBaseUrl);
+                    await userAuthenticationScreen.CheckLogInAsync(apiBaseUrl);
                     break;
                 case 3:
                     Console.WriteLine("Logging out...");

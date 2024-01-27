@@ -13,6 +13,7 @@ namespace AudialAtlasService.Repositories
     public interface IUserRepository
     {
         bool CheckIfUserExists(string userName);
+        int AuthenticateUser(string userName, string password);
         List<ArtistDto> GetAllArtistsLikedByUser(int userId);
         List<GenreDto> GetAllGenresLikedByUser(int userId);
         List<SongDto> GetAllSongsLikedByUser(int userId);
@@ -39,6 +40,14 @@ namespace AudialAtlasService.Repositories
                 Any(x => x.UserName == userName);
             Console.WriteLine("Post user exists");
             return userExists;
+        }
+
+        public int AuthenticateUser(string userName, string password)
+        {
+            var authenticatedUserId = _context.Users
+                 .SingleOrDefault(u => u.UserName == userName && u.Password == password);
+
+            return authenticatedUserId?.UserId ?? -1;
         }
 
         public void ConnectUserToArtist(UserArtistConnectionDto connectionDto)
