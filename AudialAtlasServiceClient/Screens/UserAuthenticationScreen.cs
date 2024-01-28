@@ -1,11 +1,4 @@
-﻿using AudialAtlasService.Data;
-using AudialAtlasService.Models;
-using AudialAtlasService.Repositories;
-using AudialAtlasServiceClient.Handlers;
-using AudialAtlasServiceClient.Services;
-using System.Text;
-
-namespace AudialAtlasServiceClient.Screens
+﻿namespace AudialAtlasServiceClient.Screens
 {
     public class UserAuthenticationScreen : ScreenBase
     {
@@ -13,7 +6,7 @@ namespace AudialAtlasServiceClient.Screens
 
         public async Task CheckLogInAsync(string apiBaseUrl)
         {
-            Console.WriteLine("\n\tAudio Atlas login - Please provide your login credentials:");
+            Console.WriteLine("\n\tAudial Atlas client login - Please provide your login credentials:");
 
             Console.Write("\n\tUsername: ");
             string? userName = Console.ReadLine();
@@ -42,7 +35,7 @@ namespace AudialAtlasServiceClient.Screens
                 return;
             }
 
-            var userId = await ApiService.UserAuthentication(apiBaseUrl, userName, password);
+            var userId = await ApiService.UserAuthentication(userName, password);
 
             if (userId != -1)
             {

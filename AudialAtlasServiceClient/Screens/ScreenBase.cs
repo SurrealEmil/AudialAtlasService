@@ -1,7 +1,4 @@
-﻿using AudialAtlasService.Models.ViewModels;
-using AudialAtlasServiceClient.Services;
-using Newtonsoft.Json;
-using System.Net.Http;
+﻿using AudialAtlasServiceClient.Services;
 
 namespace AudialAtlasServiceClient.Screens
 {
@@ -13,5 +10,5 @@ namespace AudialAtlasServiceClient.Screens
         {
             ApiService = new AudialAtlasApiService(apiBaseUrl);
         }
-    }    
+    }
 }

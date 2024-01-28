@@ -1,6 +1,4 @@
-﻿using AudialAtlasService.Data;
-using AudialAtlasService.Repositories;
-using AudialAtlasServiceClient.Handlers;
+﻿using AudialAtlasServiceClient.Handlers;
 
 namespace AudialAtlasServiceClient.Screens
 {

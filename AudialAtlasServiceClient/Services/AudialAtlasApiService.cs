@@ -1,6 +1,4 @@
-﻿using AudialAtlasService.Models;
-using AudialAtlasService.Models.ViewModels;
-using AudialAtlasService.Models.ViewModels.ArtistViewModels;
+﻿using AudialAtlasService.Models.ViewModels;
 using Newtonsoft.Json;
 
 namespace AudialAtlasServiceClient.Services
@@ -15,15 +13,9 @@ namespace AudialAtlasServiceClient.Services
             _apiBaseUrl = apiBaseUrl;
         }
 
-        public async Task<int> UserAuthentication(string apiBaseUrl, string userName, string password)
+        public async Task<int> UserAuthentication(string userName, string password)
         {
-            //Console.WriteLine($"{apiBaseUrl}{userName}{password}");
-            //Console.ReadKey();
-
-            //var stringUrl = $"{apiBaseUrl}/users/login/{userName}/{password}";
-
-
-            HttpResponseMessage response = await httpClient.GetAsync($"{apiBaseUrl}/users/login/{userName}/{password}");
+            HttpResponseMessage response = await httpClient.GetAsync($"{_apiBaseUrl}/users/login/{userName}/{password}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -34,12 +26,7 @@ namespace AudialAtlasServiceClient.Services
                 {
                     return authenticatedUserId;
                 }
-
-                //var authenticatedUser = JsonConvert.DeserializeObject<User>(content);
-
-                //return authenticatedUser?.UserId ?? -1;
             }
-
             return -1; // Authentication failed
         }
 
@@ -48,7 +35,7 @@ namespace AudialAtlasServiceClient.Services
         {
             HttpResponseMessage response = await httpClient.GetAsync($"{_apiBaseUrl}/users/{userId}/songs");
 
-            if (response.IsSuccessStatusCode )
+            if (response.IsSuccessStatusCode)
             {
                 string result = await response.Content.ReadAsStringAsync();
 
@@ -56,7 +43,6 @@ namespace AudialAtlasServiceClient.Services
 
                 return songList ?? new List<SongListAllViewModel>();
             }
-
             throw new Exception("Failed to get songs.");
         }
 
