@@ -6,6 +6,9 @@ using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
 using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Repositories;
+using AudialAtlasService.Services.DeezerService;
+using AudialAtlasService.Services.DeezerService.Models.ViewModels;
+using AudialAtlasService.Services.DeezerService.Handler;
 
 namespace AudialAtlasService
 {
@@ -26,6 +29,9 @@ namespace AudialAtlasService
             builder.Services.AddScoped<ISongRepository, SongRepository>();
 
             builder.Services.AddScoped<IGenreRepository, GenreRepository>();
+
+            // Testing Deezer Service
+            builder.Services.AddScoped<IDeezerSearchFunction, DeezerSearchService>();
 
             var app = builder.Build();
 
@@ -65,6 +71,15 @@ namespace AudialAtlasService
             // Link Genre to Artist
             app.MapPost("/artists/{artistId}/genres/{genreId}", ArtistHandler.LinkGenreToArtist);
             app.MapPost("/songs/{songId}/genres/{genreId}", SongHandler.LinkGenreToSong);
+
+            // Testing Deezer Service
+            //app.MapGet("/deezer/{artistNameQuery}", async (IDeezerSearchFunction service, string artistNameQuery) =>
+            //{
+            //    DeezerArtistViewModel result = await service.GetArtistViaSearchStringAsync(artistNameQuery);
+
+            //    return Results.Json(result);
+            //});
+            app.MapGet("/deezer/{artistNameQuery}/topfivesongs", DeezerServiceHandler.GetTopFiveSongsOfArtist);
 
             app.Run();
         }
