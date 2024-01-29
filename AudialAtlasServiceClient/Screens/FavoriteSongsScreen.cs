@@ -6,8 +6,7 @@ namespace AudialAtlasServiceClient.Screens
 {
     internal class FavoriteSongsScreen : ScreenBase
     {
-        public FavoriteSongsScreen(string apiBaseUrl) : base(apiBaseUrl) { }
-
+        public FavoriteSongsScreen(IAudialAtlasApiService apiService) : base(apiService) { }
 
         public async Task ListFavoriteSongsAsync(int userId)
         {
@@ -19,8 +18,8 @@ namespace AudialAtlasServiceClient.Screens
                 {
                     foreach (var song in songList)
                     {
-                        //Console.WriteLine($"Title: {song.SongTitle}");
-                        //Console.WriteLine($"Artist: {song.ArtistName}");
+                        Console.WriteLine($"Title: {song.SongTitle}");
+                        Console.WriteLine($"Artist: {song.Artist}");
                         //Console.WriteLine($"Genre: {song.GenreTitle}");
                         Console.WriteLine(); // Add spacing before the next song
                     }

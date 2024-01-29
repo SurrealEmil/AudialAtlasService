@@ -4,11 +4,11 @@ using AudialAtlasServiceClient.Services;
 
 namespace AudialAtlasServiceClient.Screens
 {
-    internal class UserMenuScreen
+    internal static class UserMenuScreen
     {
-        public static async Task UserMenuAsync(int userId, string apiBaseUrl)
+        public static async Task UserMenuAsync(IAudialAtlasApiService apiService, int userId)
         {
-            string pageHeader = $"~~~~ Welcome, main menu ~~~~";
+            string pageHeader = $"~~~~ Audial Atlas Client - Main menu ~~~~";
             string[] menuOptions =
             {
                 "List all favorite songs",
@@ -29,7 +29,7 @@ namespace AudialAtlasServiceClient.Screens
                 switch (choice)
                 {
                     case 1:
-                        await new FavoriteSongsScreen(apiBaseUrl).ListFavoriteSongsAsync(userId);
+                        await new FavoriteSongsScreen(apiService).ListFavoriteSongsAsync(userId);
                         break;
                     //case 2:
                     //    await FavoriteArtistsScreen.ListFavoriteArtistsAsync();

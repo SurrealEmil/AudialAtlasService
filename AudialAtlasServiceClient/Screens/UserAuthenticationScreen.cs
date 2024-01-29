@@ -1,156 +1,130 @@
-﻿namespace AudialAtlasServiceClient.Screens
+﻿using AudialAtlasServiceClient.Handlers;
+using AudialAtlasServiceClient.Services;
+using System.Text;
+
+namespace AudialAtlasServiceClient.Screens
 {
-    public class UserAuthenticationScreen : ScreenBase
+    public class UserAuthenticationScreen
     {
-        public UserAuthenticationScreen(string apiBaseUrl) : base(apiBaseUrl) { }
-
-        public async Task CheckLogInAsync(string apiBaseUrl)
+        public static async Task CheckLogInAsync(IAudialAtlasApiService apiService)
         {
-            Console.WriteLine("\n\tAudial Atlas client login - Please provide your login credentials:");
+            Console.WriteLine("\n\tAudial Atlas client login - Please provide your login credentials:");            
 
-            Console.Write("\n\tUsername: ");
-            string? userName = Console.ReadLine();
+            const int maxLoginAttempts = 3;
 
-            if (userName != null)
+            for (int i = 1; i <= maxLoginAttempts; i++)
             {
-                userName = userName.Trim().ToLower();
-            }
-            else
-            {
-                // Invalid input or null password
-                Console.WriteLine("Invalid input. Please try again.");
-            }
+                Console.Write("\n\tUsername: ");
+                string? userName = Console.ReadLine();
 
-            Console.Write("\n\tPassword: ");
-            string? password = Console.ReadLine();
+                if (userName != null)
+                {
+                    userName = userName.Trim().ToLower();
+                }
+                else
+                {
+                    // Invalid input or null password
+                    Console.WriteLine("Invalid input. Please try again.");
+                }
 
-            if (password != null)
-            {
-            }
-            else
-            {
-                // Invalid input or null password
-                Console.WriteLine("Invalid input. Please try again.");
-                Console.ReadLine();
-                return;
-            }
+                Console.Write("\n\tPassword: ");
+                string? password = HidePassword();
 
-            var userId = await ApiService.UserAuthentication(userName, password);
+                var userId = await apiService.UserAuthentication(userName, password);
 
-            if (userId != -1)
-            {
-                await UserMenuScreen.UserMenuAsync(userId, apiBaseUrl);
-            }
-            else
-            {
-                Console.WriteLine("\nWrong username or password. Please try again.");
-                Console.ReadKey();
+                if (password != null)
+                {
+                }
+                else
+                {
+                    // Invalid input or null password
+                    Console.WriteLine("Invalid input. Please try again.");
+                    Console.ReadLine();
+                    return;
+                }
+                if (userId != -1)
+                {
+                    await UserMenuScreen.UserMenuAsync(apiService, userId);
+                }
+                else if (i == 1)
+                {
+                    Console.WriteLine($"\n\n\tWrong username or password. Please try again. {maxLoginAttempts - i} tries left.");
+                }
+                else if (i == 2)
+                {
+                    Console.WriteLine($"\n\n\tInvalid username or password. Please try again. 1 try left.");
+                }
+                if (i == 3)
+                {
+                    Console.WriteLine("\n\n\tToo many failed attempts. Locking user...");
+                    Thread.Sleep(2000);
+                    Cooldown();
+                }
             }
         }
 
-        //        if (CheckPassword(user))
-        //    {
-        //        await UserMenuScreen.UserMenuAsync(user, apiBaseUrl);
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("\n\n\tToo many failed attempts. Locking user...");
-        //        Thread.Sleep(1000);
-        //        Cooldown();
-        //    }
-        //}
+        // Replace user PIN input with '*'
+        private static string HidePassword()
+        {
+            StringBuilder password = new StringBuilder();
 
-        //private static bool CheckPassword(User user)
-        //{
-        //    const int maxLoginAttempts = 3;
+            while (true)
+            {
+                // Use 'true' to hide which key is being pressed
+                ConsoleKeyInfo key = Console.ReadKey(true);
 
-        //    Console.WriteLine($"\n\tPlease enter your password.");
+                // Check if user press Backspace or Enter
+                if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
+                {
+                    password.Append(key.KeyChar);
+                    Console.Write('*');
+                }
+                else if (key.Key == ConsoleKey.Backspace && password.Length > 0)
+                {
+                    // Delete the last user input
+                    password.Length -= 1;
 
-        //    for (int i = 1; i <= maxLoginAttempts; i++)
-        //    {
-        //        Console.Write("\n\tPassword: ");
+                    /* Visual representation of the deletion:
+                       Move cursor back one position, 
+                       overwrite '*' with a space character,
+                       move the cursor back one position.*/
+                    Console.Write("\b \b");
+                }
 
-        //        string enteredPassword = HidePin();
+                if (key.Key == ConsoleKey.Enter)
+                {
+                    break;
+                }
+            }
+            return password.ToString();
+        }
 
-        //        if (user != null && enteredPassword == user.Password)
-        //        {
-        //            Console.WriteLine($"\n\n\tPassword correct. \n\n\tWelcome {user.UserName}!\n\n\tLogging in...");
-        //            Thread.Sleep(1000);
-        //            return true;
-        //        }
-        //        else if (i < 2)
-        //        {
-        //            Console.WriteLine($"\n\n\tInvalid password. Please try again. {maxLoginAttempts - i} tries left.");
-        //        }
-        //        if (i == 2)
-        //        {
-        //            Console.WriteLine($"\n\n\tInvalid password. Please try again. 1 try left.");
-        //        }
-        //    }
-        //    return false;
-        //}
+        // Lock user after three failed password attempts
+        private static bool Cooldown()
+        {
+            const int jailTime = 180; // 3 min
 
-        //// Replace user PIN input with '*'
-        //public static string HidePin()
-        //{
-        //    StringBuilder pin = new StringBuilder();
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Red;
+            PrintLogo.PrintLockout();
+            Console.WriteLine("\tYou ran out of tries. Lockout timer initiated.");
+            Console.CursorVisible = false;
+            for (int cooldown = jailTime; cooldown >= 0; cooldown--)
+            {
+                Console.SetCursorPosition(0, 13);
+                int minutes = cooldown / 60;
+                int remainingcooldown = cooldown % 60;
+                Console.WriteLine($"\n\tTry again in: {minutes:D2}m {remainingcooldown:D2}s");
+                Thread.Sleep(1000); // Sleep for 1 second to refresh timer properly
+            }
+            Console.CursorVisible = true;
+            Console.Clear();
+            Console.WriteLine("\tLockout is over. Press Enter to go back to the start screen:");
+            Console.ReadLine();
 
-        //    while (true)
-        //    {
-        //        // Use 'true' to hide which key is being pressed
-        //        ConsoleKeyInfo key = Console.ReadKey(true);
-
-        //        // Check if user press Backspace or Enter
-        //        if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
-        //        {
-        //            pin.Append(key.KeyChar);
-        //            Console.Write('*');
-        //        }
-        //        else if (key.Key == ConsoleKey.Backspace && pin.Length > 0)
-        //        {
-        //            // Delete the last user input
-        //            pin.Length -= 1;
-
-        //            /* Visual representation of the deletion:
-        //               Move cursor back one position, 
-        //               overwrite '*' with a space character,
-        //               move the cursor back one position.*/
-        //            Console.Write("\b \b");
-        //        }
-
-        //        if (key.Key == ConsoleKey.Enter)
-        //        {
-        //            break;
-        //        }
-        //    }
-        //    return pin.ToString();
-        //}
-
-        //// Lock user after three failed password attempts
-        //private static bool Cooldown()
-        //{
-        //    const int jailTime = 180; // 3 min
-
-        //    Console.Clear();
-        //    Console.ForegroundColor = ConsoleColor.Red;
-        //    PrintLogo.PrintLockout();
-        //    Console.WriteLine("\tYou ran out of tries. Lockout timer initiated.");
-        //    Console.CursorVisible = false;
-        //    for (int cooldown = jailTime; cooldown >= 0; cooldown--)
-        //    {
-        //        Console.SetCursorPosition(0, 13);
-        //        int minutes = cooldown / 60;
-        //        int remainingcooldown = cooldown % 60;
-        //        Console.WriteLine($"\n\tTry again in: {minutes:D2}m {remainingcooldown:D2}s");
-        //        Thread.Sleep(1000); // Sleep for 1 second to refresh timer properly
-        //    }
-        //    Console.CursorVisible = true;
-        //    Console.Clear();
-        //    Console.WriteLine("\tLockout is over. Press Enter to go back to the start screen:");
-        //    Console.ReadLine();
-
-        //    return true;
-        //}
+            return true;
+        }
     }
 }
+
 

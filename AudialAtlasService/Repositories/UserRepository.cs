@@ -164,7 +164,8 @@ namespace AudialAtlasService.Repositories
                 .SelectMany(u => u.Songs)
                 .Select(h => new SongDto
                 {
-                    SongTitle = h.SongTitle
+                    SongTitle = h.SongTitle,
+                    Artist = h.Artist.Name
                 })
                 .ToList();
 

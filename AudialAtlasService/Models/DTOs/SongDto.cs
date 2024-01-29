@@ -3,6 +3,6 @@
     public class SongDto
     {
         public string SongTitle { get; set; }
-        //public virtual Artist Artist { get; set; }
+        public string Artist { get; set; }
     }
 }
