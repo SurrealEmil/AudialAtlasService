@@ -4,11 +4,11 @@ namespace AudialAtlasServiceClient.Screens
 {
     public class ScreenBase
     {
-        protected AudialAtlasApiService ApiService { get; }
+        protected IAudialAtlasApiService ApiService { get; }
 
-        public ScreenBase(string apiBaseUrl)
+        public ScreenBase(IAudialAtlasApiService apiService)
         {
-            ApiService = new AudialAtlasApiService(apiBaseUrl);
+            ApiService = apiService;
         }
     }
 }

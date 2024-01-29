@@ -1,21 +1,32 @@
-﻿using AudialAtlasService.Models.ViewModels;
+﻿using AudialAtlasService.Models.DTOs;
+using AudialAtlasService.Models.ViewModels;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace AudialAtlasServiceClient.Services
 {
-    public class AudialAtlasApiService
+    public interface IAudialAtlasApiService
     {
-        private readonly HttpClient httpClient = new HttpClient();
+        Task<int> UserAuthentication(string username, string password);
+        Task<List<SongDto>> GetUserLikedSongsAsync(int userId);
+    }
+
+    public class AudialAtlasApiService : IAudialAtlasApiService
+    {
+        private readonly HttpClient _httpClient;
         private readonly string _apiBaseUrl;
 
-        public AudialAtlasApiService(string apiBaseUrl)
+        public AudialAtlasApiService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
-            _apiBaseUrl = apiBaseUrl;
+            _httpClient = httpClientFactory.CreateClient();
+            _apiBaseUrl = configuration["ApiSettings:BaseUrl"];
         }
+
+#region Add error handling for Http requests
 
         public async Task<int> UserAuthentication(string userName, string password)
         {
-            HttpResponseMessage response = await httpClient.GetAsync($"{_apiBaseUrl}/users/login/{userName}/{password}");
+            HttpResponseMessage response = await _httpClient.GetAsync($"{_apiBaseUrl}/users/login/{userName}/{password}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -31,17 +42,17 @@ namespace AudialAtlasServiceClient.Services
         }
 
 
-        public async Task<List<SongListAllViewModel>> GetUserLikedSongsAsync(int userId)
+        public async Task<List<SongDto>> GetUserLikedSongsAsync(int userId)
         {
-            HttpResponseMessage response = await httpClient.GetAsync($"{_apiBaseUrl}/users/{userId}/songs");
+            HttpResponseMessage response = await _httpClient.GetAsync($"{_apiBaseUrl}/users/{userId}/songs");
 
             if (response.IsSuccessStatusCode)
             {
                 string result = await response.Content.ReadAsStringAsync();
 
-                var songList = JsonConvert.DeserializeObject<List<SongListAllViewModel>>(result);
+                var songList = JsonConvert.DeserializeObject<List<SongDto>>(result);
 
-                return songList ?? new List<SongListAllViewModel>();
+                return songList ?? new List<SongDto>();
             }
             throw new Exception("Failed to get songs.");
         }
@@ -63,4 +74,5 @@ namespace AudialAtlasServiceClient.Services
         //    throw new Exception("Failed to get songs.");
         //}
     }
-}
+} 
+#endregion

@@ -1,6 +1,8 @@
 ﻿using AudialAtlasService.Repositories;
 using AudialAtlasServiceClient.Screens;
+using AudialAtlasServiceClient.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AudialAtlasServiceClient
 {
@@ -11,28 +13,31 @@ namespace AudialAtlasServiceClient
             Console.Title = "Audial Atlas Service";
             Console.ForegroundColor = ConsoleColor.Cyan;
 
-            // Build configuration
+            // Build configuration to obtain and pass on the ApiBaseUrl from settings
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true)
                 .Build();
 
-            // Get API base URL from configuration
-            string apiBaseUrl = configuration["ApiSettings:BaseUrl"];
 
-            // Configure DbContextOptions with connection string from appsettings
-            //var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
-            //optionsBuilder.UseSqlServer(configuration.GetConnectionString("ApplicationContext"));
+            // Set up dependency injection container and 
+            var serviceProvider = new ServiceCollection()
+                        .AddHttpClient()
+                        .AddScoped<IAudialAtlasApiService, AudialAtlasApiService>
+                           (provider => new AudialAtlasApiService(
+                               provider.GetRequiredService<IHttpClientFactory>(),
+                               configuration))
+                        .BuildServiceProvider();
 
             while (true)
             {
-                //using var context = new ApplicationContext(optionsBuilder.Options);
-
                 Console.Clear();
+
+                var apiService = serviceProvider.GetRequiredService<IAudialAtlasApiService>();
 
                 var loginScreen = new LoginScreen();
 
-                await loginScreen.LoginMenuAsync(apiBaseUrl);
+                await loginScreen.LoginMenuAsync(apiService);
             }
         }
     }

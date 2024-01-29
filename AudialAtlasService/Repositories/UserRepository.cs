@@ -159,18 +159,20 @@ namespace AudialAtlasService.Repositories
         {
             Console.WriteLine("\nBefore digging in Db.\n");
 
-            var song = _context.Users
+            var songs = _context.Users
                 .Where(u => u.UserId == userId)
                 .SelectMany(u => u.Songs)
-                .Select(h => new SongDto
+                .Select(s => new SongDto
                 {
-                    SongTitle = h.SongTitle
+                    SongTitle = s.SongTitle,
+                    ArtistName = s.Artist.Name,
+                    GenreTitle = string.Join(", ", s.Genres.Select(g => g.GenreTitle))
                 })
                 .ToList();
 
             Console.WriteLine("\nDigging done, applying result.\n");
 
-            return song;
+            return songs;
         }
 
         public void GetRecommendations()
