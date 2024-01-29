@@ -109,5 +109,18 @@ namespace AudialAtlasService.Handlers
                 return Results.Problem("An unexpected error occurred.");
             }
         }
+
+        public static IResult AddUser([FromServices] IUserRepository userRepository, UserDTO dto)
+        {
+            try
+            {
+                userRepository.AddUser(dto);
+            }
+            catch (Exception)
+            {
+                return Results.StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+            return Results.StatusCode((int)HttpStatusCode.Created);
+        }
     }
 }
