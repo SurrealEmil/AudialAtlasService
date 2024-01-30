@@ -1,0 +1,38 @@
+﻿using AudialAtlasServiceClient.Handlers;
+using AudialAtlasServiceClient.Models.ViewModels;
+using AudialAtlasServiceClient.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AudialAtlasServiceClient.Screens
+{
+    internal class ListAllArtistsInDbScreen : ScreenBase
+    {
+        public ListAllArtistsInDbScreen(IAudialAtlasApiService apiService) : base(apiService) { }
+
+        public async Task ListAllArtistsInDbAsync()
+        {
+            Console.WriteLine("~~~~ Audial Atlas Client - Artists ~~~~\n");
+
+            List<ListAllArtistsInDbViewModel> artistList = await ApiService.GetAllArtistsFromDbAsync();
+
+            if (artistList.Count() == 0)
+            {
+                await Console.Out.WriteLineAsync("No songs found!");
+                return;
+            }
+
+            artistList.OrderBy(a => a.Name);
+
+            foreach (ListAllArtistsInDbViewModel artist in artistList)
+            {
+                await Console.Out.WriteLineAsync($"Id: \t{artist.ArtistId}");
+                await Console.Out.WriteLineAsync($"Title: \t{artist.Name}\n");
+            }
+            MenuHandler.ReturnToMainMenu();
+        }
+    }
+}

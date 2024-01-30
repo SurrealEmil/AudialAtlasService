@@ -17,6 +17,8 @@ namespace AudialAtlasServiceClient.Screens
 
                 if (artistList.Any())
                 {
+                    artistList.OrderBy(a => a.Name);
+
                     foreach (var artist in artistList)
                     {
                         Console.WriteLine($"Artist: \t{artist.Name}");

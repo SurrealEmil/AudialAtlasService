@@ -19,7 +19,7 @@ namespace AudialAtlasServiceClient.Screens
         {
             Console.WriteLine("~~~~ Audial Atlas Client - Songs ~~~~\n");
 
-            List<ListAllSongsInDbViewModel> songList = await ApiService.GetAllSongsFromDb();
+            List<ListAllSongsInDbViewModel> songList = await ApiService.GetAllSongsFromDbAsync();
 
             if(songList.Count() == 0)
             {
@@ -27,9 +27,11 @@ namespace AudialAtlasServiceClient.Screens
                 return;
             }
 
-            foreach(ListAllSongsInDbViewModel song in songList)
+            songList.OrderBy(s => s.SongTitle);
+
+            foreach (ListAllSongsInDbViewModel song in songList)
             {
-                await Console.Out.WriteLineAsync($"Song Id: {song.Id}");
+                await Console.Out.WriteLineAsync($"Id: \t{song.Id}");
                 await Console.Out.WriteLineAsync($"Title: \t{song.SongTitle}");
                 await Console.Out.WriteLineAsync($"Artist: {song.Artist}\n");
             }

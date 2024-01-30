@@ -18,7 +18,9 @@ namespace AudialAtlasServiceClient.Screens
                 "Add new favorite artist",
                 "Add new favorite genre",
                 "Log out",
-                "All songs"
+                "All songs",
+                "All artists",
+                "All genres"
             };
 
             while (true)
@@ -47,6 +49,12 @@ namespace AudialAtlasServiceClient.Screens
                         return;
                     case 8:
                         await new ListAllSongsInDbScreen(apiService).ListAllSongsInDbAsync();
+                        break;
+                    case 9:
+                        await new ListAllArtistsInDbScreen(apiService).ListAllArtistsInDbAsync();
+                        break;
+                    case 10:
+                        await new ListAllGenresInDbScreen(apiService).ListAllGenresInDbAsync();
                         break;
                 }
             }

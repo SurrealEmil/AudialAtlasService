@@ -15,7 +15,9 @@ namespace AudialAtlasServiceClient.Services
         Task<List<FavoriteArtistViewModel>> GetUserFavoriteArtistsAsync(int userId);
         Task<List<FavoriteGenreViewModel>> GetUserFavoriteGenresAsync(int userId);
         Task PostNewFavoriteSongAsync(int userId, AddFavoriteSongDto addFavoriteSongDto);
-        Task<List<ListAllSongsInDbViewModel>> GetAllSongsFromDb();
+        Task<List<ListAllSongsInDbViewModel>> GetAllSongsFromDbAsync();
+        Task<List<ListAllArtistsInDbViewModel>> GetAllArtistsFromDbAsync();
+        Task<List<ListAllGenresInDbViewModel>> GetAllGenresFromDbAsync();
     }
 
     public class AudialAtlasApiService : IAudialAtlasApiService
@@ -162,7 +164,7 @@ namespace AudialAtlasServiceClient.Services
             }
         }
 
-        public async Task<List<ListAllSongsInDbViewModel>> GetAllSongsFromDb()
+        public async Task<List<ListAllSongsInDbViewModel>> GetAllSongsFromDbAsync()
         {
             HttpResponseMessage response = await _httpClient.GetAsync($"{_apiBaseUrl}/songs");
 
@@ -172,7 +174,7 @@ namespace AudialAtlasServiceClient.Services
                 {
                     string result = await response.Content.ReadAsStringAsync();
 
-                    List<ListAllSongsInDbViewModel> songList = JsonConvert.DeserializeObject<List<ListAllSongsInDbViewModel>>(result);
+                    List<ListAllSongsInDbViewModel>? songList = JsonConvert.DeserializeObject<List<ListAllSongsInDbViewModel>>(result);
 
                     return songList;
                 }
@@ -188,6 +190,57 @@ namespace AudialAtlasServiceClient.Services
             return new List<ListAllSongsInDbViewModel>();
         }
 
+        public async Task<List<ListAllArtistsInDbViewModel>> GetAllArtistsFromDbAsync()
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"{_apiBaseUrl}/artists");
+
+            try
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+
+                    List<ListAllArtistsInDbViewModel>? artistList = JsonConvert.DeserializeObject<List<ListAllArtistsInDbViewModel>>(result);
+
+                    return artistList;
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return new List<ListAllArtistsInDbViewModel>();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to get artists. Error: {ex.Message}");
+            }
+            return new List<ListAllArtistsInDbViewModel>();
+        }
+
+        public async Task<List<ListAllGenresInDbViewModel>> GetAllGenresFromDbAsync()
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"{_apiBaseUrl}/genres");
+
+            try
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+
+                    List<ListAllGenresInDbViewModel>? genresList = JsonConvert.DeserializeObject<List<ListAllGenresInDbViewModel>>(result);
+
+                    return genresList;
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return new List<ListAllGenresInDbViewModel>();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to get genres. Error: {ex.Message}");
+            }
+            return new List<ListAllGenresInDbViewModel>();
+        }
     }
 }
 #endregion
