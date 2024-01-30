@@ -13,6 +13,6 @@
             _message = message;
         }
 
-        public override string Message => base.Message;
+        public override string Message => _message;
     }
 }

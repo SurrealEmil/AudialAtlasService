@@ -21,6 +21,7 @@ namespace AudialAtlasService.Repositories
         void ConnectUserToSong(UserSongConnectionDto connectionDto);
         void ConnectUserToGenre(UserGenreConnectionDto connectionDto);
         void GetRecommendations();
+        void AddUser(UserDTO dto);
     }
 
     public class UserRepository : IUserRepository
@@ -178,6 +179,26 @@ namespace AudialAtlasService.Repositories
         public void GetRecommendations()
         {
             throw new NotImplementedException();
+        }
+
+        public void AddUser(UserDTO dto)
+        {
+            try
+            {
+                User user = new User()
+                {
+                    FirstName = dto.FirstName,
+                    LastName = dto.LastName,
+                    UserName = dto.UserName,
+                    Password = dto.Password
+                };
+                _context.Users.Add(user);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
         }
     }
 }
