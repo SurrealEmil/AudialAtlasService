@@ -1,9 +1,6 @@
-﻿using AudialAtlasService.Models;
-using AudialAtlasService.Models.ViewModels.ArtistViewModels;
-using AudialAtlasServiceClient.Models.DTOs;
+﻿using AudialAtlasServiceClient.Models.DTOs;
 using AudialAtlasServiceClient.Models.ViewModels;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text;
@@ -30,7 +27,7 @@ namespace AudialAtlasServiceClient.Services
             _apiBaseUrl = configuration["ApiSettings:BaseUrl"];
         }
 
-#region Add error handling for Http requests
+        #region Add error handling for Http requests
 
         public async Task<int> UserAuthentication(string userName, string password)
         {
@@ -48,7 +45,7 @@ namespace AudialAtlasServiceClient.Services
                         return authenticatedUserId;
                     }
                 }
-            } 
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"Failed to authenticate user. Error: {ex.Message}");
@@ -87,7 +84,7 @@ namespace AudialAtlasServiceClient.Services
         public async Task<List<FavoriteArtistViewModel>> GetUserFavoriteArtistsAsync(int userId)
         {
             HttpResponseMessage response = await _httpClient.GetAsync($"{_apiBaseUrl}/users/{userId}/artists");
-            
+
             try
             {
                 if (response.IsSuccessStatusCode)

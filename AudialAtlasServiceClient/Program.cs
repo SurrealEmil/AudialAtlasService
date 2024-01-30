@@ -1,5 +1,4 @@
-﻿using AudialAtlasService.Repositories;
-using AudialAtlasServiceClient.Screens;
+﻿using AudialAtlasServiceClient.Screens;
 using AudialAtlasServiceClient.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +19,7 @@ namespace AudialAtlasServiceClient
                 .Build();
 
 
-            // Set up dependency injection container and 
+            // Set up dependency injection container with ApiService and HttpClient
             var serviceProvider = new ServiceCollection()
                         .AddHttpClient()
                         .AddScoped<IAudialAtlasApiService, AudialAtlasApiService>
