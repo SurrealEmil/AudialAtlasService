@@ -166,8 +166,6 @@ namespace AudialAtlasService.Repositories
                 .Select(s => new SongDto
                 {
                     SongTitle = s.SongTitle,
-                    ArtistName = s.Artist.Name,
-                    GenreTitle = string.Join(", ", s.Genres.Select(g => g.GenreTitle))
                 })
                 .ToList();
 
