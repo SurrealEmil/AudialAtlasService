@@ -17,6 +17,8 @@ namespace AudialAtlasServiceClient.Screens
 
                 if (genresList.Any())
                 {
+                    genresList.OrderBy(g => g.GenreTitle);
+
                     foreach (var genre in genresList)
                     {
                         Console.WriteLine($"{genre.GenreTitle}\n");

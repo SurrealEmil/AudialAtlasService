@@ -17,6 +17,8 @@ namespace AudialAtlasServiceClient.Screens
 
                 if (songList.Any())
                 {
+                    songList.OrderBy(s => s.SongTitle);
+
                     foreach (var song in songList)
                     {
                         Console.WriteLine($"Title: \t{song.SongTitle}");
