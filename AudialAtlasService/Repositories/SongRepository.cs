@@ -28,6 +28,7 @@ namespace AudialAtlasService.Repositories
             List<SongListAllViewModel> list = _context.Songs
                 .Select(s => new SongListAllViewModel()
                 {
+                    Id = s.SongId,
                     SongTitle = s.SongTitle,
                     Artist = s.Artist.Name
                 })
