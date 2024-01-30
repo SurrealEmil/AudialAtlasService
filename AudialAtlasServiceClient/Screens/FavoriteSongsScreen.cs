@@ -1,6 +1,5 @@
-﻿using AudialAtlasService.Models.ViewModels;
+﻿using AudialAtlasServiceClient.Handlers;
 using AudialAtlasServiceClient.Services;
-using Newtonsoft.Json;
 
 namespace AudialAtlasServiceClient.Screens
 {
@@ -10,30 +9,27 @@ namespace AudialAtlasServiceClient.Screens
 
         public async Task ListFavoriteSongsAsync(int userId)
         {
+            Console.WriteLine("~~~~ Audial Atlas Client - Your favorite songs ~~~~\n");
+
             try
             {
-                var songList = await ApiService.GetUserLikedSongsAsync(userId);
+                var songList = await ApiService.GetUserFavoriteSongsAsync(userId);
 
                 if (songList.Any())
                 {
                     foreach (var song in songList)
                     {
-                        Console.WriteLine($"Title: {song.SongTitle}");
+                        Console.WriteLine($"Title: \t{song.SongTitle}");
                         Console.WriteLine($"Artist: {song.ArtistName}");
-                        Console.WriteLine($"Genre: {song.GenreTitle}");
-                        Console.WriteLine(); // Add spacing before the next song
+                        Console.WriteLine($"Genre: \t{song.GenreTitle}\n");
                     }
                 }
                 else
                 {
                     Console.WriteLine("No favorite songs found.");
                 }
-
-                // Wait for user to press ENTER key
-                Console.WriteLine("\nPress ENTER to return to the main menu.");
-                while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
-                Console.WriteLine("\nReturning to main menu...");
-                Thread.Sleep(1000);
+                // Wait for user to press ENTER key to return to main menu
+                MenuHandler.ReturnToMainMenu();
             }
             catch (HttpRequestException ex)
             {

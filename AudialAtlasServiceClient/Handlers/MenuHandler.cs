@@ -1,30 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AudialAtlasService.Data;
-using AudialAtlasService.Models;
-using Microsoft.AspNetCore.Authentication;
-
-namespace AudialAtlasServiceClient.Handlers
+﻿namespace AudialAtlasServiceClient.Handlers
 {
     internal class MenuHandler
     {
-        //      Mayby implement ADMIN later
-
-        //public static void DisplayMenu(BankContext context, User user)
-        //{
-        //    if (user.Name == "admin")
-        //    {
-        //        AdminFunctions.AdminMenu();
-        //    }
-        //    else
-        //    {
-        //        User.UserMenu(context, user);
-        //    }
-        //}
-
         public static int DisplayMainMenu(string pageHeader, string[] menuoptions)
         {
             // Set the cursor visibility to false for a cleaner user interface.
@@ -134,6 +111,15 @@ namespace AudialAtlasServiceClient.Handlers
                     Thread.Sleep(100);
                 }
             }
+        }
+
+        public static void ReturnToMainMenu()
+        {
+            // Wait for user to press ENTER key
+            Console.WriteLine("\nPress ENTER to return to the main menu.");
+            while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
+            Console.WriteLine("\nReturning to main menu...");
+            Thread.Sleep(1000);
         }
     }
 }

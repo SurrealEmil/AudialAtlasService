@@ -1,6 +1,6 @@
-﻿using AudialAtlasService.Models;
-using AudialAtlasServiceClient.Handlers;
+﻿using AudialAtlasServiceClient.Handlers;
 using AudialAtlasServiceClient.Services;
+using AudialAtlasServiceClient.Screens;
 
 namespace AudialAtlasServiceClient.Screens
 {
@@ -8,7 +8,7 @@ namespace AudialAtlasServiceClient.Screens
     {
         public static async Task UserMenuAsync(IAudialAtlasApiService apiService, int userId)
         {
-            string pageHeader = $"~~~~ Audial Atlas Client - Main menu ~~~~";
+            string pageHeader = "~~~~ Audial Atlas Client - Main menu ~~~~";
             string[] menuOptions =
             {
                 "List all favorite songs",
@@ -31,9 +31,15 @@ namespace AudialAtlasServiceClient.Screens
                     case 1:
                         await new FavoriteSongsScreen(apiService).ListFavoriteSongsAsync(userId);
                         break;
-                    //case 2:
-                    //    await FavoriteArtistsScreen.ListFavoriteArtistsAsync();
-                    //    break;
+                    case 2:
+                        await new FavoriteArtistsScreen(apiService).ListFavoriteArtistsAsync(userId);
+                        break;
+                    case 3:
+                        await new FavoriteGenresScreen(apiService).ListFavoriteGenresAsync(userId);
+                        break;
+                    case 4:
+                        await new AddNewSongScreen(apiService).AddNewFavoriteSongAsync(userId);
+                        break;
                     case 7:
                         Console.WriteLine("Logging out...");
                         Thread.Sleep(1000);

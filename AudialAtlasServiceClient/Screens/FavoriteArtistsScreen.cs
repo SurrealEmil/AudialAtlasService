@@ -1,65 +1,39 @@
-﻿//using AudialAtlasService.Models.ViewModels;
-//using Newtonsoft.Json;
+﻿using AudialAtlasServiceClient.Handlers;
+using AudialAtlasServiceClient.Services;
 
-//namespace AudialAtlasServiceClient.Screens
-//{
-//    internal class FavoriteArtistsScreen
-//    {
-//        public static async Task ListFavoriteArtistsAsync(string apiBaseUrl, HttpClient httpClient)
-//        {
-//            try
-//            {
-//                HttpResponseMessage response = await httpClient.GetAsync($"{apiBaseUrl}/artists");
+namespace AudialAtlasServiceClient.Screens
+{
+    internal class FavoriteArtistsScreen : ScreenBase
+    {
+        public FavoriteArtistsScreen(IAudialAtlasApiService apiService) : base(apiService) { }
 
-//                if (response.IsSuccessStatusCode)
-//                {
-//                    string result = await response.Content.ReadAsStringAsync();
+        public async Task ListFavoriteArtistsAsync(int userId)
+        {
+            Console.WriteLine("~~~~ Audial Atlas Client - Your favorite artists ~~~~\n");
 
-//                    var artistList = JsonConvert.DeserializeObject<List<ArtistListAllViewModel>>(result);
+            try
+            {
+                var artistList = await ApiService.GetUserFavoriteArtistsAsync(userId);
 
-//                    if (artistList.Any())
-//                    {
-//                        foreach (var artist in artistList)
-//                        {
-//                            if (artist != null)
-//                            {
-//                                Console.WriteLine($"Artist: {artist.ArtistName}");
-//                                Console.Write($"Genre(s): ");
-
-//                                if (!string.IsNullOrWhiteSpace(artist.GenreTitle))
-//                                {
-//                                    foreach (var genre in artist.GenreTitle)
-//                                    {
-//                                        Console.Write($"{genre}");
-//                                    }
-//                                }
-//                                else
-//                                {
-//                                    Console.Write("No genres available.");
-//                                }
-//                                Console.WriteLine(); // Add spacing before the next artist
-//                            }
-//                            else
-//                            {
-//                                Console.WriteLine("No favorite artists found.");
-//                            }
-//                        }
-//                    }
-//                    else
-//                    {
-//                        Console.WriteLine("No artists found.");
-//                    }
-//                    // Wait for user to press ENTER key
-//                    Console.WriteLine("\nPress ENTER to return to the main menu.");
-//                    while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
-//                    Console.WriteLine("\nReturning to main menu...");
-//                    Thread.Sleep(1000);
-//                }
-//            }
-//            catch (HttpRequestException ex)
-//            {
-//                Console.WriteLine($"Error displaying favorite songs: {ex.Message}");
-//            }
-//        }
-//    }
-//}
+                if (artistList.Any())
+                {
+                    foreach (var artist in artistList)
+                    {
+                        Console.WriteLine($"Artist: \t{artist.Name}");
+                        Console.WriteLine($"Description: \t{artist.Description}\n");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No favorite artists found.");
+                }
+                // Wait for user to press ENTER key
+                MenuHandler.ReturnToMainMenu();
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error displaying favorite songs: {ex.Message}");
+            }
+        }
+    }
+}
