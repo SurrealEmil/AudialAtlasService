@@ -34,9 +34,11 @@ namespace AudialAtlasServiceClient
 
                 var apiService = serviceProvider.GetRequiredService<IAudialAtlasApiService>();
 
-                var loginScreen = new LoginScreen();
+                var loginScreen = new LoginScreen(apiService);
 
-                await loginScreen.LoginMenuAsync(apiService);
+                var audialAtlasApp = new AudialAtlasClientApplication(loginScreen);
+
+                await audialAtlasApp.RunAsync();
             }
         }
     }

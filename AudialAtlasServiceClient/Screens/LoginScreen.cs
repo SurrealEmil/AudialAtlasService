@@ -3,9 +3,10 @@ using AudialAtlasServiceClient.Services;
 
 namespace AudialAtlasServiceClient.Screens
 {
-    public class LoginScreen
+    public class LoginScreen : ScreenBase
     {
-        public async Task LoginMenuAsync(IAudialAtlasApiService apiService)
+        public LoginScreen(IAudialAtlasApiService apiService) : base(apiService) { }
+        public async Task LoginMenuAsync()
         {
             PrintLogo.PrintAudialAtlasLogo();
 
@@ -24,12 +25,14 @@ namespace AudialAtlasServiceClient.Screens
             switch (choice)
             {
                 case 1:
-                    await UserAuthenticationScreen.CheckLogInAsync(apiService);
+                    var userAuthenticationScreen = new UserAuthenticationScreen(ApiService);
+                    await userAuthenticationScreen.CheckLoginAsync();
                     break;
                 case 3:
-                    Console.WriteLine("Logging out...");
+                    Console.WriteLine("Exiting application...");
                     Thread.Sleep(1000);
-                    return;
+                    Environment.Exit(0);
+                    break;
             }
         }
     }

@@ -4,16 +4,26 @@ using System.Text;
 
 namespace AudialAtlasServiceClient.Screens
 {
-    public class UserAuthenticationScreen
+    public class UserAuthenticationScreen : ScreenBase 
     {
-        public static async Task CheckLogInAsync(IAudialAtlasApiService apiService)
+        private bool returnToLoginMenu; // Flag to determine whether to return to the login menu
+        public UserAuthenticationScreen(IAudialAtlasApiService service) : base(service) { }
+        public async Task CheckLoginAsync()
         {
+            returnToLoginMenu = false; // Initialize the flag
+
             Console.WriteLine("\n\tAudial Atlas client login - Please provide your login credentials:");            
 
             const int maxLoginAttempts = 3;
 
             for (int i = 1; i <= maxLoginAttempts; i++)
             {
+
+                if (returnToLoginMenu)  // Check the flag and return to the login menu
+                {
+                    break;
+                }
+
                 Console.Write("\n\tUsername: ");
                 string? userName = Console.ReadLine();
 
@@ -30,21 +40,12 @@ namespace AudialAtlasServiceClient.Screens
                 Console.Write("\n\tPassword: ");
                 string? password = HidePassword();
 
-                var userId = await apiService.UserAuthentication(userName, password);
+                var userId = await ApiService.UserAuthentication(userName, password);
 
-                if (password != null)
-                {
-                }
-                else
-                {
-                    // Invalid input or null password
-                    Console.WriteLine("Invalid input. Please try again.");
-                    Console.ReadLine();
-                    return;
-                }
                 if (userId != -1)
                 {
-                    await UserMenuScreen.UserMenuAsync(apiService, userId);
+                    var userMenuScreen = new UserMenuScreen(ApiService, this);
+                    await userMenuScreen.UserMenuAsync(userId);
                 }
                 else if (i == 1)
                 {
@@ -62,6 +63,13 @@ namespace AudialAtlasServiceClient.Screens
                 }
             }
         }
+
+        // Method to set the flag and return to the login menu
+        public void ReturnToLoginMenu()
+        {
+            returnToLoginMenu = true;
+        }
+
 
         // Replace user PIN input with '*'
         private static string HidePassword()

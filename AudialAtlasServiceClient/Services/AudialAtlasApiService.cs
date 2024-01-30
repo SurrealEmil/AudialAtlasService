@@ -27,8 +27,6 @@ namespace AudialAtlasServiceClient.Services
             _apiBaseUrl = configuration["ApiSettings:BaseUrl"];
         }
 
-        #region Add error handling for Http requests
-
         public async Task<int> UserAuthentication(string userName, string password)
         {
             HttpResponseMessage response = await _httpClient.GetAsync($"{_apiBaseUrl}/users/login/{userName}/{password}");
@@ -162,4 +160,3 @@ namespace AudialAtlasServiceClient.Services
 
     }
 }
-#endregion

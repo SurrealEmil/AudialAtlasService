@@ -1,12 +1,16 @@
 ﻿using AudialAtlasServiceClient.Handlers;
 using AudialAtlasServiceClient.Services;
-using AudialAtlasServiceClient.Screens;
 
 namespace AudialAtlasServiceClient.Screens
 {
-    internal static class UserMenuScreen
+    public class UserMenuScreen : ScreenBase
     {
-        public static async Task UserMenuAsync(IAudialAtlasApiService apiService, int userId)
+        private readonly UserAuthenticationScreen userAuthenticationScreen;
+        public UserMenuScreen(IAudialAtlasApiService apiService, UserAuthenticationScreen userAuthenticationScreen) : base(apiService)
+        {
+            this.userAuthenticationScreen = userAuthenticationScreen;
+        }
+        public async Task UserMenuAsync(int userId)
         {
             string pageHeader = "~~~~ Audial Atlas Client - Main menu ~~~~";
             string[] menuOptions =
@@ -29,20 +33,20 @@ namespace AudialAtlasServiceClient.Screens
                 switch (choice)
                 {
                     case 1:
-                        await new FavoriteSongsScreen(apiService).ListFavoriteSongsAsync(userId);
+                        var favoriteSongsScreen = new FavoriteSongsScreen(ApiService);
+                        await favoriteSongsScreen.ListFavoriteSongsAsync(userId);
                         break;
                     case 2:
-                        await new FavoriteArtistsScreen(apiService).ListFavoriteArtistsAsync(userId);
+                        await new FavoriteArtistsScreen(ApiService).ListFavoriteArtistsAsync(userId);
                         break;
                     case 3:
-                        await new FavoriteGenresScreen(apiService).ListFavoriteGenresAsync(userId);
+                        await new FavoriteGenresScreen(ApiService).ListFavoriteGenresAsync(userId);
                         break;
                     case 4:
-                        await new AddNewSongScreen(apiService).AddNewFavoriteSongAsync(userId);
+                        await new AddNewSongScreen(ApiService).AddNewFavoriteSongAsync(userId);
                         break;
                     case 7:
-                        Console.WriteLine("Logging out...");
-                        Thread.Sleep(1000);
+                        userAuthenticationScreen.ReturnToLoginMenu();  // Set the flag to return to the login menu
                         return;
                 }
             }
