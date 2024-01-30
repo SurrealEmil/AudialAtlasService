@@ -20,11 +20,11 @@ namespace AudialAtlasServiceClient.Screens
                 "List all favorite genres",
                 "Add new favorite song",
                 "Add new favorite artist",
-                "Add new favorite genre",
-                "Log out",
+                "Add new favorite genre",                
                 "All songs",
                 "All artists",
-                "All genres"
+                "All genres",
+                "Log out"
             };
 
             while (true)
@@ -49,17 +49,18 @@ namespace AudialAtlasServiceClient.Screens
                         await new AddNewSongScreen(ApiService).AddNewFavoriteSongAsync(userId);
                         break;
                     case 7:
-                        userAuthenticationScreen.ReturnToLoginMenu();  // Set the flag to return to the login menu
-                        return;
+                        await new ListAllSongsInDbScreen(ApiService).ListAllSongsInDbAsync();
+                        break;
                     case 8:
-                        await new ListAllSongsInDbScreen(apiService).ListAllSongsInDbAsync();
+                        await new ListAllArtistsInDbScreen(ApiService).ListAllArtistsInDbAsync();
                         break;
                     case 9:
-                        await new ListAllArtistsInDbScreen(apiService).ListAllArtistsInDbAsync();
+                        await new ListAllGenresInDbScreen(ApiService).ListAllGenresInDbAsync();
                         break;
                     case 10:
-                        await new ListAllGenresInDbScreen(apiService).ListAllGenresInDbAsync();
-                        break;
+                        userAuthenticationScreen.ReturnToLoginMenu();  // Set the flag to return to the login menu
+                        return;
+                        
                 }
             }
         }

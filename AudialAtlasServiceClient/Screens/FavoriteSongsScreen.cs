@@ -22,8 +22,8 @@ namespace AudialAtlasServiceClient.Screens
                     foreach (var song in songList)
                     {
                         Console.WriteLine($"Title: \t{song.SongTitle}");
-                        Console.WriteLine($"Artist: {song.ArtistName}");
-                        Console.WriteLine($"Genre: \t{song.GenreTitle}\n");
+                        Console.WriteLine($"Artist: {song.Artist}");
+                        Console.WriteLine($"Genre: \t{song.Genres}\n");
                     }
                 }
                 else

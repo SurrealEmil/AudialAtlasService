@@ -3,7 +3,7 @@
     public class FavoriteSongViewModel
     {
         public string SongTitle { get; set; }
-        public string ArtistName { get; set; }
-        public string GenreTitle { get; set; }
+        public string Artist { get; set; }
+        public string[] Genres { get; set; }
     }
 }
