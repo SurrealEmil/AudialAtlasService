@@ -2,33 +2,29 @@
 using AudialAtlasService.Models;
 using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels;
+using AudialAtlasService.Models.ViewModels.UserViewModels;
 using Microsoft.EntityFrameworkCore;
-using AudialAtlasService.Handlers;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography.X509Certificates;
 
-// IoC (Interests of Concerns) strukturerat
 namespace AudialAtlasService.Repositories
 {
     public interface IUserRepository
     {
         bool CheckIfUserExists(string userName);
-        List<ArtistDto> GetAllArtistsLikedByUser(int userId);
-        List<GenreDto> GetAllGenresLikedByUser(int userId);
-        List<SongDto> GetAllSongsLikedByUser(int userId);
+        List<ArtistListAllFromUserViewModel> GetAllArtistsLikedByUser(int userId);
+        List<GenreListAllFromUserViewModel> GetAllGenresLikedByUser(int userId);
+        List<SongSingleViewModel> GetAllSongsLikedByUser(int userId);
         void ConnectUserToArtist(UserArtistConnectionDto connectionDto);
         void ConnectUserToSong(UserSongConnectionDto connectionDto);
         void ConnectUserToGenre(UserGenreConnectionDto connectionDto);
         void GetRecommendations();
-        void AddUser(UserDTO dto);
+        void AddUser(UserDto dto);
     }
 
     public class UserRepository : IUserRepository
     {
-        //Sätter en fast koppling vid start.
         private readonly ApplicationContext _context;
         public UserRepository(ApplicationContext context)
-        {//En konstruktor som tillåter Dependency Injection.
+        {
             _context = context;
         }
 
@@ -108,14 +104,14 @@ namespace AudialAtlasService.Repositories
             _context.SaveChanges();
         }
 
-        public List<ArtistDto> GetAllArtistsLikedByUser(int userId)
+        public List<ArtistListAllFromUserViewModel> GetAllArtistsLikedByUser(int userId)
         {
             Console.WriteLine("\nBefore digging in Db.\n");
 
             var artist = _context.Users
                 .Where(u => u.UserId == userId)
                 .SelectMany(u => u.Artists)
-                .Select(h => new ArtistDto
+                .Select(h => new ArtistListAllFromUserViewModel
                 {
                     Name = h.Name,
                     Description = h.Description
@@ -128,16 +124,15 @@ namespace AudialAtlasService.Repositories
             return artist;
         }
 
-        public List<GenreDto> GetAllGenresLikedByUser(int userId)
+        public List<GenreListAllFromUserViewModel> GetAllGenresLikedByUser(int userId)
         {
             Console.WriteLine("\nPre catch\n");
 
             var genres = _context.Users
                 .Where(u => u.UserId == userId)
                 .SelectMany(u => u.Genres)
-                .Select(h => new GenreDto
+                .Select(h => new GenreListAllFromUserViewModel
                 {
-                    // GenreId = h.GenreId,
                     GenreTitle = h.GenreTitle
                 })
                 .ToList();
@@ -147,16 +142,20 @@ namespace AudialAtlasService.Repositories
             return genres;
         }
 
-        public List<SongDto> GetAllSongsLikedByUser(int userId)
+        public List<SongSingleViewModel> GetAllSongsLikedByUser(int userId)
         {
             Console.WriteLine("\nBefore digging in Db.\n");
 
             var song = _context.Users
                 .Where(u => u.UserId == userId)
                 .SelectMany(u => u.Songs)
-                .Select(h => new SongDto
+                .Select(h => new SongSingleViewModel
                 {
-                    SongTitle = h.SongTitle
+                    SongTitle = h.SongTitle,
+                    Artist = h.Artist.Name,
+                    Genres = h.Genres
+                        .Select(g => g.GenreTitle)
+                        .ToArray()
                 })
                 .ToList();
 
@@ -170,7 +169,7 @@ namespace AudialAtlasService.Repositories
             throw new NotImplementedException();
         }
 
-        public void AddUser(UserDTO dto)
+        public void AddUser(UserDto dto)
         {
             try
             {

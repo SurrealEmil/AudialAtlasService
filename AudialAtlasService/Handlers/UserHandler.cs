@@ -110,7 +110,7 @@ namespace AudialAtlasService.Handlers
             }
         }
 
-        public static IResult AddUser([FromServices] IUserRepository userRepository, UserDTO dto)
+        public static IResult AddUser([FromServices] IUserRepository userRepository, UserDto dto)
         {
             try
             {
