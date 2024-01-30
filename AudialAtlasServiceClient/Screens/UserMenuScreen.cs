@@ -17,7 +17,8 @@ namespace AudialAtlasServiceClient.Screens
                 "Add new favorite song",
                 "Add new favorite artist",
                 "Add new favorite genre",
-                "Log out"
+                "Log out",
+                "All songs"
             };
 
             while (true)
@@ -44,6 +45,9 @@ namespace AudialAtlasServiceClient.Screens
                         Console.WriteLine("Logging out...");
                         Thread.Sleep(1000);
                         return;
+                    case 8:
+                        await new ListAllSongsInDbScreen(apiService).ListAllSongsInDbAsync();
+                        break;
                 }
             }
         }

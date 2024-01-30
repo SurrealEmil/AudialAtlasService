@@ -1,4 +1,5 @@
-﻿using AudialAtlasServiceClient.Models.DTOs;
+﻿using AudialAtlasService.Models;
+using AudialAtlasServiceClient.Models.DTOs;
 using AudialAtlasServiceClient.Models.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -14,6 +15,7 @@ namespace AudialAtlasServiceClient.Services
         Task<List<FavoriteArtistViewModel>> GetUserFavoriteArtistsAsync(int userId);
         Task<List<FavoriteGenreViewModel>> GetUserFavoriteGenresAsync(int userId);
         Task PostNewFavoriteSongAsync(int userId, AddFavoriteSongDto addFavoriteSongDto);
+        Task<List<ListAllSongsInDbViewModel>> GetAllSongsFromDb();
     }
 
     public class AudialAtlasApiService : IAudialAtlasApiService
@@ -158,6 +160,32 @@ namespace AudialAtlasServiceClient.Services
             {
                 Console.WriteLine($"Failed to add the song. Error: {ex.Message}");
             }
+        }
+
+        public async Task<List<ListAllSongsInDbViewModel>> GetAllSongsFromDb()
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"{_apiBaseUrl}/songs");
+
+            try
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+
+                    List<ListAllSongsInDbViewModel> songList = JsonConvert.DeserializeObject<List<ListAllSongsInDbViewModel>>(result);
+
+                    return songList;
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return new List<ListAllSongsInDbViewModel>();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to get songs. Error: {ex.Message}");
+            }
+            return new List<ListAllSongsInDbViewModel>();
         }
 
     }
