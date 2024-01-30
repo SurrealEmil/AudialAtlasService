@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudialAtlasService", "Audia
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudialAtlasServiceTest", "AudialAtlasServiceTest\AudialAtlasServiceTest.csproj", "{C2126427-20BB-4155-8379-CC7EF84B50E3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudialAtlasServiceClient", "AudialAtlasServiceClient\AudialAtlasServiceClient.csproj", "{0C0C65A2-FE88-41C3-AF09-0A9877B11B48}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C2126427-20BB-4155-8379-CC7EF84B50E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2126427-20BB-4155-8379-CC7EF84B50E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2126427-20BB-4155-8379-CC7EF84B50E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C0C65A2-FE88-41C3-AF09-0A9877B11B48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C0C65A2-FE88-41C3-AF09-0A9877B11B48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C0C65A2-FE88-41C3-AF09-0A9877B11B48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C0C65A2-FE88-41C3-AF09-0A9877B11B48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

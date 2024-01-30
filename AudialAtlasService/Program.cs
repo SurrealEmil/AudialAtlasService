@@ -48,6 +48,7 @@ namespace AudialAtlasService
             app.MapGet("/users/{userId}/genres", UserHandler.GetAllGenresLikedByUserHandler);
             app.MapGet("/users/{userId}/songs", UserHandler.GetAllSongsLikedByUserHandler);
             app.MapGet("/users/{userName}/check", UserHandler.CheckIfUserExistsHandler);
+            app.MapGet("/users/login/{userName}/{password}", UserHandler.UserAuthentication);
             app.MapPost("/users", UserHandler.AddUser);
 
             // Songs

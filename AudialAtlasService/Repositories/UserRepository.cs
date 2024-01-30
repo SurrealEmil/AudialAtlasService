@@ -13,6 +13,7 @@ namespace AudialAtlasService.Repositories
     public interface IUserRepository
     {
         bool CheckIfUserExists(string userName);
+        int AuthenticateUser(string userName, string password);
         List<ArtistDto> GetAllArtistsLikedByUser(int userId);
         List<GenreDto> GetAllGenresLikedByUser(int userId);
         List<SongDto> GetAllSongsLikedByUser(int userId);
@@ -40,6 +41,14 @@ namespace AudialAtlasService.Repositories
                 Any(x => x.UserName == userName);
             Console.WriteLine("Post user exists");
             return userExists;
+        }
+
+        public int AuthenticateUser(string userName, string password)
+        {
+            var authenticatedUserId = _context.Users
+                 .SingleOrDefault(u => u.UserName == userName && u.Password == password);
+
+            return authenticatedUserId?.UserId ?? -1;
         }
 
         public void ConnectUserToArtist(UserArtistConnectionDto connectionDto)
@@ -151,18 +160,20 @@ namespace AudialAtlasService.Repositories
         {
             Console.WriteLine("\nBefore digging in Db.\n");
 
-            var song = _context.Users
+            var songs = _context.Users
                 .Where(u => u.UserId == userId)
                 .SelectMany(u => u.Songs)
-                .Select(h => new SongDto
+                .Select(s => new SongDto
                 {
-                    SongTitle = h.SongTitle
+                    SongTitle = s.SongTitle,
+                    ArtistName = s.Artist.Name,
+                    GenreTitle = string.Join(", ", s.Genres.Select(g => g.GenreTitle))
                 })
                 .ToList();
 
             Console.WriteLine("\nDigging done, applying result.\n");
 
-            return song;
+            return songs;
         }
 
         public void GetRecommendations()
