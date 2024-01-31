@@ -5,10 +5,10 @@ namespace AudialAtlasServiceClient.Screens
 {
     public class UserMenuScreen : ScreenBase
     {
-        private readonly UserAuthenticationScreen userAuthenticationScreen;
+        private readonly UserAuthenticationScreen _userAuthenticationScreen;
         public UserMenuScreen(IAudialAtlasApiService apiService, UserAuthenticationScreen userAuthenticationScreen) : base(apiService)
         {
-            this.userAuthenticationScreen = userAuthenticationScreen;
+            _userAuthenticationScreen = userAuthenticationScreen;
         }
         public async Task UserMenuAsync(int userId)
         {
@@ -33,8 +33,7 @@ namespace AudialAtlasServiceClient.Screens
                 switch (choice)
                 {
                     case 1:
-                        var favoriteSongsScreen = new FavoriteSongsScreen(ApiService);
-                        await favoriteSongsScreen.ListFavoriteSongsAsync(userId);
+                        await new FavoriteSongsScreen(ApiService).ListFavoriteSongsAsync(userId);
                         break;
                     case 2:
                         await new FavoriteArtistsScreen(ApiService).ListFavoriteArtistsAsync(userId);
@@ -46,7 +45,7 @@ namespace AudialAtlasServiceClient.Screens
                         await new AddNewSongScreen(ApiService).AddNewFavoriteSongAsync(userId);
                         break;
                     case 7:
-                        userAuthenticationScreen.ReturnToLoginMenu();  // Set the flag to return to the login menu
+                        _userAuthenticationScreen.ReturnToLoginMenu();  // Set the flag to return to the login menu
                         return;
                 }
             }

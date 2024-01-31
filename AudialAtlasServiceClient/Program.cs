@@ -32,10 +32,8 @@ namespace AudialAtlasServiceClient
             {
                 Console.Clear();
 
-                var apiService = serviceProvider.GetRequiredService<IAudialAtlasApiService>();
-
-                var loginScreen = new LoginScreen(apiService);
-
+                var apiService = serviceProvider.GetRequiredService<IAudialAtlasApiService>();                               
+                var loginScreen = new LoginScreen(apiService);               
                 var audialAtlasApp = new AudialAtlasClientApplication(loginScreen);
 
                 await audialAtlasApp.RunAsync();
