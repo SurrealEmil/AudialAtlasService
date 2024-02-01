@@ -119,7 +119,7 @@ namespace AudialAtlasService.Repositories
             }
             catch (Exception ex)
             {
-                // Change exception to more specifik exception.
+                // Change exception to more specific exception.
                 throw new SongFailedToAddToDatabaseException("Failed to add genre to song");
             }
         }
