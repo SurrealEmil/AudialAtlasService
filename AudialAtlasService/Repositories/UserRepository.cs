@@ -20,6 +20,7 @@ namespace AudialAtlasService.Repositories
         void ConnectUserToGenre(UserGenreConnectionDto connectionDto);
         void GetRecommendations();
         void AddUser(UserDto dto);
+        List<GetAllUsersViewModel> GetAllUsers();
     }
 
     public class UserRepository : IUserRepository
@@ -197,6 +198,18 @@ namespace AudialAtlasService.Repositories
             {
                 throw new Exception();
             }
+        }
+
+        public List<GetAllUsersViewModel> GetAllUsers()
+        {
+            var userList = _context.Users
+                .Select(h => new GetAllUsersViewModel
+                {
+                    UserName = h.UserName,
+                })
+                .ToList();
+
+            return userList;
         }
     }
 }

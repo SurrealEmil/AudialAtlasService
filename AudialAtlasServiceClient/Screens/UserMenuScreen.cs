@@ -52,13 +52,13 @@ namespace AudialAtlasServiceClient.Screens
                         userAuthenticationScreen.ReturnToLoginMenu();  // Set the flag to return to the login menu
                         return;
                     case 8:
-                        await new ListAllSongsInDbScreen(apiService).ListAllSongsInDbAsync();
+                        await new ListAllSongsInDbScreen(ApiService).ListAllSongsInDbAsync();
                         break;
                     case 9:
-                        await new ListAllArtistsInDbScreen(apiService).ListAllArtistsInDbAsync();
+                        await new ListAllArtistsInDbScreen(ApiService).ListAllArtistsInDbAsync();
                         break;
                     case 10:
-                        await new ListAllGenresInDbScreen(apiService).ListAllGenresInDbAsync();
+                        await new ListAllGenresInDbScreen(ApiService).ListAllGenresInDbAsync();
                         break;
                 }
             }
