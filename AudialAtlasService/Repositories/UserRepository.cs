@@ -20,6 +20,7 @@ namespace AudialAtlasService.Repositories
         void ConnectUserToGenre(UserGenreConnectionDto connectionDto);
         void GetRecommendations();
         void AddUser(UserDto dto);
+        List<UserSearchViewModel> SearchUserByName(string searchString);
     }
 
     public class UserRepository : IUserRepository
@@ -209,6 +210,17 @@ namespace AudialAtlasService.Repositories
                 .ToList();
 
             return userList;
+        }
+
+        public List<UserSearchViewModel> SearchUserByName(string searchString)
+        {
+            return _context.Users
+                .Where(u => u.FirstName.Contains(searchString))
+                .Select(h => new UserSearchViewModel
+                {
+                    FirstName = h.FirstName,
+                })
+                .ToList();
         }
     }
 }
