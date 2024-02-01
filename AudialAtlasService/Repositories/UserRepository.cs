@@ -10,17 +10,16 @@ namespace AudialAtlasService.Repositories
     public interface IUserRepository
     {
         bool CheckIfUserExists(string userName);
+        List<GetAllUsersViewModel> GetAllUsers();
         List<ArtistListAllFromUserViewModel> GetAllArtistsLikedByUser(int userId);
         List<GenreListAllFromUserViewModel> GetAllGenresLikedByUser(int userId);
         List<SongSingleViewModel> GetAllSongsLikedByUser(int userId);
         int AuthenticateUser(string userName, string password);
-
         void ConnectUserToArtist(UserArtistConnectionDto connectionDto);
         void ConnectUserToSong(UserSongConnectionDto connectionDto);
         void ConnectUserToGenre(UserGenreConnectionDto connectionDto);
         void GetRecommendations();
         void AddUser(UserDto dto);
-        List<GetAllUsersViewModel> GetAllUsers();
     }
 
     public class UserRepository : IUserRepository
