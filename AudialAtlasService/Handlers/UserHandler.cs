@@ -139,5 +139,13 @@ namespace AudialAtlasService.Handlers
                 ? Results.Ok(getAllUsers)
                 : Results.NotFound("No users found.");
         }
+
+        public static IResult SearchUserByName([FromServices] IUserRepository userRepository, [FromBody] UserSearchDto searchDto)
+        {
+            var usersWithSearch = userRepository.SearchUserByName(searchDto.SearchString);
+            return usersWithSearch.Any()
+                ? Results.Ok(usersWithSearch)
+                : Results.NotFound("No users found.");
+        }
     }
 }
