@@ -2,7 +2,9 @@
 using AudialAtlasService.Models;
 using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels;
+using AudialAtlasService.Models.ViewModels.UserViewModels;
 using AudialAtlasService.Repositories;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -110,7 +112,14 @@ namespace AudialAtlasService.Handlers
             }
         }
 
-        public static IResult AddUser([FromServices] IUserRepository userRepository, UserDTO dto)
+        public static IResult UserAuthentication([FromServices] IUserRepository userRepository, string userName, string password)
+        {
+            int authenticatedUserId = userRepository.AuthenticateUser(userName, password);
+
+            return Results.Ok(authenticatedUserId);
+        }
+
+        public static IResult AddUser([FromServices] IUserRepository userRepository, UserDto dto)
         {
             try
             {
@@ -121,6 +130,14 @@ namespace AudialAtlasService.Handlers
                 return Results.StatusCode((int)HttpStatusCode.InternalServerError);
             }
             return Results.StatusCode((int)HttpStatusCode.Created);
+        }
+
+        public static IResult GetAllUsersFromRepository([FromServices] IUserRepository userRepository)
+        {
+            var getAllUsers = userRepository.GetAllUsers();
+            return getAllUsers.Any()
+                ? Results.Ok(getAllUsers)
+                : Results.NotFound("No users found.");
         }
     }
 }
