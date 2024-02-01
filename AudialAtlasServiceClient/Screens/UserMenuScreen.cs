@@ -24,7 +24,8 @@ namespace AudialAtlasServiceClient.Screens
                 "All songs",
                 "All artists",
                 "All genres",
-                "Log out"
+                "Log out",
+                "Top five songs of artist"
             };
 
             while (true)
@@ -60,6 +61,9 @@ namespace AudialAtlasServiceClient.Screens
                     case 10:
                         userAuthenticationScreen.ReturnToLoginMenu();  // Set the flag to return to the login menu
                         return;
+                    case 11:
+                        await new GetTopFiveSongsOfArtistScreen(ApiService).ListFavoriteSongsAsync();
+                        break;
                         
                 }
             }

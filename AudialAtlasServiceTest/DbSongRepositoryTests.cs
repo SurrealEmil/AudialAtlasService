@@ -64,7 +64,7 @@ namespace AudialAtlasServiceTest
                 .Options;
 
             using (ApplicationContext context = new ApplicationContext(options))
-            {                
+            {
                 ISongRepository repository = new SongRepository(context);
 
                 // Act & Assert - StackOverFlow and ChatGPT suggested using "Assert.ThrowsException" when the [ExpectedException] was
