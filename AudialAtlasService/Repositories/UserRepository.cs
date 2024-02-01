@@ -10,11 +10,11 @@ namespace AudialAtlasService.Repositories
     public interface IUserRepository
     {
         bool CheckIfUserExists(string userName);
+        List<GetAllUsersViewModel> GetAllUsers();
         List<ArtistListAllFromUserViewModel> GetAllArtistsLikedByUser(int userId);
         List<GenreListAllFromUserViewModel> GetAllGenresLikedByUser(int userId);
         List<SongSingleViewModel> GetAllSongsLikedByUser(int userId);
         int AuthenticateUser(string userName, string password);
-
         void ConnectUserToArtist(UserArtistConnectionDto connectionDto);
         void ConnectUserToSong(UserSongConnectionDto connectionDto);
         void ConnectUserToGenre(UserGenreConnectionDto connectionDto);
@@ -197,6 +197,18 @@ namespace AudialAtlasService.Repositories
             {
                 throw new Exception();
             }
+        }
+
+        public List<GetAllUsersViewModel> GetAllUsers()
+        {
+            var userList = _context.Users
+                .Select(h => new GetAllUsersViewModel
+                {
+                    UserName = h.UserName,
+                })
+                .ToList();
+
+            return userList;
         }
     }
 }
