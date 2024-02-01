@@ -51,7 +51,7 @@ namespace AudialAtlasService
             app.MapGet("/users/{userName}/check", UserHandler.CheckIfUserExistsHandler);
             app.MapGet("/users/login/{userName}/{password}", UserHandler.UserAuthentication);
             app.MapPost("/users", UserHandler.AddUser);
-
+            app.MapPost("/users/search", UserHandler.SearchUserByName);
 
             // Songs
             app.MapGet("/songs", SongHandler.ListAllSongs);
