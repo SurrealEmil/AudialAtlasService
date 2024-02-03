@@ -55,6 +55,9 @@ namespace AudialAtlasServiceClient.Screens
                     case 4:
                         await new AddNewSongScreen(ApiService).AddNewFavoriteSongAsync(userId);
                         break;
+                    case 5:
+                        await new AddNewArtistScreen(ApiService).AddNewFavoriteArtistAsync(userId);
+                        break;
                     case 7:
                         await new ListAllSongsInDbScreen(ApiService).ListAllSongsInDbAsync();
                         break;
