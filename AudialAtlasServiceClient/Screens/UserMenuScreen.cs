@@ -24,6 +24,9 @@ namespace AudialAtlasServiceClient.Screens
                 "All songs",
                 "All artists",
                 "All genres",
+                "Add songs",
+                "Add artists",
+                "Add genres",
                 "Log out"
             };
 
@@ -57,7 +60,16 @@ namespace AudialAtlasServiceClient.Screens
                     case 9:
                         await new ListAllGenresInDbScreen(ApiService).ListAllGenresInDbAsync();
                         break;
-                    case 10:
+                    //case 10:
+                    //    await new ListAllGenresInDbScreen(ApiService).ListAllGenresInDbAsync();
+                    //    break;
+                    //case 11:
+                    //    await new ListAllGenresInDbScreen(ApiService).ListAllGenresInDbAsync();
+                    //    break;
+                    case 12:
+                        await new AddGenreScreen(ApiService).AddGenreAsync();
+                        break;
+                    case 13:
                         userAuthenticationScreen.ReturnToLoginMenu();  // Set the flag to return to the login menu
                         return;
                         

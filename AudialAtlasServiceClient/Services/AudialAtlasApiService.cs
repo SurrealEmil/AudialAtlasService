@@ -16,6 +16,7 @@ namespace AudialAtlasServiceClient.Services
         Task<List<FavoriteGenreViewModel>> GetUserFavoriteGenresAsync(int userId);
         Task PostNewFavoriteSongAsync(int userId, AddFavoriteSongDto addFavoriteSongDto);
         Task PostNewUserAsync(AddUserDto addUserDto);
+        Task PostNewGenreAsync(AddGenreDto addGenreDto);
         Task<List<ListAllSongsInDbViewModel>> GetAllSongsFromDbAsync();
         Task<List<ListAllArtistsInDbViewModel>> GetAllArtistsFromDbAsync();
         Task<List<ListAllGenresInDbViewModel>> GetAllGenresFromDbAsync();
@@ -190,6 +191,34 @@ namespace AudialAtlasServiceClient.Services
             }
         }
 
+        public async Task PostNewGenreAsync(AddGenreDto addGenreDto)
+        {
+            try
+            {
+                // Serialize the AddUserDto object to JSON
+                string jsonContent = JsonConvert.SerializeObject(addGenreDto);
+
+                // Create the HttpContent for the request
+                HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _httpClient.PostAsync($"{_apiBaseUrl}/genres", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Genre added successfully!");
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to add the genre. Status code: {response.StatusCode}");
+                    Console.ReadLine();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to add the genre. Error: {ex.Message}");
+                Console.ReadLine();
+            }
+        }
 
         public async Task<List<ListAllSongsInDbViewModel>> GetAllSongsFromDbAsync()
         {
