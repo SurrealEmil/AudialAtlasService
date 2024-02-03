@@ -1,4 +1,5 @@
-﻿using AudialAtlasServiceClient.Handlers;
+﻿using AudialAtlasService.Models;
+using AudialAtlasServiceClient.Handlers;
 using AudialAtlasServiceClient.Services;
 
 namespace AudialAtlasServiceClient.Screens
@@ -27,6 +28,9 @@ namespace AudialAtlasServiceClient.Screens
                 case 1:
                     var userAuthenticationScreen = new UserAuthenticationScreen(ApiService);
                     await userAuthenticationScreen.CheckLoginAsync();
+                    break;
+                case 2:
+                    await new AddUserScreen(ApiService).AddUserAsync();
                     break;
                 case 3:
                     Console.WriteLine("Exiting application...");

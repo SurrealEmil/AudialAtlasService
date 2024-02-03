@@ -15,6 +15,7 @@ namespace AudialAtlasServiceClient.Services
         Task<List<FavoriteArtistViewModel>> GetUserFavoriteArtistsAsync(int userId);
         Task<List<FavoriteGenreViewModel>> GetUserFavoriteGenresAsync(int userId);
         Task PostNewFavoriteSongAsync(int userId, AddFavoriteSongDto addFavoriteSongDto);
+        Task PostNewUserAsync(AddUserDto addUserDto);
         Task<List<ListAllSongsInDbViewModel>> GetAllSongsFromDbAsync();
         Task<List<ListAllArtistsInDbViewModel>> GetAllArtistsFromDbAsync();
         Task<List<ListAllGenresInDbViewModel>> GetAllGenresFromDbAsync();
@@ -161,6 +162,34 @@ namespace AudialAtlasServiceClient.Services
                 Console.WriteLine($"Failed to add the song. Error: {ex.Message}");
             }
         }
+
+        public async Task PostNewUserAsync(AddUserDto addUserDto)
+        {
+            try
+            {
+                // Serialize the AddUserDto object to JSON
+                string jsonContent = JsonConvert.SerializeObject(addUserDto);
+
+                // Create the HttpContent for the request
+                HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _httpClient.PostAsync($"{_apiBaseUrl}/users", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("User added successfully!");
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to add the user. Status code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to add the user. Error: {ex.Message}");
+            }
+        }
+
 
         public async Task<List<ListAllSongsInDbViewModel>> GetAllSongsFromDbAsync()
         {
