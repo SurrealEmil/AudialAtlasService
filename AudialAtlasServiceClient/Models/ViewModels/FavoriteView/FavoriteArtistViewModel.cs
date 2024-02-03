@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AudialAtlasServiceClient.Models.ViewModels
+namespace AudialAtlasServiceClient.Models.ViewModels.FavoriteView
 {
     public class FavoriteArtistViewModel
     {

@@ -1,5 +1,8 @@
 ﻿using AudialAtlasServiceClient.Handlers;
 using AudialAtlasServiceClient.Screens.Add;
+using AudialAtlasServiceClient.Screens.ConnectFavorites;
+using AudialAtlasServiceClient.Screens.ListAll;
+using AudialAtlasServiceClient.Screens.ListFavorites;
 using AudialAtlasServiceClient.Services;
 
 namespace AudialAtlasServiceClient.Screens
