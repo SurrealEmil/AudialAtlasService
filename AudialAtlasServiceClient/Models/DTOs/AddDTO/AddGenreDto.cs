@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AudialAtlasServiceClient.Models.DTOs
+namespace AudialAtlasServiceClient.Models.DTOs.AddDTO
 {
     public class AddGenreDto
     {

@@ -1,5 +1,6 @@
 ﻿using AudialAtlasService.Models;
 using AudialAtlasServiceClient.Models.DTOs;
+using AudialAtlasServiceClient.Models.DTOs.AddDTO;
 using AudialAtlasServiceClient.Models.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -17,6 +18,7 @@ namespace AudialAtlasServiceClient.Services
         Task PostNewFavoriteSongAsync(int userId, AddFavoriteSongDto addFavoriteSongDto);
         Task PostNewUserAsync(AddUserDto addUserDto);
         Task PostNewGenreAsync(AddGenreDto addGenreDto);
+        Task PostNewSongAsync(int artistId, AddSongDto addSongDto);
         Task<List<ListAllSongsInDbViewModel>> GetAllSongsFromDbAsync();
         Task<List<ListAllArtistsInDbViewModel>> GetAllArtistsFromDbAsync();
         Task<List<ListAllGenresInDbViewModel>> GetAllGenresFromDbAsync();
@@ -219,6 +221,40 @@ namespace AudialAtlasServiceClient.Services
                 Console.ReadLine();
             }
         }
+
+        public async Task PostNewSongAsync(int artistId, AddSongDto addSongDto)
+        {
+            try
+            {
+                // Serialize the AddSongDto object to JSON
+                string jsonContent = JsonConvert.SerializeObject(addSongDto);
+
+                // Create the HttpContent for the request
+                HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _httpClient.PostAsync($"{_apiBaseUrl}/artists/{artistId}/songs", content);
+
+                // Read the response content
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Song added successfully!");
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to add the song. Status code: {response.StatusCode}");
+                    Console.WriteLine($"Response content: {responseContent}");
+                    Console.ReadLine();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to add the song. Error: {ex.Message}");
+                Console.ReadLine();
+            }
+        }
+
 
         public async Task<List<ListAllSongsInDbViewModel>> GetAllSongsFromDbAsync()
         {

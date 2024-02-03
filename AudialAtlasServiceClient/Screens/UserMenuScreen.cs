@@ -1,4 +1,5 @@
 ﻿using AudialAtlasServiceClient.Handlers;
+using AudialAtlasServiceClient.Screens.Add;
 using AudialAtlasServiceClient.Services;
 
 namespace AudialAtlasServiceClient.Screens
@@ -60,9 +61,9 @@ namespace AudialAtlasServiceClient.Screens
                     case 9:
                         await new ListAllGenresInDbScreen(ApiService).ListAllGenresInDbAsync();
                         break;
-                    //case 10:
-                    //    await new ListAllGenresInDbScreen(ApiService).ListAllGenresInDbAsync();
-                    //    break;
+                    case 10:
+                        await new AddSongScreen(ApiService).AddSongAsync();
+                        break;
                     //case 11:
                     //    await new ListAllGenresInDbScreen(ApiService).ListAllGenresInDbAsync();
                     //    break;

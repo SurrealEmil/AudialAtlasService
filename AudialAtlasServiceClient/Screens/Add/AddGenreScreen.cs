@@ -1,4 +1,4 @@
-﻿using AudialAtlasServiceClient.Models.DTOs;
+﻿using AudialAtlasServiceClient.Models.DTOs.AddDTO;
 using AudialAtlasServiceClient.Services;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AudialAtlasServiceClient.Screens
+namespace AudialAtlasServiceClient.Screens.Add
 {
     internal class AddGenreScreen : ScreenBase
     {
