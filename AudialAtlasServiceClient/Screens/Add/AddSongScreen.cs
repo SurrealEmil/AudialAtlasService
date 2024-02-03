@@ -20,6 +20,9 @@ namespace AudialAtlasServiceClient.Screens.Add
             Console.Write("\nPlease enter artist ID: ");
             int artistId = int.Parse(Console.ReadLine());
 
+            Console.Write("\nPlease enter genre ID: ");
+            int genreId = int.Parse(Console.ReadLine());
+
             Console.Write("\nPlease enter song: ");
             string songTitle = Console.ReadLine();
 
@@ -30,7 +33,7 @@ namespace AudialAtlasServiceClient.Screens.Add
                     SongTitle = songTitle,
                 };
 
-                await ApiService.PostNewSongAsync(artistId, addSongDto);
+                await ApiService.PostNewSongAsync(artistId, genreId, addSongDto);
             }
             catch (HttpRequestException ex)
             {

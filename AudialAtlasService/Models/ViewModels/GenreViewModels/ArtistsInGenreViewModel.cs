@@ -2,9 +2,8 @@
 
 namespace AudialAtlasService.Models.ViewModels.GenreViewModels
 {
-    public class ArtistsInGenreViewModel
+    public class ArtistsInGenreViewModel : GenreSingleViewModel
     {
-        public string GenreTitle { get; set; }
         public virtual List<ArtistSingleViewModel> Artists { get; set; }
     }
 }

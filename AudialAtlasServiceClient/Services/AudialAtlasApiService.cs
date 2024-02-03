@@ -19,7 +19,7 @@ namespace AudialAtlasServiceClient.Services
         Task PostNewUserAsync(AddUserDto addUserDto);
         Task PostNewGenreAsync(AddGenreDto addGenreDto);
         Task PostNewArtistAsync(AddArtistDto addArtistDto);
-        Task PostNewSongAsync(int artistId, AddSongDto addSongDto);
+        Task PostNewSongAsync(int artistId, int genreId, AddSongDto addSongDto);
         Task<List<ListAllSongsInDbViewModel>> GetAllSongsFromDbAsync();
         Task<List<ListAllArtistsInDbViewModel>> GetAllArtistsFromDbAsync();
         Task<List<ListAllGenresInDbViewModel>> GetAllGenresFromDbAsync();
@@ -250,7 +250,7 @@ namespace AudialAtlasServiceClient.Services
             }
         }
 
-        public async Task PostNewSongAsync(int artistId, AddSongDto addSongDto)
+        public async Task PostNewSongAsync(int artistId, int genreId, AddSongDto addSongDto)
         {
             try
             {
@@ -260,7 +260,7 @@ namespace AudialAtlasServiceClient.Services
                 // Create the HttpContent for the request
                 HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await _httpClient.PostAsync($"{_apiBaseUrl}/artists/{artistId}/songs", content);
+                HttpResponseMessage response = await _httpClient.PostAsync($"{_apiBaseUrl}/artists/{artistId}/genres/{genreId}/songs", content);
 
                 // Read the response content
                 string responseContent = await response.Content.ReadAsStringAsync();

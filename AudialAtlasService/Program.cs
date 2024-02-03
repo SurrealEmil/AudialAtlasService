@@ -58,7 +58,7 @@ namespace AudialAtlasService
             app.MapGet("/songs/{songId}", SongHandler.GetSingleSong);
             // PostSong posts the song directly on the artist. So currently no way of posting a song
             // without also having an artist.
-            app.MapPost("/artists/{artistId}/songs", SongHandler.PostSong);
+            app.MapPost("/artists/{artistId}/genres/{genreId}/songs", SongHandler.PostSong);
 
             // Artists
             app.MapGet("/artists", ArtistHandler.GetAllArtists);
