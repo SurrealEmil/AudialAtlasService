@@ -25,7 +25,7 @@ namespace AudialAtlasServiceClient.Screens.Add
             Console.Write("\nPlease enter lastname: ");
             string lastname = Console.ReadLine();
 
-            Console.Write("Please enter password: ");
+            Console.Write("\nPlease enter password: ");
             string password = Console.ReadLine();
 
             try

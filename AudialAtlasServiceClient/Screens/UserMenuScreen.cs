@@ -64,9 +64,9 @@ namespace AudialAtlasServiceClient.Screens
                     case 10:
                         await new AddSongScreen(ApiService).AddSongAsync();
                         break;
-                    //case 11:
-                    //    await new ListAllGenresInDbScreen(ApiService).ListAllGenresInDbAsync();
-                    //    break;
+                    case 11:
+                        await new AddArtistScreen(ApiService).AddArtistAsync();
+                        break;
                     case 12:
                         await new AddGenreScreen(ApiService).AddGenreAsync();
                         break;
