@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AudialAtlasServiceClient.Models.DTOs.FavoritesDTO
 {
-    internal class AddFavoriteGenreDto
+    public class AddFavoriteGenreDto
     {
         public int UserId { get; set; }
         public int GenreId { get; set; }

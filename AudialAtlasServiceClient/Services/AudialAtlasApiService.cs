@@ -17,6 +17,7 @@ namespace AudialAtlasServiceClient.Services
         Task<List<FavoriteArtistViewModel>> GetUserFavoriteArtistsAsync(int userId);
         Task<List<FavoriteGenreViewModel>> GetUserFavoriteGenresAsync(int userId);
         Task PostNewFavoriteArtistAsync(int userId, AddFavoriteArtistDto addFavoriteArtistDto);
+        Task PostNewFavoriteGenreAsync(int userId, AddFavoriteGenreDto addFavoriteGenreDto);
         Task PostNewFavoriteSongAsync(int userId, AddFavoriteSongDto addFavoriteSongDto);
         Task PostNewUserAsync(AddUserDto addUserDto);
         Task PostNewGenreAsync(AddGenreDto addGenreDto);
@@ -167,11 +168,38 @@ namespace AudialAtlasServiceClient.Services
             }
         }
 
+        public async Task PostNewFavoriteGenreAsync(int userId, AddFavoriteGenreDto addFavoriteGenreDto)
+        {
+            try
+            {
+                // Serialize the AddFavoriteGenreDto object to JSON
+                string jsonContent = JsonConvert.SerializeObject(addFavoriteGenreDto);
+
+                // Create the HttpContent for the request
+                HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _httpClient.PostAsync($"{_apiBaseUrl}/users/connect-to-genre", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Genre added successfully!");
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to add the genre. Status code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to add the genre. Error: {ex.Message}");
+            }
+        }
+
         public async Task PostNewFavoriteArtistAsync(int userId, AddFavoriteArtistDto addFavoriteArtistDto)
         {
             try
             {
-                // Serialize the AddFavoriteSongDto object to JSON
+                // Serialize the AddFavoriteGenreDto object to JSON
                 string jsonContent = JsonConvert.SerializeObject(addFavoriteArtistDto);
 
                 // Create the HttpContent for the request
