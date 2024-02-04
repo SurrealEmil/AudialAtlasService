@@ -31,6 +31,7 @@ namespace AudialAtlasServiceClient.Screens
                 "Add songs",
                 "Add artists",
                 "Add genres",
+                "Top five songs of artist",
                 "Log out"
             };
 
@@ -80,9 +81,13 @@ namespace AudialAtlasServiceClient.Screens
                         await new AddGenreScreen(ApiService).AddGenreAsync();
                         break;
                     case 13:
+                        await new GetTopFiveSongsOfArtistScreen(ApiService).ListFavoriteSongsAsync();
+                        break;
+
+                    case 14:                        
                         userAuthenticationScreen.ReturnToLoginMenu();  // Set the flag to return to the login menu
                         return;
-                        
+
                 }
             }
         }

@@ -56,25 +56,33 @@ namespace AudialAtlasService.Services.DeezerService
 
             List<DeezerTopFiveSongsViewModel> result = new List<DeezerTopFiveSongsViewModel>();
 
-            using (var response = await _client.SendAsync(request))
+            try
             {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
-
-                DeezerTopFiveSongsDTO dto = JsonSerializer.Deserialize<DeezerTopFiveSongsDTO>(body);
-
-                int i = 0;
-                foreach(DeezerTopFiveSongsDtoTracks song in dto.Data)
+                using (var response = await _client.SendAsync(request))
                 {
-                    DeezerTopFiveSongsViewModel topFiveAddToResultList = new DeezerTopFiveSongsViewModel()
+                    response.EnsureSuccessStatusCode();
+                    var body = await response.Content.ReadAsStringAsync();
+
+                    DeezerTopFiveSongsDTO dto = JsonSerializer.Deserialize<DeezerTopFiveSongsDTO>(body);
+
+                    int i = 0;
+                    foreach (DeezerTopFiveSongsDtoTracks song in dto.Data)
                     {
-                        Id = dto.Data[i].Id,
-                        Title = dto.Data[i].Title,
-                    };
-                    result.Add(topFiveAddToResultList);
-                    i++;
+                        DeezerTopFiveSongsViewModel topFiveAddToResultList = new DeezerTopFiveSongsViewModel()
+                        {
+                            Id = dto.Data[i].Id,
+                            Title = dto.Data[i].Title,
+                        };
+                        result.Add(topFiveAddToResultList);
+                        i++;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                throw new FailedGettingTopFiveSongsForArtist_ArtistNotFound($"No artist with name {artistNameQuery} found. Error message: {ex.Message}");
+            }
+            
 
             return result;
         }

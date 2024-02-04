@@ -1,6 +1,7 @@
 ﻿using AudialAtlasService.Models;
 using AudialAtlasServiceClient.Models.DTOs.AddDTO;
 using AudialAtlasServiceClient.Models.DTOs.FavoritesDTO;
+using AudialAtlasServiceClient.Models.ViewModels;
 using AudialAtlasServiceClient.Models.ViewModels.FavoriteView;
 using AudialAtlasServiceClient.Models.ViewModels.ListAllView;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,7 @@ namespace AudialAtlasServiceClient.Services
         Task<List<ListAllSongsInDbViewModel>> GetAllSongsFromDbAsync();
         Task<List<ListAllArtistsInDbViewModel>> GetAllArtistsFromDbAsync();
         Task<List<ListAllGenresInDbViewModel>> GetAllGenresFromDbAsync();
+        Task<List<TopFiveSongsOfArtistViewModel>> GetTopFiveSongsOfArtistAsync(string searchArtistQuery);
     }
 
     public class AudialAtlasApiService : IAudialAtlasApiService
@@ -416,6 +418,29 @@ namespace AudialAtlasServiceClient.Services
                 Console.WriteLine($"Failed to get genres. Error: {ex.Message}");
             }
             return new List<ListAllGenresInDbViewModel>();
+        }
+
+        public async Task<List<TopFiveSongsOfArtistViewModel>> GetTopFiveSongsOfArtistAsync(string searchArtistQuery)
+        {
+            HttpResponseMessage respone = await _httpClient.GetAsync($"{_apiBaseUrl}/deezer/{searchArtistQuery}/topfivesongs");
+
+            try
+            {
+                if (respone.IsSuccessStatusCode)
+                {
+                    string result = await respone.Content.ReadAsStringAsync();
+
+                    List<TopFiveSongsOfArtistViewModel>? topFiveSongs = JsonConvert.DeserializeObject<List<TopFiveSongsOfArtistViewModel>>(result);
+
+                    return topFiveSongs;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to get songs with error message: {ex.Message}");
+            }
+
+            return new List<TopFiveSongsOfArtistViewModel>();
         }
     }
 }
