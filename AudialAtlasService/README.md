@@ -1,7 +1,6 @@
 # Audial Atlas
 
-
-![](/Diagrams/UML_diagram_MiniAPIproject_dark.png)
+![](/Images/audial_atlas_logo.jpg)
 
 
 
