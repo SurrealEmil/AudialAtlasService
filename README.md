@@ -7,9 +7,13 @@
 
 ## Intro
 
-This is a group project and a school assignment to develop a music API. We had tons of fun developing this and it gave us all new insights of API Development in general.
+Welcome to the Audial Atlas music API. This is a group project and a school assignment to develop a music API. We had tons of fun developing this and it gave us all new insights of API Development in general.
 
-    Flow of things: Client API Call -> Endpoint -> Handler -> Repo -> Back to client with fetched result.
+#### Program flow:
+| Client API Call → Endpoint → Handler → Repo → Back to client with fetched result |
+|----------------------------------------------------------------------------------|
+
+<br>
 
 We followed the design of repository pattern, with focus on the concept of IoC. We have repositories that fetches data from the database, and sends it to our Handlers. Our Handlers then give an IResult based on result back to endpoint.
 
@@ -39,11 +43,10 @@ We use DTOs to send data via calls, and ViewModels to return limited designed da
 ## Prerequisites
 
 #### Framework
-    .NET SDK (version .NET 6)
+    .NET 6 SDK
 
 #### AudialAtlasService
 
-    Entity Framework Core:
     EntityFrameworkCore (v6.0.26)
     EntityFrameworkCore.SqlServer (v6.0.26)
     EntityFrameworkCore.Tools (v6.0.26)
@@ -53,7 +56,6 @@ We use DTOs to send data via calls, and ViewModels to return limited designed da
     
 #### AudialAtlasServiceTest
 
-    Entity Framework Core:
     EntityFrameworkCore (v6.0.26)
     EntityFrameworkCore.InMemory (v6.0.26)
     NET.Test.Sdk (v17.5.0)
@@ -61,7 +63,7 @@ We use DTOs to send data via calls, and ViewModels to return limited designed da
     MSTest.TestFramework (v2.2.10)
 
 #### Tools
-    An API client such as Insomnia or Postman.
+    An API client such as Insomnia or Postman
 
 <br>
 
