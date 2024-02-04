@@ -1,5 +1,4 @@
 ﻿using AudialAtlasServiceClient.Screens;
-using AudialAtlasServiceClient.Services;
 
 namespace AudialAtlasServiceClient
 {

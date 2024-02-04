@@ -34,7 +34,7 @@ namespace AudialAtlasService.Repositories
                 })
                 .ToList();
 
-            if(list.Count <= 0)
+            if (list.Count <= 0)
             {
                 throw new SongNotFoundException("No songs in database");
             }
@@ -55,7 +55,7 @@ namespace AudialAtlasService.Repositories
                 })
                 .SingleOrDefault();
 
-            if(song == null)
+            if (song == null)
             {
                 throw new SongNotFoundException();
             }
@@ -69,7 +69,7 @@ namespace AudialAtlasService.Repositories
                 .Where(a => a.ArtistId == artistId)
                 .Include(a => a.Songs)
                 .SingleOrDefault();
-            if(artist == null) 
+            if (artist == null)
             {
                 throw new SongFailedToAddToDatabaseException($"No artist with id {artistId} found");
             }
@@ -87,7 +87,7 @@ namespace AudialAtlasService.Repositories
             {
                 SongTitle = dto.SongTitle,
                 Artist = artist,
-                Genres = new List<Genre> {genre}
+                Genres = new List<Genre> { genre }
             };
 
             try
@@ -107,7 +107,7 @@ namespace AudialAtlasService.Repositories
                 .Where(s => s.SongId == songId)
                 .Include(s => s.Genres)
                 .SingleOrDefault();
-            if(song == null)
+            if (song == null)
             {
                 throw new SongNotFoundException($"No song with id {songId} found");
             }
@@ -116,8 +116,8 @@ namespace AudialAtlasService.Repositories
                 .Where(g => g.GenreId == genreId)
                 .Include(g => g.Songs)
                 .SingleOrDefault();
-            if(genre == null) 
-            { 
+            if (genre == null)
+            {
                 // Placeholder for genre exception?
                 throw new SongNotFoundException($"No genre with id {genreId} found");
             }

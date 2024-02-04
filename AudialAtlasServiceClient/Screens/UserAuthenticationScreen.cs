@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AudialAtlasServiceClient.Screens
 {
-    public class UserAuthenticationScreen : ScreenBase 
+    public class UserAuthenticationScreen : ScreenBase
     {
         private bool returnToLoginMenu; // Flag to determine whether to return to the login menu
         public UserAuthenticationScreen(IAudialAtlasApiService service) : base(service) { }
@@ -12,7 +12,7 @@ namespace AudialAtlasServiceClient.Screens
         {
             returnToLoginMenu = false; // Initialize the flag
 
-            Console.WriteLine("\n\tAudial Atlas client login - Please provide your login credentials:");            
+            Console.WriteLine("\n\tAudial Atlas client login - Please provide your login credentials:");
 
             const int maxLoginAttempts = 3;
 

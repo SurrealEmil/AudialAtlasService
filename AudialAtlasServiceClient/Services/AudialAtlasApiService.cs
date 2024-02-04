@@ -1,5 +1,4 @@
-﻿using AudialAtlasService.Models;
-using AudialAtlasServiceClient.Models.DTOs.AddDTO;
+﻿using AudialAtlasServiceClient.Models.DTOs.AddDTO;
 using AudialAtlasServiceClient.Models.DTOs.FavoritesDTO;
 using AudialAtlasServiceClient.Models.ViewModels;
 using AudialAtlasServiceClient.Models.ViewModels.FavoriteView;

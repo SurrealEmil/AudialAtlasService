@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace AudialAtlasService.Services.DeezerService.Models.ViewModels
+﻿namespace AudialAtlasService.Services.DeezerService.Models.ViewModels
 {
     public class DeezerTopFiveSongsViewModel
     {
