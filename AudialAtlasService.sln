@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudialAtlasService", "AudialAtlasService\AudialAtlasService.csproj", "{E255CDB7-BCA2-4E1E-88EA-28D7371CC870}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudialAtlasServiceTest", "AudialAtlasServiceTest\AudialAtlasServiceTest.csproj", "{C2126427-20BB-4155-8379-CC7EF84B50E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudialAtlasServiceTest", "AudialAtlasServiceTest\AudialAtlasServiceTest.csproj", "{C2126427-20BB-4155-8379-CC7EF84B50E3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudialAtlasServiceClient", "AudialAtlasServiceClient\AudialAtlasServiceClient.csproj", "{0C0C65A2-FE88-41C3-AF09-0A9877B11B48}"
 EndProject
