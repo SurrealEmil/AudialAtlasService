@@ -1,6 +1,6 @@
 # Audial Atlas
 
-![](/Images/audial_atlas_logo.jpg)
+<img src="/AudialAtlasService/Images/audial_atlas_logo.jpg">
 
 
 
@@ -41,21 +41,21 @@ We use DTOs to send data via calls, and ViewModels to return limited designed da
 #### AudialAtlasService
 
     Entity Framework Core:
-    EntityFrameworkCore (v 6.0.26)
-    EntityFrameworkCore.SqlServer (v 6.0.26)
-    EntityFrameworkCore.Tools (v 6.0.26)
+    EntityFrameworkCore (v6.0.26)
+    EntityFrameworkCore.SqlServer (v6.0.26)
+    EntityFrameworkCore.Tools (v6.0.26)
     
 #### AudialAtlasServiceClient
-    Newtonsoft.Json (v 13.0.3)
+    Newtonsoft.Json (v13.0.3)
     
 #### AudialAtlasServiceTest
 
     Entity Framework Core:
-    EntityFrameworkCore (v 6.0.26)
-    EntityFrameworkCore.InMemory (v 6.0.26)
-    NET.Test.Sdk (v 17.5.0)
-    MSTest.TestAdapter (v 2.2.10)
-    MSTest.TestFramework (v 2.2.10)
+    EntityFrameworkCore (v6.0.26)
+    EntityFrameworkCore.InMemory (v6.0.26)
+    NET.Test.Sdk (v17.5.0)
+    MSTest.TestAdapter (v2.2.10)
+    MSTest.TestFramework (v2.2.10)
 
 #### An API tool such as Insomnia or Postman.
 
@@ -78,9 +78,9 @@ The API is a minimal API using inversion of control and dependency injection. Th
 
     /users                      adds user to database
     /users/search               searches for user by user name
-    /users/connect-to-artist    ìLikesî an artist,
-    /users/connect-to-genre     ìLikesî a genre,
-    /users/connect-to-song      ìLikesî a song,
+    /users/connect-to-artist    ‚ÄúLikes‚Äù an artist,
+    /users/connect-to-genre     ‚ÄúLikes‚Äù a genre,
+    /users/connect-to-song      ‚ÄúLikes‚Äù a song,
 
 
 #### GET Song
@@ -129,7 +129,7 @@ The API is a minimal API using inversion of control and dependency injection. Th
 
 ## External API
 
-Part of the assignment was to include an external API in our own API. We used the Deezer API. In retrospect we should have implemented the Deezer API earlier in development. This would have allowed us to build our models around the data Deezer returns. As it currently stands we use the Deezer API to get the top five songs of an artist via searching for the artists name. Even though Deezer has most artists, some artists are not searchable via our API. The calls still work, but Deezer doesnít return a result for those artists. 
+Part of the assignment was to include an external API in our own API. We used the Deezer API. In retrospect we should have implemented the Deezer API earlier in development. This would have allowed us to build our models around the data Deezer returns. As it currently stands we use the Deezer API to get the top five songs of an artist via searching for the artists name. Even though Deezer has most artists, some artists are not searchable via our API. The calls still work, but Deezer doesn‚Äôt return a result for those artists. 
 
 #### Endpoint
 
@@ -163,4 +163,4 @@ For testing we use InMemory Database.
 Filip Nilsson &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- &nbsp;&nbsp;&nbsp;[filip-io](https://github.com/filip-io)
 <br>Dennis Briffa &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- &nbsp;&nbsp;&nbsp;[Balos87](https://github.com/Balos87)
 <br>Emil Ejderklev &nbsp;&nbsp;&nbsp;&nbsp;- &nbsp;&nbsp;&nbsp;[SurrealEmil](https://github.com/SurrealEmil)
-<br>Pontus Ahlb‰ck &nbsp;&nbsp;- &nbsp;&nbsp;&nbsp;[PAhlback](https://github.com/PAhlback)
+<br>Pontus Ahlb√§ck &nbsp;&nbsp;- &nbsp;&nbsp;&nbsp;[PAhlback](https://github.com/PAhlback)
