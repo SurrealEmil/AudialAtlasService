@@ -44,19 +44,21 @@ namespace AudialAtlasService
             app.MapPost("/users/connect-to-artist", UserHandler.ConnectUserToArtistHandler);
             app.MapPost("/users/connect-to-genre", UserHandler.ConnectUserToGenreHandler);
             app.MapPost("/users/connect-to-song", UserHandler.ConnectUserToSongHandler);
+            app.MapGet("/users/allusers", UserHandler.GetAllUsersFromRepository); // Ny
             app.MapGet("/users/{userId}/artists", UserHandler.GetAllArtistsLikedByUserHandler);
             app.MapGet("/users/{userId}/genres", UserHandler.GetAllGenresLikedByUserHandler);
             app.MapGet("/users/{userId}/songs", UserHandler.GetAllSongsLikedByUserHandler);
             app.MapGet("/users/{userName}/check", UserHandler.CheckIfUserExistsHandler);
             app.MapGet("/users/login/{userName}/{password}", UserHandler.UserAuthentication);
             app.MapPost("/users", UserHandler.AddUser);
+            app.MapPost("/users/search", UserHandler.SearchUserByName);
 
             // Songs
             app.MapGet("/songs", SongHandler.ListAllSongs);
             app.MapGet("/songs/{songId}", SongHandler.GetSingleSong);
             // PostSong posts the song directly on the artist. So currently no way of posting a song
             // without also having an artist.
-            app.MapPost("artists/{artistId}/songs", SongHandler.PostSong);
+            app.MapPost("/artists/{artistId}/genres/{genreId}/songs", SongHandler.PostSong);
 
             // Artists
             app.MapGet("/artists", ArtistHandler.GetAllArtists);

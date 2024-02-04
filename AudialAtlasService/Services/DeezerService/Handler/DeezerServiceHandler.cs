@@ -6,11 +6,19 @@ namespace AudialAtlasService.Services.DeezerService.Handler
     {
         public static async Task<IResult> GetTopFiveSongsOfArtist(IDeezerSearchFunction service, string artistNameQuery)
         {
-            DeezerArtistViewModel firstGet = await service.GetArtistViaSearchStringAsync(artistNameQuery);
+            try
+            {
+                DeezerArtistViewModel firstGet = await service.GetArtistViaSearchStringAsync(artistNameQuery);
 
-            List<DeezerTopFiveSongsViewModel> result = await service.GetTopFiveSongsOfArtist(artistNameQuery, firstGet);
+                List<DeezerTopFiveSongsViewModel> result = await service.GetTopFiveSongsOfArtist(artistNameQuery, firstGet);
 
-            return Results.Json(result);
+                return Results.Json(result);
+            }
+            catch (FailedGettingTopFiveSongsForArtist_ArtistNotFound ex)
+            {
+                return Results.NotFound(ex.Message);
+            }
         }
+
     }
 }

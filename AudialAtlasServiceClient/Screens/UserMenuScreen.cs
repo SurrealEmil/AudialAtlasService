@@ -1,4 +1,8 @@
 ﻿using AudialAtlasServiceClient.Handlers;
+using AudialAtlasServiceClient.Screens.Add;
+using AudialAtlasServiceClient.Screens.ConnectFavorites;
+using AudialAtlasServiceClient.Screens.ListAll;
+using AudialAtlasServiceClient.Screens.ListFavorites;
 using AudialAtlasServiceClient.Services;
 
 namespace AudialAtlasServiceClient.Screens
@@ -20,7 +24,14 @@ namespace AudialAtlasServiceClient.Screens
                 "List all favorite genres",
                 "Add new favorite song",
                 "Add new favorite artist",
-                "Add new favorite genre",
+                "Add new favorite genre",                
+                "All songs",
+                "All artists",
+                "All genres",
+                "Add songs",
+                "Add artists",
+                "Add genres",
+                "Top five songs of artist",
                 "Log out"
             };
 
@@ -44,9 +55,38 @@ namespace AudialAtlasServiceClient.Screens
                     case 4:
                         await new AddNewSongScreen(ApiService).AddNewFavoriteSongAsync(userId);
                         break;
+                    case 5:
+                        await new AddNewArtistScreen(ApiService).AddNewFavoriteArtistAsync(userId);
+                        break;
+                    case 6:
+                        await new AddNewGenreScreen(ApiService).AddNewFavoriteGenreAsync(userId);
+                        break;
                     case 7:
-                        _userAuthenticationScreen.ReturnToLoginMenu();  // Set the flag to return to the login menu
+                        await new ListAllSongsInDbScreen(ApiService).ListAllSongsInDbAsync();
+                        break;
+                    case 8:
+                        await new ListAllArtistsInDbScreen(ApiService).ListAllArtistsInDbAsync();
+                        break;
+                    case 9:
+                        await new ListAllGenresInDbScreen(ApiService).ListAllGenresInDbAsync();
+                        break;
+                    case 10:
+                        await new AddSongScreen(ApiService).AddSongAsync();
+                        break;
+                    case 11:
+                        await new AddArtistScreen(ApiService).AddArtistAsync();
+                        break;
+                    case 12:
+                        await new AddGenreScreen(ApiService).AddGenreAsync();
+                        break;
+                    case 13:
+                        await new GetTopFiveSongsOfArtistScreen(ApiService).ListFavoriteSongsAsync();
+                        break;
+
+                    case 14:                        
+                        userAuthenticationScreen.ReturnToLoginMenu();  // Set the flag to return to the login menu
                         return;
+
                 }
             }
         }

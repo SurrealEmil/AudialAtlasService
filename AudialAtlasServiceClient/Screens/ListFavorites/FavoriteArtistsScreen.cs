@@ -1,7 +1,7 @@
 ﻿using AudialAtlasServiceClient.Handlers;
 using AudialAtlasServiceClient.Services;
 
-namespace AudialAtlasServiceClient.Screens
+namespace AudialAtlasServiceClient.Screens.ListFavorites
 {
     internal class FavoriteArtistsScreen : ScreenBase
     {
@@ -17,6 +17,8 @@ namespace AudialAtlasServiceClient.Screens
 
                 if (artistList.Any())
                 {
+                    artistList.OrderBy(a => a.Name);
+
                     foreach (var artist in artistList)
                     {
                         Console.WriteLine($"Artist: \t{artist.Name}");

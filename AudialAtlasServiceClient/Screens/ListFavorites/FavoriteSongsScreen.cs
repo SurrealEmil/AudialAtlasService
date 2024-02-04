@@ -1,7 +1,7 @@
 ﻿using AudialAtlasServiceClient.Handlers;
 using AudialAtlasServiceClient.Services;
 
-namespace AudialAtlasServiceClient.Screens
+namespace AudialAtlasServiceClient.Screens.ListFavorites
 {
     internal class FavoriteSongsScreen : ScreenBase
     {
@@ -17,11 +17,18 @@ namespace AudialAtlasServiceClient.Screens
 
                 if (songList.Any())
                 {
+                    songList.OrderBy(s => s.SongTitle);
+
                     foreach (var song in songList)
                     {
                         Console.WriteLine($"Title: \t{song.SongTitle}");
-                        Console.WriteLine($"Artist: {song.ArtistName}");
-                        Console.WriteLine($"Genre: \t{song.GenreTitle}\n");
+                        Console.WriteLine($"Artist: {song.Artist}");
+                        Console.Write("Genre: \t");
+                        foreach (var genre in song.Genres)
+                        {
+                            Console.Write($"{genre}, ");
+                        }
+                        Console.WriteLine("\n");
                     }
                 }
                 else
