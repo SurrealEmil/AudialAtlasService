@@ -1,4 +1,8 @@
 ﻿using AudialAtlasServiceClient.Handlers;
+using AudialAtlasServiceClient.Screens.Add;
+using AudialAtlasServiceClient.Screens.ConnectFavorites;
+using AudialAtlasServiceClient.Screens.ListAll;
+using AudialAtlasServiceClient.Screens.ListFavorites;
 using AudialAtlasServiceClient.Services;
 
 namespace AudialAtlasServiceClient.Screens
@@ -24,6 +28,9 @@ namespace AudialAtlasServiceClient.Screens
                 "All songs",
                 "All artists",
                 "All genres",
+                "Add songs",
+                "Add artists",
+                "Add genres",
                 "Log out"
             };
 
@@ -48,6 +55,12 @@ namespace AudialAtlasServiceClient.Screens
                     case 4:
                         await new AddNewSongScreen(ApiService).AddNewFavoriteSongAsync(userId);
                         break;
+                    case 5:
+                        await new AddNewArtistScreen(ApiService).AddNewFavoriteArtistAsync(userId);
+                        break;
+                    case 6:
+                        await new AddNewGenreScreen(ApiService).AddNewFavoriteGenreAsync(userId);
+                        break;
                     case 7:
                         await new ListAllSongsInDbScreen(ApiService).ListAllSongsInDbAsync();
                         break;
@@ -58,6 +71,15 @@ namespace AudialAtlasServiceClient.Screens
                         await new ListAllGenresInDbScreen(ApiService).ListAllGenresInDbAsync();
                         break;
                     case 10:
+                        await new AddSongScreen(ApiService).AddSongAsync();
+                        break;
+                    case 11:
+                        await new AddArtistScreen(ApiService).AddArtistAsync();
+                        break;
+                    case 12:
+                        await new AddGenreScreen(ApiService).AddGenreAsync();
+                        break;
+                    case 13:
                         userAuthenticationScreen.ReturnToLoginMenu();  // Set the flag to return to the login menu
                         return;
                         

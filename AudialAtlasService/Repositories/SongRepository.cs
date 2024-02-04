@@ -11,7 +11,7 @@ namespace AudialAtlasService.Repositories
     {
         public List<SongListAllViewModel> ListAllSongs();
         public SongSingleViewModel GetSingleSong(int songId);
-        public void PostSong(int artistId, SongDto dto);
+        public void PostSong(int artistId, int genreId, SongDto dto);
         public void LinkGenreToSong(int songId, int genreId);
     }
 
@@ -63,7 +63,7 @@ namespace AudialAtlasService.Repositories
             return song;
         }
 
-        public void PostSong(int artistId, SongDto dto)
+        public void PostSong(int artistId, int genreId, SongDto dto)
         {
             Artist? artist = _context.Artists
                 .Where(a => a.ArtistId == artistId)
@@ -74,10 +74,20 @@ namespace AudialAtlasService.Repositories
                 throw new SongFailedToAddToDatabaseException($"No artist with id {artistId} found");
             }
 
+            Genre? genre = _context.Genres
+                .Where(g => g.GenreId == genreId)
+                .SingleOrDefault();
+
+            if (genre == null)
+            {
+                throw new SongFailedToAddToDatabaseException($"No genre with id {genreId} found");
+            }
+
             Song? song = new Song()
             {
                 SongTitle = dto.SongTitle,
-                Artist = artist
+                Artist = artist,
+                Genres = new List<Genre> {genre}
             };
 
             try

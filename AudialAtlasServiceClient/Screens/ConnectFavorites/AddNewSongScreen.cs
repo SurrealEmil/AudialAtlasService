@@ -1,7 +1,7 @@
-﻿using AudialAtlasServiceClient.Models.DTOs;
+﻿using AudialAtlasServiceClient.Models.DTOs.FavoritesDTO;
 using AudialAtlasServiceClient.Services;
 
-namespace AudialAtlasServiceClient.Screens
+namespace AudialAtlasServiceClient.Screens.ConnectFavorites
 {
     internal class AddNewSongScreen : ScreenBase
     {

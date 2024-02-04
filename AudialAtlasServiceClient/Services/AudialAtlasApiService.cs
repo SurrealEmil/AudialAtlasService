@@ -1,6 +1,8 @@
 ﻿using AudialAtlasService.Models;
-using AudialAtlasServiceClient.Models.DTOs;
-using AudialAtlasServiceClient.Models.ViewModels;
+using AudialAtlasServiceClient.Models.DTOs.AddDTO;
+using AudialAtlasServiceClient.Models.DTOs.FavoritesDTO;
+using AudialAtlasServiceClient.Models.ViewModels.FavoriteView;
+using AudialAtlasServiceClient.Models.ViewModels.ListAllView;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Net;
@@ -14,7 +16,13 @@ namespace AudialAtlasServiceClient.Services
         Task<List<FavoriteSongViewModel>> GetUserFavoriteSongsAsync(int userId);
         Task<List<FavoriteArtistViewModel>> GetUserFavoriteArtistsAsync(int userId);
         Task<List<FavoriteGenreViewModel>> GetUserFavoriteGenresAsync(int userId);
+        Task PostNewFavoriteArtistAsync(int userId, AddFavoriteArtistDto addFavoriteArtistDto);
+        Task PostNewFavoriteGenreAsync(int userId, AddFavoriteGenreDto addFavoriteGenreDto);
         Task PostNewFavoriteSongAsync(int userId, AddFavoriteSongDto addFavoriteSongDto);
+        Task PostNewUserAsync(AddUserDto addUserDto);
+        Task PostNewGenreAsync(AddGenreDto addGenreDto);
+        Task PostNewArtistAsync(AddArtistDto addArtistDto);
+        Task PostNewSongAsync(int artistId, int genreId, AddSongDto addSongDto);
         Task<List<ListAllSongsInDbViewModel>> GetAllSongsFromDbAsync();
         Task<List<ListAllArtistsInDbViewModel>> GetAllArtistsFromDbAsync();
         Task<List<ListAllGenresInDbViewModel>> GetAllGenresFromDbAsync();
@@ -55,7 +63,6 @@ namespace AudialAtlasServiceClient.Services
             return -1; // Authentication failed
         }
 
-
         public async Task<List<FavoriteSongViewModel>> GetUserFavoriteSongsAsync(int userId)
         {
             HttpResponseMessage response = await _httpClient.GetAsync($"{_apiBaseUrl}/users/{userId}/songs");
@@ -81,7 +88,6 @@ namespace AudialAtlasServiceClient.Services
             }
             return new List<FavoriteSongViewModel>();
         }
-
 
         public async Task<List<FavoriteArtistViewModel>> GetUserFavoriteArtistsAsync(int userId)
         {
@@ -159,6 +165,178 @@ namespace AudialAtlasServiceClient.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"Failed to add the song. Error: {ex.Message}");
+            }
+        }
+
+        public async Task PostNewFavoriteGenreAsync(int userId, AddFavoriteGenreDto addFavoriteGenreDto)
+        {
+            try
+            {
+                // Serialize the AddFavoriteGenreDto object to JSON
+                string jsonContent = JsonConvert.SerializeObject(addFavoriteGenreDto);
+
+                // Create the HttpContent for the request
+                HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _httpClient.PostAsync($"{_apiBaseUrl}/users/connect-to-genre", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Genre added successfully!");
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to add the genre. Status code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to add the genre. Error: {ex.Message}");
+            }
+        }
+
+        public async Task PostNewFavoriteArtistAsync(int userId, AddFavoriteArtistDto addFavoriteArtistDto)
+        {
+            try
+            {
+                // Serialize the AddFavoriteGenreDto object to JSON
+                string jsonContent = JsonConvert.SerializeObject(addFavoriteArtistDto);
+
+                // Create the HttpContent for the request
+                HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _httpClient.PostAsync($"{_apiBaseUrl}/users/connect-to-artist", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Artist added successfully!");
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to add the artist. Status code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to add the artist. Error: {ex.Message}");
+            }
+        }
+
+        public async Task PostNewUserAsync(AddUserDto addUserDto)
+        {
+            try
+            {
+                // Serialize the AddUserDto object to JSON
+                string jsonContent = JsonConvert.SerializeObject(addUserDto);
+
+                // Create the HttpContent for the request
+                HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _httpClient.PostAsync($"{_apiBaseUrl}/users", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("User added successfully!");
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to add the user. Status code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to add the user. Error: {ex.Message}");
+            }
+        }
+
+        public async Task PostNewGenreAsync(AddGenreDto addGenreDto)
+        {
+            try
+            {
+                // Serialize the AddUserDto object to JSON
+                string jsonContent = JsonConvert.SerializeObject(addGenreDto);
+
+                // Create the HttpContent for the request
+                HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _httpClient.PostAsync($"{_apiBaseUrl}/genres", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Genre added successfully!");
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to add the genre. Status code: {response.StatusCode}");
+                    Console.ReadLine();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to add the genre. Error: {ex.Message}");
+                Console.ReadLine();
+            }
+        }
+
+        public async Task PostNewArtistAsync(AddArtistDto addArtistDto)
+        {
+            try
+            {
+                // Serialize the AddUserDto object to JSON
+                string jsonContent = JsonConvert.SerializeObject(addArtistDto);
+
+                // Create the HttpContent for the request
+                HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _httpClient.PostAsync($"{_apiBaseUrl}/artists", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Artist added successfully!");
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to add the artist. Status code: {response.StatusCode}");
+                    Console.ReadLine();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to add the artist. Error: {ex.Message}");
+                Console.ReadLine();
+            }
+        }
+
+        public async Task PostNewSongAsync(int artistId, int genreId, AddSongDto addSongDto)
+        {
+            try
+            {
+                // Serialize the AddSongDto object to JSON
+                string jsonContent = JsonConvert.SerializeObject(addSongDto);
+
+                // Create the HttpContent for the request
+                HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _httpClient.PostAsync($"{_apiBaseUrl}/artists/{artistId}/genres/{genreId}/songs", content);
+
+                // Read the response content
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Song added successfully!");
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to add the song. Status code: {response.StatusCode}");
+                    Console.WriteLine($"Response content: {responseContent}");
+                    Console.ReadLine();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to add the song. Error: {ex.Message}");
+                Console.ReadLine();
             }
         }
 
