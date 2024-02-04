@@ -33,24 +33,33 @@ namespace AudialAtlasServiceTest
                     Description = "TestArtistDescription"
                 };
                 context.Artists.Add(artist);
+                Genre genre = new Genre()
+                {
+                    GenreTitle = "TestGenre"
+                };
+                context.Genres.Add(genre);
                 context.SaveChanges();
                 artist = context.Artists.Where(a => a.Name == "TestArtistName").SingleOrDefault();
+                genre = context.Genres.Where(g => g.GenreTitle == "TestGenre").SingleOrDefault();
 
                 ISongRepository repository = new SongRepository(context);
 
                 // Act
-                repository.PostSong(artist.ArtistId, new SongDto
+                repository.PostSong(artist.ArtistId, genre.GenreId, new SongDto
                 {
                     SongTitle = "TestSongTitle"
                 });
 
                 // Assert
-                List<Song> songs = context.Songs.ToList();
-                Assert.AreEqual(1, songs.Count);
+                Assert.AreEqual(1, context.Songs.Count());
                 Assert.AreEqual(1, context.Artists.Count());
-                Assert.AreEqual(songs[0].SongTitle, "TestSongTitle");
-                Assert.AreEqual(songs[0].Artist.Name, "TestArtistName");
-                Assert.AreEqual(songs[0].Artist.Description, "TestArtistDescription");
+                Assert.AreEqual(1, context.Genres.Count());
+
+                Assert.AreEqual(context.Songs.SingleOrDefault().SongTitle, "TestSongTitle");
+                Assert.AreEqual(context.Songs.SingleOrDefault().Artist.Name, "TestArtistName");
+                Assert.AreEqual(context.Songs.SingleOrDefault().Artist.Description, "TestArtistDescription");
+                Assert.AreEqual(context.Songs.SingleOrDefault().Genres.SingleOrDefault().GenreTitle, "TestGenre");
+
             }
         }
 
@@ -76,7 +85,7 @@ namespace AudialAtlasServiceTest
                 // I was running the tests with the debugger and then stopping (meaning failed test).
                 Assert.ThrowsException<SongFailedToAddToDatabaseException>(() =>
                 {
-                    repository.PostSong(-1, new SongDto
+                    repository.PostSong(-1, -1, new SongDto
                     {
                         SongTitle = "TestSongTitle"
                     });
@@ -102,12 +111,18 @@ namespace AudialAtlasServiceTest
                     Description = "TestArtistDescription"
                 };
                 context.Artists.Add(artist);
+                Genre genre = new Genre()
+                {
+                    GenreTitle = "TestGenre"
+                };
+                context.Genres.Add(genre);
                 context.SaveChanges();
                 artist = context.Artists.Where(a => a.Name == "TestArtistName").SingleOrDefault();
+                genre = context.Genres.Where(g => g.GenreTitle == "TestGenre").SingleOrDefault();
 
                 ISongRepository repository = new SongRepository(context);
 
-                repository.PostSong(artist.ArtistId, new SongDto
+                repository.PostSong(artist.ArtistId, genre.GenreId, new SongDto
                 {
                     SongTitle = "TestSongTitle"
                 });
@@ -153,20 +168,26 @@ namespace AudialAtlasServiceTest
                     Description = "TestArtistDescription"
                 };
                 context.Artists.Add(artist);
+                Genre genre = new Genre()
+                {
+                    GenreTitle = "TestGenre"
+                };
+                context.Genres.Add(genre);
                 context.SaveChanges();
                 artist = context.Artists.Where(a => a.Name == "TestArtistName").SingleOrDefault();
+                genre = context.Genres.Where(g => g.GenreTitle == "TestGenre").SingleOrDefault();
 
                 ISongRepository repository = new SongRepository(context);
 
-                repository.PostSong(artist.ArtistId, new SongDto
+                repository.PostSong(artist.ArtistId, genre.GenreId, new SongDto
                 {
                     SongTitle = "TestSongTitle"
                 });
-                repository.PostSong(artist.ArtistId, new SongDto
+                repository.PostSong(artist.ArtistId, genre.GenreId, new SongDto
                 {
                     SongTitle = "TestSongTitle2"
                 });
-                repository.PostSong(artist.ArtistId, new SongDto
+                repository.PostSong(artist.ArtistId, genre.GenreId, new SongDto
                 {
                     SongTitle = "TestSongTitle3"
                 });
