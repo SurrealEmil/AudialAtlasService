@@ -9,10 +9,10 @@ namespace AudialAtlasServiceClient.Screens
 {
     public class UserMenuScreen : ScreenBase
     {
-        private readonly UserAuthenticationScreen userAuthenticationScreen;
+        private readonly UserAuthenticationScreen _userAuthenticationScreen;
         public UserMenuScreen(IAudialAtlasApiService apiService, UserAuthenticationScreen userAuthenticationScreen) : base(apiService)
         {
-            this.userAuthenticationScreen = userAuthenticationScreen;
+            _userAuthenticationScreen = userAuthenticationScreen;
         }
         public async Task UserMenuAsync(int userId)
         {
@@ -24,7 +24,7 @@ namespace AudialAtlasServiceClient.Screens
                 "List all favorite genres",
                 "Add new favorite song",
                 "Add new favorite artist",
-                "Add new favorite genre",                
+                "Add new favorite genre",
                 "All songs",
                 "All artists",
                 "All genres",
@@ -44,8 +44,7 @@ namespace AudialAtlasServiceClient.Screens
                 switch (choice)
                 {
                     case 1:
-                        var favoriteSongsScreen = new FavoriteSongsScreen(ApiService);
-                        await favoriteSongsScreen.ListFavoriteSongsAsync(userId);
+                        await new FavoriteSongsScreen(ApiService).ListFavoriteSongsAsync(userId);
                         break;
                     case 2:
                         await new FavoriteArtistsScreen(ApiService).ListFavoriteArtistsAsync(userId);
@@ -84,8 +83,8 @@ namespace AudialAtlasServiceClient.Screens
                         await new GetTopFiveSongsOfArtistScreen(ApiService).ListFavoriteSongsAsync();
                         break;
 
-                    case 14:                        
-                        userAuthenticationScreen.ReturnToLoginMenu();  // Set the flag to return to the login menu
+                    case 14:
+                        _userAuthenticationScreen.ReturnToLoginMenu();  // Set the flag to return to the login menu
                         return;
 
                 }

@@ -1,6 +1,4 @@
-﻿using AudialAtlasService.Data;
-using AudialAtlasService.Models;
-using AudialAtlasService.Models.DTOs;
+﻿using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels;
 using AudialAtlasService.Repositories;
 using AudialAtlasService.Repositories.SongRepoExceptions;
@@ -38,9 +36,9 @@ namespace AudialAtlasService.Handlers
 
         public static IResult PostSong(ISongRepository helper, int artistId, int genreId, SongDto dto)
         {
-            if(dto.SongTitle == null)
+            if (dto.SongTitle == null)
             {
-                return Results.BadRequest(new {Message = "Song title is required"});
+                return Results.BadRequest(new { Message = "Song title is required" });
             }
 
             try

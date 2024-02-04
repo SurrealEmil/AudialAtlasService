@@ -1,10 +1,5 @@
-﻿using AudialAtlasService.Data;
-using AudialAtlasService.Models;
-using AudialAtlasService.Models.DTOs;
-using AudialAtlasService.Models.ViewModels;
-using AudialAtlasService.Models.ViewModels.UserViewModels;
+﻿using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Repositories;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 

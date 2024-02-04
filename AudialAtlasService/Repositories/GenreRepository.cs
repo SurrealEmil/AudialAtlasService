@@ -4,10 +4,7 @@ using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels.ArtistViewModels;
 using AudialAtlasService.Models.ViewModels.GenreViewModels;
 using AudialAtlasService.Repositories.GenreRepoExceptions;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Net;
 
 namespace AudialAtlasService.Repositories
 {
@@ -110,8 +107,8 @@ namespace AudialAtlasService.Repositories
             }
         };
 
-                return result;
-            }
+            return result;
+        }
 
 
         public void PostGenre(GenreDto dto)

@@ -82,7 +82,7 @@ namespace AudialAtlasService.Services.DeezerService
             {
                 throw new FailedGettingTopFiveSongsForArtist_ArtistNotFound($"No artist with name {artistNameQuery} found. Error message: {ex.Message}");
             }
-            
+
 
             return result;
         }

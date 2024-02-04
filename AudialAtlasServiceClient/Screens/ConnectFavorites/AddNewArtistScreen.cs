@@ -1,11 +1,5 @@
-﻿using AudialAtlasService.Models;
-using AudialAtlasServiceClient.Models.DTOs.FavoritesDTO;
+﻿using AudialAtlasServiceClient.Models.DTOs.FavoritesDTO;
 using AudialAtlasServiceClient.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AudialAtlasServiceClient.Screens.ConnectFavorites
 {

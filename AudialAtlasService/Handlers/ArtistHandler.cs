@@ -1,10 +1,6 @@
-﻿using AudialAtlasService.Data;
-using AudialAtlasService.Models;
-using AudialAtlasService.Models.DTOs;
+﻿using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels.ArtistViewModels;
 using AudialAtlasService.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using System.Net;
 
 namespace AudialAtlasService.Handlers
@@ -25,11 +21,11 @@ namespace AudialAtlasService.Handlers
             return Results.Json(list);
         }
 
-        public static IResult GetSingleArtist(IArtistRepository helper, int artistId) 
+        public static IResult GetSingleArtist(IArtistRepository helper, int artistId)
         {
             ArtistGetSingleArtistViewModel? artist = helper.GetSingleArtist(artistId);
 
-            if(artist == null)
+            if (artist == null)
             {
                 return Results.NotFound(new { Message = $"No artist with id {artistId} found" });
             }
@@ -56,7 +52,7 @@ namespace AudialAtlasService.Handlers
             {
                 return Results.BadRequest(new { Message = "Artist already exists" });
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 return Results.Conflict(new { Message = "Failed to add artist to database" });
             }

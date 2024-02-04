@@ -1,6 +1,4 @@
-﻿using AudialAtlasService.Data;
-using AudialAtlasService.Models;
-using AudialAtlasService.Models.DTOs;
+﻿using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels.GenreViewModels;
 using AudialAtlasService.Repositories;
 using AudialAtlasService.Repositories.GenreRepoExceptions;

@@ -3,7 +3,6 @@ using AudialAtlasService.Models;
 using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Models.ViewModels.ArtistViewModels;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
 
 namespace AudialAtlasService.Repositories
 {

@@ -1,5 +1,4 @@
-﻿using static AudialAtlasService.Services.DeezerService.Models.DTOs.DeezerSearchResultDTO;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace AudialAtlasService.Services.DeezerService.Models.DTOs
 {

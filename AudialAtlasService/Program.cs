@@ -1,14 +1,9 @@
 using AudialAtlasService.Data;
 using AudialAtlasService.Handlers;
-using Microsoft.EntityFrameworkCore;
-using AudialAtlasService.Models;
-using System.Reflection.Metadata.Ecma335;
-using Microsoft.AspNetCore.Mvc;
-using AudialAtlasService.Models.DTOs;
 using AudialAtlasService.Repositories;
 using AudialAtlasService.Services.DeezerService;
-using AudialAtlasService.Services.DeezerService.Models.ViewModels;
 using AudialAtlasService.Services.DeezerService.Handler;
+using Microsoft.EntityFrameworkCore;
 
 namespace AudialAtlasService
 {
@@ -19,7 +14,7 @@ namespace AudialAtlasService
             var builder = WebApplication.CreateBuilder(args);
 
             string connectionString = builder.Configuration.GetConnectionString("ApplicationContext");
-            
+
             builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
 
             // DI Containers med AddScoped
@@ -35,7 +30,7 @@ namespace AudialAtlasService
 
             var app = builder.Build();
 
-            app.MapGet("/", () => 
+            app.MapGet("/", () =>
             {
                 Console.WriteLine("Hello World in Console!");
             });
