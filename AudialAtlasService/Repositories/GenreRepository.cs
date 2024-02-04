@@ -83,26 +83,36 @@ namespace AudialAtlasService.Repositories
 
         public List<SongsInGenreViewModel> GetAllSongsInGenre(int genreId)
         {
-            List<Genre> genre = _context.Genres
+            Genre? genre = _context.Genres
                 .Where(g => g.GenreId == genreId)
                 .Include(g => g.Songs)
-                .ToList();
+                    .ThenInclude(s => s.Artist)  // Include the Artist for each Song
+                .SingleOrDefault();
 
-            List<SongsInGenreViewModel> result = genre
-                .Select(g => new SongsInGenreViewModel
-                {
-                    GenreTitle = g.GenreTitle,
-                    Songs = g.Songs
-                    .Select(s => new SongViewModel
+            if (genre == null || genre.Songs == null)
+            {
+                // Handle the case when the genre or songs are not found
+                return new List<SongsInGenreViewModel>();
+            }
+
+            List<SongsInGenreViewModel> result = new List<SongsInGenreViewModel>
+        {
+            new SongsInGenreViewModel
+            {
+                GenreTitle = genre.GenreTitle,
+                Songs = genre.Songs
+                    .Select(song => new SongViewModel
                     {
-                        SongTitle = s.SongTitle,
-                        Artist = s.Artist.Name,
-                    }).ToList()
-                })
-                .ToList();
+                        SongTitle = song.SongTitle,
+                        Artist = song.Artist?.Name ?? "Unknown Artist", // Handle potential null reference
+                    })
+                    .ToList()
+            }
+        };
 
-            return result;
-        }
+                return result;
+            }
+
 
         public void PostGenre(GenreDto dto)
         {

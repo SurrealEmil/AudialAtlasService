@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AudialAtlasServiceClient.Models.ViewModels
+namespace AudialAtlasServiceClient.Models.DTOs.AddDTO
 {
-    public class ListAllGenresInDbViewModel
+    public class AddGenreDto
     {
-        public int GenreId { get; set; }
         public string GenreTitle { get; set; }
     }
 }

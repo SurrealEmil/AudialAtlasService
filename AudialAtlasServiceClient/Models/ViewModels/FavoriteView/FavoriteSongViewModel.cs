@@ -1,4 +1,4 @@
-﻿namespace AudialAtlasServiceClient.Models.ViewModels
+﻿namespace AudialAtlasServiceClient.Models.ViewModels.FavoriteView
 {
     public class FavoriteSongViewModel
     {

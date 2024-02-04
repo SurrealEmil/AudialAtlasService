@@ -1,4 +1,4 @@
-﻿namespace AudialAtlasServiceClient.Models.DTOs
+﻿namespace AudialAtlasServiceClient.Models.DTOs.FavoritesDTO
 {
     public class AddFavoriteSongDto
     {

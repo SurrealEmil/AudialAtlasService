@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AudialAtlasServiceClient.Models.ViewModels
+namespace AudialAtlasServiceClient.Models.DTOs.FavoritesDTO
 {
-    public class ListAllArtistsInDbViewModel
+    public class AddFavoriteArtistDto
     {
+        public int UserId { get; set; }
         public int ArtistId { get; set; }
-        public string Name { get; set; }
     }
 }

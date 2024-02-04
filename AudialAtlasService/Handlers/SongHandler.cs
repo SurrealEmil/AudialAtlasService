@@ -36,7 +36,7 @@ namespace AudialAtlasService.Handlers
             }
         }
 
-        public static IResult PostSong(ISongRepository helper, int artistId, SongDto dto)
+        public static IResult PostSong(ISongRepository helper, int artistId, int genreId, SongDto dto)
         {
             if(dto.SongTitle == null)
             {
@@ -45,7 +45,7 @@ namespace AudialAtlasService.Handlers
 
             try
             {
-                helper.PostSong(artistId, dto);
+                helper.PostSong(artistId, genreId, dto);
                 return Results.StatusCode((int)HttpStatusCode.Created);
             }
             catch (SongFailedToAddToDatabaseException e)

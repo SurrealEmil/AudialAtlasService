@@ -1,5 +1,5 @@
 ﻿using AudialAtlasServiceClient.Handlers;
-using AudialAtlasServiceClient.Models.ViewModels;
+using AudialAtlasServiceClient.Models.ViewModels.ListAllView;
 using AudialAtlasServiceClient.Services;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AudialAtlasServiceClient.Screens
+namespace AudialAtlasServiceClient.Screens.ListAll
 {
     public class ListAllGenresInDbScreen : ScreenBase
     {

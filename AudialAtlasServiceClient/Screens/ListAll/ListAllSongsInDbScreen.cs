@@ -1,7 +1,7 @@
 ﻿using AudialAtlasService.Models;
 using AudialAtlasServiceClient.Handlers;
 using AudialAtlasServiceClient.Models.DTOs;
-using AudialAtlasServiceClient.Models.ViewModels;
+using AudialAtlasServiceClient.Models.ViewModels.ListAllView;
 using AudialAtlasServiceClient.Services;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AudialAtlasServiceClient.Screens
+namespace AudialAtlasServiceClient.Screens.ListAll
 {
     internal class ListAllSongsInDbScreen : ScreenBase
     {
@@ -21,7 +21,7 @@ namespace AudialAtlasServiceClient.Screens
 
             List<ListAllSongsInDbViewModel> songList = await ApiService.GetAllSongsFromDbAsync();
 
-            if(songList.Count() == 0)
+            if (songList.Count() == 0)
             {
                 await Console.Out.WriteLineAsync("No songs found!");
                 return;

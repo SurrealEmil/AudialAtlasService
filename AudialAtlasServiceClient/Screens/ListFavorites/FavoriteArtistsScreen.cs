@@ -1,7 +1,7 @@
 ﻿using AudialAtlasServiceClient.Handlers;
 using AudialAtlasServiceClient.Services;
 
-namespace AudialAtlasServiceClient.Screens
+namespace AudialAtlasServiceClient.Screens.ListFavorites
 {
     internal class FavoriteArtistsScreen : ScreenBase
     {
