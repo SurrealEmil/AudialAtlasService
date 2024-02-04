@@ -33,13 +33,19 @@ namespace AudialAtlasServiceTest
                     Description = "TestArtistDescription"
                 };
                 context.Artists.Add(artist);
+                Genre genre = new Genre()
+                {
+                    GenreTitle = "TestGenre"
+                };
+                context.Genres.Add(genre);
                 context.SaveChanges();
                 artist = context.Artists.Where(a => a.Name == "TestArtistName").SingleOrDefault();
+                genre = context.Genres.Where(g => g.GenreTitle == "TestGenre").SingleOrDefault();
 
                 ISongRepository repository = new SongRepository(context);
 
                 // Act
-                repository.PostSong(artist.ArtistId, new SongDto
+                repository.PostSong(artist.ArtistId, genre.GenreId, new SongDto
                 {
                     SongTitle = "TestSongTitle"
                 });
@@ -76,7 +82,7 @@ namespace AudialAtlasServiceTest
                 // I was running the tests with the debugger and then stopping (meaning failed test).
                 Assert.ThrowsException<SongFailedToAddToDatabaseException>(() =>
                 {
-                    repository.PostSong(-1, new SongDto
+                    repository.PostSong(-1, -1, new SongDto
                     {
                         SongTitle = "TestSongTitle"
                     });
@@ -102,12 +108,18 @@ namespace AudialAtlasServiceTest
                     Description = "TestArtistDescription"
                 };
                 context.Artists.Add(artist);
+                Genre genre = new Genre()
+                {
+                    GenreTitle = "TestGenre"
+                };
+                context.Genres.Add(genre);
                 context.SaveChanges();
                 artist = context.Artists.Where(a => a.Name == "TestArtistName").SingleOrDefault();
+                genre = context.Genres.Where(g => g.GenreTitle == "TestGenre").SingleOrDefault();
 
                 ISongRepository repository = new SongRepository(context);
 
-                repository.PostSong(artist.ArtistId, new SongDto
+                repository.PostSong(artist.ArtistId, genre.GenreId, new SongDto
                 {
                     SongTitle = "TestSongTitle"
                 });
@@ -153,20 +165,26 @@ namespace AudialAtlasServiceTest
                     Description = "TestArtistDescription"
                 };
                 context.Artists.Add(artist);
+                Genre genre = new Genre()
+                {
+                    GenreTitle = "TestGenre"
+                };
+                context.Genres.Add(genre);
                 context.SaveChanges();
                 artist = context.Artists.Where(a => a.Name == "TestArtistName").SingleOrDefault();
+                genre = context.Genres.Where(g => g.GenreTitle == "TestGenre").SingleOrDefault();
 
                 ISongRepository repository = new SongRepository(context);
 
-                repository.PostSong(artist.ArtistId, new SongDto
+                repository.PostSong(artist.ArtistId, genre.GenreId, new SongDto
                 {
                     SongTitle = "TestSongTitle"
                 });
-                repository.PostSong(artist.ArtistId, new SongDto
+                repository.PostSong(artist.ArtistId, genre.GenreId, new SongDto
                 {
                     SongTitle = "TestSongTitle2"
                 });
-                repository.PostSong(artist.ArtistId, new SongDto
+                repository.PostSong(artist.ArtistId, genre.GenreId, new SongDto
                 {
                     SongTitle = "TestSongTitle3"
                 });
