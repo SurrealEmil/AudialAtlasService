@@ -7,14 +7,15 @@
 
 ## Intro
 
-This is a group project and a school assignment to develop a music API. We had tons of fun developing this, and it gave us all new insights of API Development in general.
+This is a group project and a school assignment to develop a music API. We had tons of fun developing this and it gave us all new insights of API Development in general.
 
-Flow of things: Client API Call -> Endpoint -> Handler -> Repo -> Back to client with fetched result.
+    Flow of things: Client API Call -> Endpoint -> Handler -> Repo -> Back to client with fetched result.
 
 We followed the design of repository pattern, with focus on the concept of IoC. We have repositories that fetches data from the database, and sends it to our Handlers. Our Handlers then give an IResult based on result back to endpoint.
 
 We use DTOs to send data via calls, and ViewModels to return limited designed data back.
 
+<br>
 
 ## Features
 
@@ -32,11 +33,13 @@ We use DTOs to send data via calls, and ViewModels to return limited designed da
     Get top 5 songs from artist.
 
 
+<br>
+
 
 ## Prerequisites
 
-
-#### .NET SDK (version .NET 6)
+#### Framework
+    .NET SDK (version .NET 6)
 
 #### AudialAtlasService
 
@@ -57,27 +60,32 @@ We use DTOs to send data via calls, and ViewModels to return limited designed da
     MSTest.TestAdapter (v2.2.10)
     MSTest.TestFramework (v2.2.10)
 
-#### An API tool such as Insomnia or Postman.
+#### Tools
+    An API client such as Insomnia or Postman.
+
+<br>
 
 
-## Audial Atlas API and endpoints
+## Audial Atlas API and Endpoints
 
-The API is a minimal API using inversion of control and dependency injection. The endpoints are mostly self explanatory. These are the endpoints that currently exist:
+The API is a minimal API using inversion of control and dependency injection. The endpoints are mostly self explanatory. 
+
+These are the endpoints that currently exist:
 
 #### GET User
 
-    /users/allusers                         displays all users
-    /users/{userId}/artists                 displays all artists liked by user
-    /users/{userId}/genres                  displays all genres liked by user
-    /users/{userId}/songs                   displays all sings liked by user
-    /users/{userName}/check                 checks if a user already exists
-    /users/login/{userName}/{password}      authenticates a user, and allows them to log in
+    /users/allusers                         Displays all users
+    /users/{userId}/artists                 Displays all artists liked by user
+    /users/{userId}/genres                  Displays all genres liked by user
+    /users/{userId}/songs                   Displays all sings liked by user
+    /users/{userName}/check                 Checks if a user already exists
+    /users/login/{userName}/{password}      Authenticates a user, and allows them to log in
 
 
 #### POST User
 
-    /users                      adds user to database
-    /users/search               searches for user by user name
+    /users                      Adds user to database
+    /users/search               Searches for user by user name
     /users/connect-to-artist    “Likes” an artist,
     /users/connect-to-genre     “Likes” a genre,
     /users/connect-to-song      “Likes” a song,
@@ -85,46 +93,48 @@ The API is a minimal API using inversion of control and dependency injection. Th
 
 #### GET Song
 
-    /songs              displays all songs in database
-    /songs/{songId}     displays one song
+    /songs              Displays all songs in database
+    /songs/{songId}     Displays one song
 
 
 #### POST Song
 
-    /artists/{artistId}/genres/{genreId}/songs - adds song to database
+    /artists/{artistId}/genres/{genreId}/songs    Adds song to database
     
     (Requires both an artist and a genre)
 
 
 #### GET Artist
 
-    /artists                displays all artists in database
-    /artists/{artistId}     displays one artist
+    /artists                Displays all artists in database
+    /artists/{artistId}     Displays one artist
 
 
 #### POST Artist
 
-    /artists - adds artist to database
+    /artists - Adds artist to database
     
     
 #### GET Genre
 
-    /genres - displays all genres
-    /genres/{genreId} - displays one genre
-    /artists/genres/{genreId} - displays all artists linked to genre
-    /songs/genres/{genreId} - displays all songs linked to genre
+    /genres                     Displays all genres
+    /genres/{genreId}           Displays one genre
+    /artists/genres/{genreId}   Displays all artists linked to genre
+    /songs/genres/{genreId}     Displays all songs linked to genre
 
 
 #### POST Genre
 
-    /genres - adds genre to database
+    /genres    Adds genre to database
 
 
 #### Linking endpoints
 
-    /artists/{artistId}/genres/{genreId}    links a genre to an artist via POST
-    /songs/{songId}/genres/{genreId}        links a genre to a song via POST
+    /artists/{artistId}/genres/{genreId}    Links a genre to an artist via POST
+    /songs/{songId}/genres/{genreId}        Links a genre to a song via POST
 
+
+<br>
 
 
 ## External API
@@ -141,13 +151,19 @@ Part of the assignment was to include an external API in our own API. We used th
 [Deezer Guidelines](https://developers.deezer.com/guidelines/getting_started )
 
 
+<br>
+
 
 ## Console client
 
-We use a simple console client located in a separate project to make calls to our API and then display the info to the user. The client is detached from the main project to simulate external calls to the API. 
+We use a simple console client located in a separate project to make calls to our API and then display the info to the user. 
 
-From the main screen the user is able to either log in or sign up for the service. For convenience the base URL for the API is provided by ConfigurationBuilder via appsettings.Development.json located in the main project.
+The client is detached from the main project to simulate external calls to the API. 
 
+From the main screen the user is able to either log in or sign up for the service. For convenience the base URL for the API is provided by <i>ConfigurationBuilder</i> via <i>appsettings.Development.json</i> located in the main project.
+
+
+<br>
 
 
 ## Testing
@@ -157,10 +173,12 @@ We use MSTest in our program and are currently able to test Genre endpoints and 
 For testing we use InMemory Database.
 
 
+<br>
 
-## Made by
 
-Filip Nilsson &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- &nbsp;&nbsp;&nbsp;[filip-io](https://github.com/filip-io)
-<br>Dennis Briffa &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- &nbsp;&nbsp;&nbsp;[Balos87](https://github.com/Balos87)
-<br>Emil Ejderklev &nbsp;&nbsp;&nbsp;&nbsp;- &nbsp;&nbsp;&nbsp;[SurrealEmil](https://github.com/SurrealEmil)
-<br>Pontus Ahlbäck &nbsp;&nbsp;- &nbsp;&nbsp;&nbsp;[PAhlback](https://github.com/PAhlback)
+## Credits
+
+Filip Nilsson - [filip-io](https://github.com/filip-io)
+<br>Dennis Briffa - [Balos87](https://github.com/Balos87)
+<br>Emil Ejderklev - [SurrealEmil](https://github.com/SurrealEmil)
+<br>Pontus Ahlbäck - [PAhlback](https://github.com/PAhlback)
